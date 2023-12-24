@@ -30,5 +30,5 @@ class ObraLiteraria:
     def modificar_obra(self):
         pass
     
-    def crear_obra(self):
-        pass
+    def crear_obra(self, titulo, autor, cantidad, importancia):
+        print("Desde el controlador de obra literaria: ", titulo, autor, cantidad, importancia)

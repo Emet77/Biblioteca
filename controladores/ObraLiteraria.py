@@ -24,11 +24,19 @@ class ObraLiteraria:
         #consulta= f"SELECT * FROM obraliteraria WHERE obraLiteraria.autor LIKE '%{self.criterio}%';"
         resultado=self.ejecutar_consulta(consulta)
         return resultado
+    def crear_obra(self, titulo, autor, cantidad, importancia):
+        if(importancia=="SI"):
+            evalua=1
+        else:
+            evalua=0
+        #print("Desde el controlador de obra literaria: ", titulo, autor, cantidad, importancia)
+        consulta=f"INSERT INTO `obraliteraria`(`idObra`, `titulo`, `autor`, `cantidaEjemplares`, `importancia`) VALUES (null,'{titulo}','{autor}','{cantidad}','{evalua}');"
+        self.ejecutar_consulta(consulta)
+        return True
+        
     def eliminar_obra(self):
         pass
     
     def modificar_obra(self):
         pass
     
-    def crear_obra(self, titulo, autor, cantidad, importancia):
-        print("Desde el controlador de obra literaria: ", titulo, autor, cantidad, importancia)

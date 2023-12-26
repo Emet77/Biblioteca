@@ -15,7 +15,7 @@ class MenuPrincipal:
     def agregar(self):
         ventana_agregar= VistaAgregar.VistaAgregar(self.ventana_principal)
         try:
-            comprueba = self.cuadro_resultados.item(self.cuadro_resultados.selection())['values'][1]
+            comprueba = self.cuadro_resultados.item(self.cuadro_resultados.selection())['values'][2]
             if(comprueba != 0):
                 ventana_agregar.ventana_agrega_ejemplar()
         except:

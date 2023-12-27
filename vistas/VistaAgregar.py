@@ -54,12 +54,22 @@ class VistaAgregar:
         
         
         
-    def ventana_agrega_ejemplar(self):
+    def ventana_agrega_ejemplar(self, nombreObra , autor , cant):
         ventana_agrega_ejemplar=Toplevel(self.ventana_principal)
-        ventana_agrega_ejemplar.geometry("400x300")
-        ventana_agrega_ejemplar.title("Agregar 'ejemplares' a una obra literaria")        
+        ventana_agrega_ejemplar.geometry("300x200")
+        ventana_agrega_ejemplar.title("Agregar 'ejemplares' a una obra literaria")
+        lblTitulo1=ttk.Label(ventana_agrega_ejemplar,text=f'Titulo:  ').place(x=10 , y=20)
+        lblTitulo2=ttk.Label(ventana_agrega_ejemplar,text=nombreObra).place(x=50, y=20) 
+             
+        lblAutor1=ttk.Label(ventana_agrega_ejemplar , text='Autor: ').place(x=10, y=40)
+        lblAutor2=ttk.Label(ventana_agrega_ejemplar , text=autor).place(x=50, y=40)
+        
+        lblCant1=ttk.Label(ventana_agrega_ejemplar,text='Cantidad de ejemplares: ').place(x=10, y=60)
+        lblCant2=ttk.Label(ventana_agrega_ejemplar,text=cant).place(x=140, y=60)
 
-
+        lblPregunta=ttk.Label(ventana_agrega_ejemplar, text='¿Cuantos ejemplares desea agregar a esta obra?').place(x=10 , y=80)
+        varCant=tkinter.IntVar()
+        entryCant=Entry(ventana_agrega_ejemplar, textvariable=varCant).place(x=60, y=100)
 
 
     def ventana_edita_obra(self):

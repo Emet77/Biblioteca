@@ -10,9 +10,9 @@ class MenuPrincipal:
             self.cuadro_resultados.delete(elemento)
         criterio = self.var_buscar.get()
         resultado = self.controlador.buscar_obra(criterio)
-        
-        #for elemento in resultado:   
-        #    self.cuadro_resultados.insert('',0,text=elemento[0],values=(elemento[1],'cant ejemplares',elemento[2]) )
+        for elemento in resultado:   
+            self.cuadro_resultados.insert('',0,text=elemento[0],values=(elemento[1],elemento[2]) )
+     
     def agregar(self):
         ventana_agregar= VistaAgregar.VistaAgregar(self.ventana_principal)
         comprueba = self.cuadro_resultados.item(self.cuadro_resultados.selection())

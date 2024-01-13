@@ -20,28 +20,34 @@ class ObraLiteraria:
         self.ejecutar_consulta(consulta)
     def buscar_obra(self,criterio):
         self.criterio=criterio 
-              
+        #esto es la consulta de la busqueda     
         consulta_obras=f"SELECT obraliteraria.titulo , obraliteraria.autor, obraliteraria.idObra FROM obraliteraria  WHERE obraLiteraria.autor LIKE '%{self.criterio}%' OR obraLiteraria.titulo LIKE '%{self.criterio}%';"
+        #
+        #esto es una 'LISTA DE TUPLAS' resultado de ejecutar la busquedad de arriba
         obras_buscadas=self.ejecutar_consulta(consulta_obras)
-        #[('La vuelta al mundo en 80 dias', 'Julio Verne', 1),
-        # ('DUNE', 'Frank Herbert', 2), ('De la Tierra a la Luna', 'Julio Verne', 3),
-        # ('20mil Leguas de viaje submarino', 'Julio Verne', 4),
-        # ('Calculo', 'Robert A. Adams', 5), ('mi libro', 'yo', 6)]
-        #   la ejecucion de la busqueda devuelve una lista de tuplas, nececito los elementos ID de cada tupla
-        #   este dato se encuentra en la pocicion 2 de cada una de ellas , vamos a iterarlas con un for
-        cont=0
+        #
         
-        list(obras_buscadas)
-        for i in obras_buscadas:           
-            contar_ejemplares=f"SELECT COUNT(idEjemplar) FROM ejemplar WHERE idObra = {obras_buscadas[cont][2]};"
-            cantidad=(self.ejecutar_consulta(contar_ejemplares))
-            list(i)
-            
-            cont=cont+1
-            cantidad.append(cantidad)
-        print(type(i))
-        print(cantidad)
-        return obras_buscadas
+        lista_de_listas=[]
+        for obra in obras_buscadas:
+             lista_vacia=[]   
+             lista_vacia.append(obra[0])
+             lista_vacia.append(obra[1])
+             obra[2]
+             consulta_cantidad=f"SELECT COUNT(idEjemplar) FROM ejemplar WHERE idObra = {obra[2]};"
+             cantidad_ejemplares=(self.ejecutar_consulta(consulta_cantidad))
+             lista_vacia.append(cantidad_ejemplares)
+             
+             
+             lista_de_listas.append(lista_vacia)
+             
+        print(lista_de_listas)
+        # for i in obras_buscadas:           
+        #     contar_ejemplares=f"SELECT COUNT(idEjemplar) FROM ejemplar WHERE idObra = {obras_buscadas[cont][2]};"
+        #     cantidad=(self.ejecutar_consulta(contar_ejemplares))
+        #     lista_de_cantidades.append(cantidad)
+        #     cont=cont+1
+         
+        return lista_de_listas 
     
     
     

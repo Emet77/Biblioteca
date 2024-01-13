@@ -54,7 +54,21 @@ class VistaAgregar:
         
         
         
-    def ventana_agrega_ejemplar(self, nombreObra , autor , cant):
+    def ventana_agrega_ejemplar(self, nombreObra , autor , cant , idObra):
+     
+        def agrega_ejem( ):
+            cantida=varCant.get()
+            #mensaje = self.controladorObra.agrega_obra(cantida, idObra)
+            c1=ObraLiteraria.ObraLiteraria('','',0)
+            c1.agrega_ejemplar(idObra , cantida)
+              
+           # if(mensaje == True):
+            #    messagebox.showinfo('informacion', 'Una nueva obra fue agregada')
+             #   ventana_agrega_ejemplar.destroy()
+            #else:
+             #   messagebox.showerror('Error','Algo salio mal :c \n contacte con el administrador ')
+              #  ventana_agrega_ejemplar.destroy()
+                      
         ventana_agrega_ejemplar=Toplevel(self.ventana_principal)
         ventana_agrega_ejemplar.geometry("300x200")
         ventana_agrega_ejemplar.title("Agregar 'ejemplares' a una obra literaria")
@@ -69,11 +83,14 @@ class VistaAgregar:
 
         lblPregunta=ttk.Label(ventana_agrega_ejemplar, text='¿Cuantos ejemplares desea agregar a esta obra?').place(x=10 , y=80)
         varCant=tkinter.IntVar()
-        entryCant=Entry(ventana_agrega_ejemplar, textvariable=varCant).place(x=60, y=100)
+        entryCant=Entry(ventana_agrega_ejemplar, textvariable=varCant).place(x=60, y=110)
+        
+        btnGuardar=ttk.Button(ventana_agrega_ejemplar, text="Agregar" , command=agrega_ejem ).place(x=50 , y=140 , width=60 , height=40)
+        btnSalir=ttk.Button(ventana_agrega_ejemplar, text="Salir" , command= ventana_agrega_ejemplar.destroy).place(x=150 , y=140 ,width=60 , height=40)         
 
 
     def ventana_edita_obra(self):
-        self.controladorObra =ObraLiteraria.ObraLiteraria('','',0)
+        #self.controladorObra =ObraLiteraria.ObraLiteraria('','',0)
         ventana_agrega_obra=Toplevel(self.ventana_principal)
         ventana_agrega_obra.geometry("400x300")
         ventana_agrega_obra.title('Agregar una obra literaria')

@@ -27,27 +27,22 @@ class ObraLiteraria:
         obras_buscadas=self.ejecutar_consulta(consulta_obras)
         #
         
-        lista_de_listas=[]
+        lista_de_obras=[]
         for obra in obras_buscadas:
-             lista_vacia=[]   
-             lista_vacia.append(obra[0])
-             lista_vacia.append(obra[1])
-             obra[2]
+             cantida_ejepares_obra=[]   
+             cantida_ejepares_obra.append(obra[0])#Titulo
+             cantida_ejepares_obra.append(obra[1])#Autor
+             cantida_ejepares_obra.append(obra[2])#id De la obra
+             
              consulta_cantidad=f"SELECT COUNT(idEjemplar) FROM ejemplar WHERE idObra = {obra[2]};"
-             cantidad_ejemplares=(self.ejecutar_consulta(consulta_cantidad))
-             lista_vacia.append(cantidad_ejemplares)
+             cantidad_ejemplares=(self.ejecutar_consulta(consulta_cantidad))#cantidad de ejemplares de esta obra
+             cantida_ejepares_obra.append(cantidad_ejemplares)
              
+             lista_de_obras.append(cantida_ejepares_obra)
              
-             lista_de_listas.append(lista_vacia)
-             
-        print(lista_de_listas)
-        # for i in obras_buscadas:           
-        #     contar_ejemplares=f"SELECT COUNT(idEjemplar) FROM ejemplar WHERE idObra = {obras_buscadas[cont][2]};"
-        #     cantidad=(self.ejecutar_consulta(contar_ejemplares))
-        #     lista_de_cantidades.append(cantidad)
-        #     cont=cont+1
+        
          
-        return lista_de_listas 
+        return lista_de_obras
     
     
     

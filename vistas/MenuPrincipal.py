@@ -17,22 +17,12 @@ class MenuPrincipal:
     def agregar(self):
         ventana_agregar= VistaAgregar.VistaAgregar(self.ventana_principal)
         comprueba = self.cuadro_resultados.item(self.cuadro_resultados.selection())
-        #print(comprueba['values'][1])
-        #print(comprueba['text'])
         if(comprueba['text'] == ''):
             ventana_agregar.ventana_agrega_obra()
+            
         else:
             ventana_agregar.ventana_agrega_ejemplar(comprueba['text'],comprueba['values'][0],comprueba['values'][1],comprueba['values'][2])
-        
-        
-        #{'text': 'De la Tierra a la Luna', 'image': '', 'values': ['Julio Verne', 15, 3], 'open': 0, 'tags': ''}
-        #con el value[2] hacer un if que evalue si el usuario quiere ingresar una obra completa o solo ejemplares
-        # de una obra en especifico
-
-        
-        
-        
-        
+        self.buscar()            
     def ventana_principal(self):
         self.ventana_principal=tkinter.Tk()
         self.ventana_principal.title('Biblioteca IES-9012')

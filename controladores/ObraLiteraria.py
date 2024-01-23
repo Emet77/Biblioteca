@@ -18,6 +18,10 @@ class ObraLiteraria:
     def traer_todos_los_datos(self):
         consulta = "SELECT * FROM `obraliteraria`"
         self.ejecutar_consulta(consulta)
+    def evaluar_informacion(self):
+        pass
+    
+    
     def buscar_obra(self,criterio):
         self.criterio=criterio 
         #esto es la consulta de la busqueda     
@@ -29,16 +33,16 @@ class ObraLiteraria:
         
         lista_de_obras=[]
         for obra in obras_buscadas:
-             cantida_ejepares_obra=[]   
-             cantida_ejepares_obra.append(obra[0])#Titulo
-             cantida_ejepares_obra.append(obra[1])#Autor
-             cantida_ejepares_obra.append(obra[2])#id De la obra
+             cantida_ejemplares_obra=[]   
+             cantida_ejemplares_obra.append(obra[0])#Titulo
+             cantida_ejemplares_obra.append(obra[1])#Autor
+             cantida_ejemplares_obra.append(obra[2])#id De la obra
              
              consulta_cantidad=f"SELECT COUNT(idEjemplar) FROM ejemplar WHERE idObra = {obra[2]};"
              cantidad_ejemplares=(self.ejecutar_consulta(consulta_cantidad))#cantidad de ejemplares de esta obra
-             cantida_ejepares_obra.append(cantidad_ejemplares)
+             cantida_ejemplares_obra.append(cantidad_ejemplares)
              
-             lista_de_obras.append(cantida_ejepares_obra)
+             lista_de_obras.append(cantida_ejemplares_obra)
              
         
          
@@ -46,22 +50,30 @@ class ObraLiteraria:
     
     
     
-    def crear_obra(self, titulo, autor, cantidad, importancia):
+    def crear_obra(self, titulo, autor,importancia, cantidad):
         if(importancia=="SI"):
             evalua=1
         else:
             evalua=0
-        #print("Desde el controlador de obra literaria: ", titulo, autor, cantidad, importancia)
-        consulta=f"INSERT INTO `obraliteraria`(`idObra`, `titulo`, `autor`, `cantidaEjemplares`, `importancia`) VALUES (null,'{titulo}','{autor}','{cantidad}','{evalua}');"
-        self.ejecutar_consulta(consulta)
+        nueva_obra=f"INSERT INTO `obraliteraria`(`idObra`, `titulo`, `autor`, `importancia`) VALUES (null,'{titulo}','{autor}','{evalua}');"
+        id_obra_nueva=f"SELECT obraliteraria.idObra FROM obraliteraria  WHERE obraLiteraria.autor ='{autor}' and obraLiteraria.titulo ='{titulo}';"
+        self.ejecutar_consulta(nueva_obra)
+        captura_id=self.ejecutar_consulta(id_obra_nueva)
+        id=captura_id[0][0]
+        self.agrega_ejemplar(id , cantidad) 
         return True
+    
     def agrega_ejemplar(self,idObra,cantida):
         consulta=f"INSERT INTO `ejemplar`(`idEjemplar`, `idObra`, `estado`) VALUES (null,'{idObra}',1);"
         cont=1
+      
         while cont <= cantida:
             cont=cont+1
-            print(cont)
             resultado=self.ejecutar_consulta(consulta)
+            
+        # print(idObra)
+        # print(type(idObra))#este idObra es de clase int
+        return True
         
     
     def eliminar_obra(self):

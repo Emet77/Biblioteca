@@ -14,14 +14,18 @@ class VistaAgregar:
             autor=varAutor.get()
             cantida=varCantidad.get()
             importancia=varImportacia.get()
-            mensaje = self.controladorObra.crear_obra(titulo,autor,cantida,importancia) 
-            if(mensaje == True):
+            confirma = self.controladorObra.crear_obra(titulo,autor,importancia, cantida) 
+            
+            if(confirma == True):
+                
                 messagebox.showinfo('informacion', 'Una nueva obra fue agregada')
                 ventana_agrega_obra.destroy()
+                
             else:
                 messagebox.showerror('Error','Algo salio mal :c \n contacte con el administrador ')
                 ventana_agrega_obra.destroy()
-                      
+            
+            
         
        
             
@@ -58,16 +62,15 @@ class VistaAgregar:
      
         def agrega_ejem( ):
             cantida=varCant.get()
-            #mensaje = self.controladorObra.agrega_obra(cantida, idObra)
             c1=ObraLiteraria.ObraLiteraria('','',0)
-            c1.agrega_ejemplar(idObra , cantida)
+            mensaje = c1.agrega_ejemplar(idObra , cantida)
               
-           # if(mensaje == True):
-            #    messagebox.showinfo('informacion', 'Una nueva obra fue agregada')
-             #   ventana_agrega_ejemplar.destroy()
-            #else:
-             #   messagebox.showerror('Error','Algo salio mal :c \n contacte con el administrador ')
-              #  ventana_agrega_ejemplar.destroy()
+            if(mensaje == True):
+                messagebox.showinfo('informacion', f'Nuevos ejemplares fueron agregados a la obra:  {nombreObra}'  )
+                ventana_agrega_ejemplar.destroy()
+            else:
+                messagebox.showerror('Error','Algo salio mal :c \n contacte con el administrador ')
+                ventana_agrega_ejemplar.destroy()
                       
         ventana_agrega_ejemplar=Toplevel(self.ventana_principal)
         ventana_agrega_ejemplar.geometry("300x200")

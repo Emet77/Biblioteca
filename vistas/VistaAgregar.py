@@ -14,7 +14,10 @@ class VistaAgregar:
             autor=varAutor.get()
             cantida=varCantidad.get()
             importancia=varImportacia.get()
-            confirma = self.controladorObra.crear_obra(titulo,autor,importancia, cantida) 
+            tituloM=titulo.upper()
+            autorM=autor.upper()
+            
+            confirma = self.controladorObra.crear_obra( tituloM,autorM,importancia, cantida) 
             
             if(confirma == True):
                 
@@ -22,7 +25,7 @@ class VistaAgregar:
                 ventana_agrega_obra.destroy()
                 
             else:
-                messagebox.showerror('Error','Algo salio mal :c \n contacte con el administrador ')
+                messagebox.showerror('Error','Esta obra ya existe :[')
                 ventana_agrega_obra.destroy()
             
             

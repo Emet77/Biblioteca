@@ -14,12 +14,17 @@ class ObraLiteraria:
         resultado= cursor.fetchall()
         conexion.commit()
         return resultado
+    
+    def validar_obra(self, titulo, autor ):
+        #tengo que recibir titulo y autor de las obras y evaluar que no haya una obra exactamente igual antes.
+        consulta= f"SELECT COUNT(idObra) FROM obraliteraria WHERE `titulo`='{titulo}' AND `autor` ='{autor}' ;"
+        resultado_consulta = self.ejecutar_consulta(consulta)
+        print(resultado_consulta)
+        if resultado_consulta[0][0] == 0:
+            return True
+        else:
+            return False
         
-    def traer_todos_los_datos(self):
-        consulta = "SELECT * FROM `obraliteraria`"
-        self.ejecutar_consulta(consulta)
-    def evaluar_informacion(self):
-        pass
     
     
     def buscar_obra(self,criterio):
@@ -43,25 +48,26 @@ class ObraLiteraria:
              cantida_ejemplares_obra.append(cantidad_ejemplares)
              
              lista_de_obras.append(cantida_ejemplares_obra)
-             
-        
-         
         return lista_de_obras
     
     
     
     def crear_obra(self, titulo, autor,importancia, cantidad):
-        if(importancia=="SI"):
-            evalua=1
+        revisar_datos= self.validar_obra(titulo , autor)
+        if revisar_datos==True:
+            if(importancia=="SI"):
+                evalua=1
+            else:
+                evalua=0
+            nueva_obra=f"INSERT INTO `obraliteraria`(`idObra`, `titulo`, `autor`, `importancia`) VALUES (null,'{titulo}','{autor}','{evalua}');"
+            id_obra_nueva=f"SELECT obraliteraria.idObra FROM obraliteraria  WHERE obraLiteraria.autor ='{autor}' and obraLiteraria.titulo ='{titulo}';"
+            self.ejecutar_consulta(nueva_obra)
+            captura_id=self.ejecutar_consulta(id_obra_nueva)
+            id=captura_id[0][0]
+            self.agrega_ejemplar(id , cantidad) 
+            return True
         else:
-            evalua=0
-        nueva_obra=f"INSERT INTO `obraliteraria`(`idObra`, `titulo`, `autor`, `importancia`) VALUES (null,'{titulo}','{autor}','{evalua}');"
-        id_obra_nueva=f"SELECT obraliteraria.idObra FROM obraliteraria  WHERE obraLiteraria.autor ='{autor}' and obraLiteraria.titulo ='{titulo}';"
-        self.ejecutar_consulta(nueva_obra)
-        captura_id=self.ejecutar_consulta(id_obra_nueva)
-        id=captura_id[0][0]
-        self.agrega_ejemplar(id , cantidad) 
-        return True
+            return False
     
     def agrega_ejemplar(self,idObra,cantida):
         consulta=f"INSERT INTO `ejemplar`(`idEjemplar`, `idObra`, `estado`) VALUES (null,'{idObra}',1);"
@@ -70,9 +76,6 @@ class ObraLiteraria:
         while cont <= cantida:
             cont=cont+1
             resultado=self.ejecutar_consulta(consulta)
-            
-        # print(idObra)
-        # print(type(idObra))#este idObra es de clase int
         return True
         
     

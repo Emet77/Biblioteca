@@ -1,9 +1,11 @@
 import tkinter
 from tkinter import ttk , Frame, Toplevel
-from vistas import VistaAgregar
-class MenuPrincipal:
+from vistas import VistaAgregar, VistaEliminar
+class MenuPrincipal():
+    
     def __init__(self , controlador) :
         self.controlador  = controlador
+    
     def buscar(self):
         eliminar =self.cuadro_resultados.get_children()
         for elemento in eliminar:
@@ -22,7 +24,20 @@ class MenuPrincipal:
             
         else:
             ventana_agregar.ventana_agrega_ejemplar(comprueba['text'],comprueba['values'][0],comprueba['values'][1],comprueba['values'][2])
-        self.buscar()            
+        self.buscar() 
+    def elimina(self):
+        vista_elimina = VistaEliminar.VistaEliminar(self.ventana_principal)
+        comprueba = self.cuadro_resultados.item(self.cuadro_resultados.selection())
+        if (comprueba['text'] == ''):
+            vista_elimina.ventana_elimina_ejemplar()
+            self.buscar() 
+        else:  
+            id_obra= self.cuadro_resultados.item(self.cuadro_resultados.selection())['values'][2]  
+            titulo=self.cuadro_resultados.item(self.cuadro_resultados.selection())['text']
+            vista_elimina.ventana_elimina_obra(id_obra , titulo)
+            self.buscar()           
+        
+        
     def ventana_principal(self):
         self.ventana_principal=tkinter.Tk()
         self.ventana_principal.title('Biblioteca IES-9012')
@@ -43,6 +58,11 @@ class MenuPrincipal:
         
         boton_agregar=ttk.Button(self.ventana_principal, text='Agregar', command=self.agregar).place(x=700, y=50)
         
+         
+       
+    
+        boton_eliminar=ttk.Button(self.ventana_principal, text='Eliminar',  command=self.elimina)
+        boton_eliminar.place(x=700, y=100)
         self.ventana_principal.mainloop()
         
-        
+    

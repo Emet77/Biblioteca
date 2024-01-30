@@ -79,9 +79,21 @@ class ObraLiteraria:
         return True
         
     
-    def eliminar_obra(self):
+    def eliminar_obra(self,id_obra):
         pass
-    
+    def eliminar_ejemplar(self,id_ejemp):
+        exist_ejemplar= f"SELECT COUNT(idEjemplar) FROM ejemplar WHERE idEjemplar = {id_ejemp};"
+        comprueba=self.ejecutar_consulta(exist_ejemplar)
+        print(comprueba[0][0])
+        if(comprueba[0][0] >0):
+            consulta_elim=f"DELETE FROM `ejemplar` WHERE `ejemplar`.`idEjemplar` = {id_ejemp}; "
+            self.ejecutar_consulta(consulta_elim)
+            return True
+        elif(comprueba[0][0]==0):
+            return False
+            
+        
+        
     def modificar_obra(self):
         pass
     

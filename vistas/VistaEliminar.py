@@ -18,17 +18,17 @@ class VistaEliminar:
         def borra():
             abortar=messagebox.askquestion(title='Eliminar obra completa', message=f"¿Esta seguro que desea continuar?\n se borrara la obra '{self.titulo}'")
             if abortar=='yes':
-                print('se borra toda la obra')
-                self.controlador_obralit.eliminar_obra(self.id_obra)
-                messagebox.showinfo(title='Información', message='¡Obra eliminada con exito!')
-                
-            else:
-                print('no se borra nada ...')
+                comprueba=self.controlador_obralit.eliminar_obra(self.id_obra)
+                if(comprueba == True):
+                    messagebox.showinfo(title='Información', message='¡Obra eliminada con exito!')
+                elif(comprueba==False):
+                    messagebox.showerror(title='Fatal Error', message='Error al conectarse a la base de datos')
+ 
             ventana_elimina.destroy()
             
             
         ventana_elimina=Toplevel(self.ventana_principal)
-        ventana_elimina.geometry("300x400")
+        ventana_elimina.geometry("300x200")
         
         lbl_pregunta=ttk.Label(ventana_elimina, text="¿Desea eliminar la obra completa?").pack()
         lbl_titulo=ttk.Label(ventana_elimina, text=titulo).pack()

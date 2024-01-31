@@ -15,19 +15,19 @@ class VistaAgregar:
             cantida=varCantidad.get()
             importancia=varImportacia.get()
             tituloM=titulo.upper()
-            autorM=autor.upper()
+            autorM=autor.upper() 
+            tiene_titulo=len(tituloM)- tituloM.count(' ')
             
-            confirma = self.controladorObra.crear_obra( tituloM,autorM,importancia, cantida) 
-            
-            if(confirma == True):
-                
-                messagebox.showinfo('informacion', 'Una nueva obra fue agregada')
-                ventana_agrega_obra.destroy()
-                
-            else:
-                messagebox.showerror('Error','Esta obra ya existe :[')
-                ventana_agrega_obra.destroy()
-            
+            if(tiene_titulo > 0):
+                confirma = self.controladorObra.crear_obra( tituloM,autorM,importancia, cantida)
+                if(confirma == True):
+                    messagebox.showinfo('informacion', 'Una nueva obra fue agregada')
+                    ventana_agrega_obra.destroy()
+                else:
+                    messagebox.showerror('Error','Esta obra ya existe :[')
+                    ventana_agrega_obra.destroy()
+            elif(tiene_titulo<=0):
+                messagebox.showwarning(title="Información", message="El campo 'Titulo' debe estar lleno :-]")
             
         
        
@@ -67,13 +67,18 @@ class VistaAgregar:
             cantida=varCant.get()
             c1=ObraLiteraria.ObraLiteraria('','',0)
             mensaje = c1.agrega_ejemplar(idObra , cantida)
+            
+            if(cantida>0):
+                if(mensaje == True):
+                    messagebox.showinfo('informacion', f'Nuevos ejemplares fueron agregados a la obra:  {nombreObra}'  )
+                    ventana_agrega_ejemplar.destroy()
+                else:
+                    messagebox.showerror('Error','Algo salio mal :c \n contacte con el administrador ')
+                    ventana_agrega_ejemplar.destroy()
+            elif(cantida<=0):
+                messagebox.showwarning(title="Información",message='La cantidad de ejemplares debe ser un entero mayor a 0 ' )    
               
-            if(mensaje == True):
-                messagebox.showinfo('informacion', f'Nuevos ejemplares fueron agregados a la obra:  {nombreObra}'  )
-                ventana_agrega_ejemplar.destroy()
-            else:
-                messagebox.showerror('Error','Algo salio mal :c \n contacte con el administrador ')
-                ventana_agrega_ejemplar.destroy()
+            
                       
         ventana_agrega_ejemplar=Toplevel(self.ventana_principal)
         ventana_agrega_ejemplar.geometry("300x200")

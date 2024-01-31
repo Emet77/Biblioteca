@@ -80,7 +80,15 @@ class ObraLiteraria:
         
     
     def eliminar_obra(self,id_obra):
-        pass
+        try:
+            elim_obra=f"DELETE FROM obraliteraria WHERE `obraliteraria`.`idObra` = {id_obra};"
+            self.ejecutar_consulta(elim_obra)
+            return True
+        except mysql.connector.errors.DatabaseError:
+            return False
+        
+            
+            
     def eliminar_ejemplar(self,id_ejemp):
         exist_ejemplar= f"SELECT COUNT(idEjemplar) FROM ejemplar WHERE idEjemplar = {id_ejemp};"
         comprueba=self.ejecutar_consulta(exist_ejemplar)
@@ -97,3 +105,8 @@ class ObraLiteraria:
     def modificar_obra(self):
         pass
     
+
+
+
+
+

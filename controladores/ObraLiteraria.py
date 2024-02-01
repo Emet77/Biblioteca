@@ -92,7 +92,7 @@ class ObraLiteraria:
     def eliminar_ejemplar(self,id_ejemp):
         exist_ejemplar= f"SELECT COUNT(idEjemplar) FROM ejemplar WHERE idEjemplar = {id_ejemp};"
         comprueba=self.ejecutar_consulta(exist_ejemplar)
-        print(comprueba[0][0])
+         
         if(comprueba[0][0] >0):
             consulta_elim=f"DELETE FROM `ejemplar` WHERE `ejemplar`.`idEjemplar` = {id_ejemp}; "
             self.ejecutar_consulta(consulta_elim)
@@ -102,8 +102,14 @@ class ObraLiteraria:
             
         
         
-    def modificar_obra(self):
-        pass
+    def modificar_obra(self, titulo , autor , id_obra):
+        consulta_edita=f"UPDATE `obraliteraria` SET  `titulo`='{titulo}',`autor`='{autor}'  WHERE `idObra`= {id_obra}"
+        try:
+            self.ejecutar_consulta(consulta_edita)
+            return True
+        except:
+            return False
+        
     
 
 

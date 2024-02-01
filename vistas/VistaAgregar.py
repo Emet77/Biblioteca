@@ -27,8 +27,8 @@ class VistaAgregar:
                     messagebox.showerror('Error','Esta obra ya existe :[')
                     ventana_agrega_obra.destroy()
             elif(tiene_titulo<=0):
-                messagebox.showwarning(title="Información", message="El campo 'Titulo' debe estar lleno :-]")
-            
+               #messagebox.showwarning(title="Información", message="El campo 'Titulo' debe estar lleno :-]")
+                messagebox.showerror(title="Información", message="El campo 'Titulo' debe estar lleno :-]")
         
        
             

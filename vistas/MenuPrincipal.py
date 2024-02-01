@@ -1,6 +1,6 @@
 import tkinter
 from tkinter import ttk , Frame, Toplevel
-from vistas import VistaAgregar, VistaEliminar
+from vistas import VistaAgregar, VistaEliminar , VistaEdita
 class MenuPrincipal():
     
     def __init__(self , controlador) :
@@ -36,6 +36,13 @@ class MenuPrincipal():
             titulo=self.cuadro_resultados.item(self.cuadro_resultados.selection())['text']
             vista_elimina.ventana_elimina_obra(id_obra , titulo)
             self.buscar()           
+    def edita(self):
+        try: 
+            datos_editar=self.cuadro_resultados.item(self.cuadro_resultados.selection())
+            vista_edita= VistaEdita.VistaEdita(self.ventana_principal)
+            vista_edita.ventana_edita_obra(datos_editar['text'], datos_editar['values'][0],datos_editar['values'][2])
+        except:
+            pass
         
         
     def ventana_principal(self):
@@ -57,12 +64,17 @@ class MenuPrincipal():
         scrollbar = ttk.Scrollbar(self.ventana_principal, orient=tkinter.VERTICAL, command=self.cuadro_resultados.yview).place(x=615 , y=40 ,height="240")
         
         boton_agregar=ttk.Button(self.ventana_principal, text='Agregar', command=self.agregar).place(x=700, y=50)
-        
-         
-       
     
         boton_eliminar=ttk.Button(self.ventana_principal, text='Eliminar',  command=self.elimina)
         boton_eliminar.place(x=700, y=100)
+        
+        boton_editar=ttk.Button(self.ventana_principal, text='Editar' , command=self.edita)
+        boton_editar.place(x=700 , y=150)
+        
+        
+        
+        
+        
         self.ventana_principal.mainloop()
         
     

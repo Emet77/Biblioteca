@@ -16,7 +16,6 @@ class ObraLiteraria:
         return resultado
     
     def validar_obra(self, titulo, autor ):
-        #tengo que recibir titulo y autor de las obras y evaluar que no haya una obra exactamente igual antes.
         consulta= f"SELECT COUNT(idObra) FROM obraliteraria WHERE `titulo`='{titulo}' AND `autor` ='{autor}' ;"
         resultado_consulta = self.ejecutar_consulta(consulta)
         print(resultado_consulta)
@@ -25,17 +24,11 @@ class ObraLiteraria:
         else:
             return False
         
-    
-    
     def buscar_obra(self,criterio):
-        self.criterio=criterio 
-        #esto es la consulta de la busqueda     
+        self.criterio=criterio    
         consulta_obras=f"SELECT obraliteraria.titulo , obraliteraria.autor, obraliteraria.idObra FROM obraliteraria  WHERE obraLiteraria.autor LIKE '%{self.criterio}%' OR obraLiteraria.titulo LIKE '%{self.criterio}%';"
-        #
-        #esto es una 'LISTA DE TUPLAS' resultado de ejecutar la busquedad de arriba
         obras_buscadas=self.ejecutar_consulta(consulta_obras)
-        #
-        
+      
         lista_de_obras=[]
         for obra in obras_buscadas:
              cantida_ejemplares_obra=[]   

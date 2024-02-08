@@ -1,7 +1,9 @@
 import tkinter
 from tkinter import ttk , Frame, Toplevel
-from vistas import VistaAgregar, VistaEliminar , VistaEdita
 from controladores import ObraLiteraria
+
+from vistas.vistasMOE import VistaAgregar , VistaEliminar , VistaEdita
+ 
 class MenuObraEjemplar:   
     
    

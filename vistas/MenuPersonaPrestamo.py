@@ -1,10 +1,14 @@
 import tkinter
 from tkinter import ttk , Frame, Toplevel
 from controladores import ObraLiteraria
+from vistas.vistasMPP import VistaAgregarPersona
 
 class MenuPersonaPrestamo:
     def __init__(self,ventana_principal) -> None:
         self.ventana_principal = ventana_principal
+    def agrega_persona(self):
+        ventana_agrega_persona=VistaAgregarPersona.VistaAgregarPersona(self.ventana_principal)
+        ventana_agrega_persona.ventana_agrega_persona()
     def menu_persona_prestamo(self):
         self.controlador= ObraLiteraria.ObraLiteraria('','',0)
         menu_persn_prstm=Toplevel(self.ventana_principal)
@@ -26,7 +30,7 @@ class MenuPersonaPrestamo:
         cuadro_persona.column('#3', width=100)
         cuadro_persona.place(x=10 , y=50 , width=400, height=150)
         
-        btn_agrega_persona=ttk.Button(menu_persn_prstm , text='Agregar\nPersona').place(x=10 , y=210)
+        btn_agrega_persona=ttk.Button(menu_persn_prstm , text='Agregar\nPersona', command=self.agrega_persona).place(x=10 , y=210)
         btn_edita_p=ttk.Button(menu_persn_prstm, text='Editar').place(x=100 , y=210)
         btn_elimina_p=ttk.Button(menu_persn_prstm , text='Eliminar').place(x=190 , y=210)
 

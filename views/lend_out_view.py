@@ -106,17 +106,46 @@ class lend_out_view():
         lbl_list_advice=ttk.Label(lend_out_frame, text='Lista de ejemplares',font='Helvetica')
         lbl_list_advice.place(x=590, y=50+5)
 
-        list_of_curses=self.lend_out_driver.cursos_disponibles()
-        lbl_course=ttk.Label(lend_out_frame, text='Curso')
-        lbl_course.place(x=20,y=250, width='150')
+        lbl_second_step=ttk.Label(lend_out_frame, text='Beneficiario del prestamo',font='Helvetica')
+        lbl_second_step.place(x=20 , y=250)
 
+        lbl_course=ttk.Label(lend_out_frame, text='Curso')
+        lbl_course.place(x=20,y=290, width='150')
+
+        list_of_curses=self.lend_out_driver.cursos_disponibles()
         var_course=tkinter.StringVar()
         course_select=ttk.Combobox(lend_out_frame, state="readonly", values=list_of_curses,textvariable=var_course)#, values=lista_de_cursos
-        course_select.place(x=20, y=270,width='60')
+        course_select.place(x=20, y=310,width='60')
 
+        lbl_sections=ttk.Label(lend_out_frame, text='Divicion')
+        lbl_sections.place(x=90,y=290, width='150')
 
+        list_of_sections=self.lend_out_driver.diviciones_disponibles()
+        var_sections=tkinter.StringVar()
+        section_select=ttk.Combobox(lend_out_frame, state="readonly", values=list_of_sections,textvariable=var_sections)#, values=lista_de_cursos
+        section_select.place(x=90, y=310,width='60')
 
+        var_chkbox_home_loan=tkinter.IntVar()
+        chkbox_home_loan=tkinter.Checkbutton(lend_out_frame, text='Para llevar a casa', var=var_chkbox_home_loan,onvalue=1, offvalue=0) #command=funcion_chkbox_on_off,
+        chkbox_home_loan.place(x=20, y=350)
 
+        lbl_num_socio_dni=ttk.Label(lend_out_frame, text='Buscar por socio/DNI')
+        lbl_num_socio_dni.place(x=20, y=380)    
+
+        var_id_partner=tkinter.IntVar()
+        validate_entry = lambda text: text.isdecimal()
+        ntry_socio=ttk.Entry(lend_out_frame,state='disabled',validate="key",validatecommand=(lend_out_frame.register(validate_entry), "%S"), textvariable=var_id_partner)#Validar para que solo se puedan ingresar numeros enteros positivos
+        ntry_socio.place(x=20, y=400, width=80)
+        
+
+        frame_search_partner=ttk.Treeview(lend_out_frame, columns=('Nombre','DNI','id') )
+        frame_search_partner.place(x=20 , y=440 , width=170, height=80)
+        frame_search_partner.heading('#0', text='Nombre')
+        frame_search_partner.heading('#1',text='DNI')
+        frame_search_partner.heading('#2',text='id')
+        frame_search_partner.column('#0', width=90, minwidth=90)
+        frame_search_partner.column('#1', width=80, minwidth=80)
+        frame_search_partner.column('#2', width=5, minwidth=5)
 
 
 

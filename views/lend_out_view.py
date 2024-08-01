@@ -50,7 +50,11 @@ class lend_out_view():
             
                 # ['La vuelta al mundo en 80 días 0', 'Julio Verne1', 'Santillana2', 2, 5, 1]
                 frame_to_show_search.insert('',0,text=elemento[0],values=(elemento[1],elemento[2],elemento[3]) )
-            
+        def func_btn_search_partner():
+            search_this_id=var_id_partner.get()
+            self.lend_out_driver.verifica_id_socio(search_this_id)
+
+
         lend_out_frame=ttkbootstrap.Frame(self.main_window, border=5, bootstyle='ligth' )
         lend_out_frame.configure(width="990",height="560")
         # frame.place(x=0,y=0)
@@ -69,7 +73,7 @@ class lend_out_view():
         cmbox_where_search=ttk.Combobox(lend_out_frame ,state="readonly",values=('Titulo', 'Autor', 'Editorial','Identificador'), textvariable=var_where_search)
         cmbox_where_search.place(x=165, y=55, width=70 , height=25)
         
-        btn_search=tkinter.Button(lend_out_frame, text='Buscar', command=function_btn_search)# command=funcion_btn_busca
+        btn_search=ttk.Button(lend_out_frame, text='Buscar', command=function_btn_search)# command=funcion_btn_busca
         btn_search.place_configure( x=255, y=55, height=25) 
 
         frame_to_show_search=ttk.Treeview(lend_out_frame, columns=('Titulo','Autor','Editorial','Disponibles','Total') )
@@ -137,6 +141,9 @@ class lend_out_view():
         ntry_socio=ttk.Entry(lend_out_frame,state='disabled',validate="key",validatecommand=(lend_out_frame.register(validate_entry), "%S"), textvariable=var_id_partner)#Validar para que solo se puedan ingresar numeros enteros positivos
         ntry_socio.place(x=20, y=400, width=80)
         
+        btn_search_partner=ttk.Button(lend_out_frame , text="Buscar")
+        btn_search_partner.place(x=130, y=400)
+        btn_search_partner.configure(state='disabled')
 
         frame_search_partner=ttk.Treeview(lend_out_frame, columns=('Nombre','DNI','id') )
         frame_search_partner.place(x=20 , y=440 , width=170, height=80)
@@ -148,7 +155,7 @@ class lend_out_view():
         frame_search_partner.column('#2', width=5, minwidth=5)
 
 
-
+        
 
 
         return lend_out_frame

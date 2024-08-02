@@ -4,7 +4,8 @@ from ttkbootstrap.constants import *
 import ttkbootstrap.window
 from views import catalog_view , lend_out_view
 
-main_window=ttkbootstrap.Window(themename="litera")#Esta es la ventana principal que contiene todo
+main_window=ttkbootstrap.Window(themename="litera")##Esta es la ventana principal que contiene todo
+#podria agregar un selector deslizante para cambiar entre modo obscuro y claro#
 main_window.title("biblioteca 4-117")
 main_window.geometry('1000x600')
 main_window.resizable(0,0)

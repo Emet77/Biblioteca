@@ -33,9 +33,31 @@ class lend_out_view():
             seleccion_ejemplar=frame_to_show_search.item(frame_to_show_search.selection())
             
             if(seleccion_ejemplar['values'][2] not in list_of_ids):
+                lbl_list_advice.configure(text="Lista de ejemplares")
                 list_of_ids.append(seleccion_ejemplar['values'][2])#solo una lista
                 frame_book_list.insert('',0,text=seleccion_ejemplar['text'], values=(seleccion_ejemplar['values'][2]))#cuadro treeview
-               
+
+        
+        def func_btn_create_loan():
+            if(list_of_ids==[]):
+                lbl_list_advice.configure(text="Esta lista no debe estar vacia")
+            else:
+                lbl_list_advice.configure(text="Lista de ejemplares")
+                if(var_course.get()=='' or var_sections.get()==''):
+                    lbl_second_step.configure(text="Debe seleccionar curso y divicion")
+                else:
+                    if(var_chkbox_home_loan.get()==1):
+                        if(var_id_partner==None):
+                            pass
+
+        def select_partner(s):
+            pass
+
+
+
+
+
+
         def function_btn_search():
             search_this=var_word_to_search_book.get()
             in_this_place=var_where_search.get()
@@ -48,12 +70,42 @@ class lend_out_view():
             resultado_busqueda.reverse()
             for elemento in resultado_busqueda:  
             
-                # ['La vuelta al mundo en 80 días 0', 'Julio Verne1', 'Santillana2', 2, 5, 1]
+               
                 frame_to_show_search.insert('',0,text=elemento[0],values=(elemento[1],elemento[2],elemento[3]) )
         def func_btn_search_partner():
-            search_this_id=var_id_partner.get()
-            self.lend_out_driver.verifica_id_socio(search_this_id)
+            try:
+                search_this_id=var_id_partner.get()
+                clean_frame_partners=frame_search_partner.get_children()
+                for element in clean_frame_partners:
+                    frame_search_partner.delete(element)
+        
+                search_partner=self.lend_out_driver.verifica_id_socio(search_this_id)
+    
+                if(search_partner==[]):
+                    lbl_num_socio_dni.configure(text='No se encontro coincidencia')
+                else:
+                    lbl_num_socio_dni.configure(text='Buscar por socio/DNI')
+                    for element in search_partner:
+                        frame_search_partner.insert('',0,text=element[0], values=(element[1],element[2]))
+            except:
+                pass          
 
+       
+
+
+        def func_on_off_home_loan():
+            select_type=var_chkbox_home_loan.get()
+            if(select_type==0):
+                btn_search_partner.configure(state='disabled')
+                ntry_socio.configure(state='disabled')
+                ntry_socio.delete(0,tkinter.END)
+
+       
+            elif(select_type==1):
+                btn_search_partner.configure(state='normal')
+                ntry_socio.configure(state='normal')
+                ntry_socio.delete(0,tkinter.END)
+                 
 
         lend_out_frame=ttkbootstrap.Frame(self.main_window, border=5, bootstyle='ligth' )
         lend_out_frame.configure(width="990",height="560")
@@ -130,7 +182,7 @@ class lend_out_view():
         section_select.place(x=90, y=310,width='60')
 
         var_chkbox_home_loan=tkinter.IntVar()
-        chkbox_home_loan=tkinter.Checkbutton(lend_out_frame, text='Para llevar a casa', var=var_chkbox_home_loan,onvalue=1, offvalue=0) #command=funcion_chkbox_on_off,
+        chkbox_home_loan=tkinter.Checkbutton(lend_out_frame, text='Para llevar a casa', var=var_chkbox_home_loan,onvalue=1, offvalue=0, command=func_on_off_home_loan)
         chkbox_home_loan.place(x=20, y=350)
 
         lbl_num_socio_dni=ttk.Label(lend_out_frame, text='Buscar por socio/DNI')
@@ -141,9 +193,9 @@ class lend_out_view():
         ntry_socio=ttk.Entry(lend_out_frame,state='disabled',validate="key",validatecommand=(lend_out_frame.register(validate_entry), "%S"), textvariable=var_id_partner)#Validar para que solo se puedan ingresar numeros enteros positivos
         ntry_socio.place(x=20, y=400, width=80)
         
-        btn_search_partner=ttk.Button(lend_out_frame , text="Buscar")
+        btn_search_partner=ttk.Button(lend_out_frame , text="Buscar",state='disabled', command= func_btn_search_partner)
         btn_search_partner.place(x=130, y=400)
-        btn_search_partner.configure(state='disabled')
+    
 
         frame_search_partner=ttk.Treeview(lend_out_frame, columns=('Nombre','DNI','id') )
         frame_search_partner.place(x=20 , y=440 , width=170, height=80)
@@ -154,7 +206,10 @@ class lend_out_view():
         frame_search_partner.column('#1', width=80, minwidth=80)
         frame_search_partner.column('#2', width=5, minwidth=5)
 
+        frame_search_partner.bind("<<TreeviewSelect>>", select_partner)
 
+        btn_create_loan=ttk.Button(lend_out_frame, text='Prestar' , command=func_btn_create_loan)
+        btn_create_loan.place(x=220, y=350 )
         
 
 

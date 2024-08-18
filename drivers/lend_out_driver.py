@@ -10,7 +10,7 @@ class lend_out_driver():
         pass
     def ejecutar_consulta(self, consulta):
         self.consulta = consulta
-        conexion = mysql.connector.connect( host='localhost' , user='root' , passwd='' , database='biblioteca4117test2')
+        conexion = mysql.connector.connect( host='localhost' , user='root' , passwd='' , database='biblioteca4117')
         cursor= conexion.cursor()
         cursor.execute(consulta)
         resultado= cursor.fetchall()
@@ -57,8 +57,9 @@ class lend_out_driver():
             consulta=f"""SELECT obraliteraria.titulo, obraliteraria.autor, obraliteraria.editorial,ejemplar.id_ejemplar
                         FROM obraliteraria , ejemplar 
                         WHERE obraliteraria.id_obra=ejemplar.id_obra_fk
-                        AND ejemplar.disponibilidad=0
+                        AND ejemplar.disponibilidad=1
                         ORDER BY ejemplar.id_ejemplar;"""  
+        pprint(consulta)
         resultado_busqueda=self.ejecutar_consulta(consulta)
   
  
@@ -103,7 +104,7 @@ class lend_out_driver():
         fecha=datetime.now()
         fecha_inicio=fecha.date()
         if(tipo_prestamo ==1):   
-            #prestamo personal    
+            print("#prestamo personal desde el controlador")   
             consulta_crea_prestamo_estudiante=f"""INSERT INTO `prestamo`(`id_prestamo`, `id_curso_fk`, `id_divicion_fk`, `id_estudiante_fk`, `tipo_prestamo`, `fecha_inicio`, `fecha_finaliza`) 
                         VALUES (null,'{id_curso}','{id_divicion}','{id_estudiante}','{tipo_prestamo}','{fecha_inicio}',null);"""
             self.ejecutar_consulta(consulta_crea_prestamo_estudiante)
@@ -112,14 +113,15 @@ class lend_out_driver():
             
             for id in lista_ids_ejemplares:
                
-                consulta_crea_detalle_prestamo=f"""INSERT INTO `detalle_prestamo`(`id_detalle_prestamo`, `id_prestamo_fk`, `id_ejemplar_fk`, `fecha_prestado`, `fecha_devuelto`, `finalizado`) 
-                                                    VALUES (null,{id_ultimo_prestamo[0][0]},{id},'{fecha_inicio}',null,0);"""
+                consulta_crea_detalle_prestamo=f"""INSERT INTO `detalle_prestamo`(`id_detalle_prestamo`, `id_prestamo_fk`, `id_ejemplar_fk`, `fecha_prestado`, `fecha_devuelto`) 
+                                                    VALUES (null,{id_ultimo_prestamo[0][0]},{id},'{fecha_inicio}',null);"""
                 self.ejecutar_consulta(consulta_crea_detalle_prestamo)
                 consulta_id_detalle="SELECT MAX(id_detalle_prestamo) FROM detalle_prestamo;"
                 id_detalle=self.ejecutar_consulta(consulta_id_detalle)
-                
-                consulta_cambia_disp_ejemplar=f"""UPDATE `ejemplar` SET `disponibilidad`= {id_detalle[0][0]} WHERE ejemplar.id_ejemplar={id}"""
+                #{id_detalle[0][0]}
+                consulta_cambia_disp_ejemplar=f"""UPDATE `ejemplar` SET `disponibilidad`= 0 WHERE ejemplar.id_ejemplar={id}"""
                 self.ejecutar_consulta(consulta_cambia_disp_ejemplar)
+
             return True
         
             #retornar un mesaje o algo para mostrar que el prestamo fue exitoso o si hubo algun error

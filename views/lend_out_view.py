@@ -45,15 +45,58 @@ class lend_out_view():
                 lbl_list_advice.configure(text="Lista de ejemplares")
                 if(var_course.get()=='' or var_sections.get()==''):
                     lbl_second_step.configure(text="Debe seleccionar curso y divicion")
+                    
                 else:
                     if(var_chkbox_home_loan.get()==1):
-                        if(var_id_partner==None):
-                            pass
+                        selected_partner=frame_search_partner.item(frame_search_partner.selection())
+                        if(selected_partner['text']==''):
+                            print("el array esta vacio")
+                            lbl_second_step.configure(text="Debe buscar y elgir un socio")
+                        elif(selected_partner['text'] != ''):
+                            lbl_second_step.configure(text="")
+                            curse=var_course.get()
+                            section=var_sections.get()
+                            id_curse=int(curse[0])  
+                            id_section=int(section[0])
+                            id_selected_partner=selected_partner['values'][1]
+                            
+                            # creado_prestamo=self.controlador.crear_prestamo(curso_id,divicion_id,id_socio,tipo_prestamo,lista_id_ejemplar_agrega)
+                            created_loan=self.lend_out_driver.crear_prestamo(id_curse,id_section,id_selected_partner,1 ,list_of_ids )
+                            if(created_loan==True):
+                                #ARREGLAR : no se muestra el mensaje de prestamo exitoso!
+                                function_btn_search()
+                                eliminate_list=frame_book_list.get_children()
+                                for e in eliminate_list:
+                                    frame_book_list.delete(e)
+
+                                eliminate_partner_list=frame_search_partner.get_children()
+                                for element in eliminate_partner_list:
+                                    frame_search_partner.delete(element)          
+                                lbl_second_step.configure(text=f"prestamo realizado con exito")
+
+                            else:
+                                lbl_second_step.configure(text=f"Intente nuevamente")
+                    else:
+                        print("este seria un prestamo grupal")
+                        
+      
+        def interface_clean():
+             lbl_second_step.configure(text="prestamo realizado con exitooo ")
+             function_btn_search()
+             func_btn_search_partner()
+             eliminate_list=frame_book_list.get_children()
+             for e in eliminate_list:
+                frame_book_list.delete(e)
+                                
+             eliminate_partner_list=frame_search_partner.get_children()
+             for element in eliminate_partner_list:
+                frame_search_partner.delete(element)          
+
 
         def select_partner(s):
-            pass
-
-
+            selected_partner=frame_search_partner.item(frame_search_partner.selection())
+            
+            lbl_second_step.configure(text=f"El socio seleccionado es : {selected_partner['text']}")
 
 
 
@@ -62,16 +105,17 @@ class lend_out_view():
             search_this=var_word_to_search_book.get()
             in_this_place=var_where_search.get()
             resultado_busqueda=self.lend_out_driver.buscar_ejemplares_prestamo(search_this, in_this_place)
+            pprint(resultado_busqueda)
             
             delete_frame_search = frame_to_show_search.get_children()
             for element in delete_frame_search:
                 frame_to_show_search.delete(element)
        
             resultado_busqueda.reverse()
-            for elemento in resultado_busqueda:  
-            
-               
+            for elemento in resultado_busqueda:         
                 frame_to_show_search.insert('',0,text=elemento[0],values=(elemento[1],elemento[2],elemento[3]) )
+
+
         def func_btn_search_partner():
             try:
                 search_this_id=var_id_partner.get()
@@ -80,6 +124,7 @@ class lend_out_view():
                     frame_search_partner.delete(element)
         
                 search_partner=self.lend_out_driver.verifica_id_socio(search_this_id)
+                # pprint(search_partner)
     
                 if(search_partner==[]):
                     lbl_num_socio_dni.configure(text='No se encontro coincidencia')
@@ -182,13 +227,15 @@ class lend_out_view():
         section_select.place(x=90, y=310,width='60')
 
         var_chkbox_home_loan=tkinter.IntVar()
-        chkbox_home_loan=tkinter.Checkbutton(lend_out_frame, text='Para llevar a casa', var=var_chkbox_home_loan,onvalue=1, offvalue=0, command=func_on_off_home_loan)
+        chkbox_home_loan=tkinter.Checkbutton(lend_out_frame, text='Para llevar a casa',state='normal', var=var_chkbox_home_loan,onvalue=1, offvalue=0, command=func_on_off_home_loan)
         chkbox_home_loan.place(x=20, y=350)
 
         lbl_num_socio_dni=ttk.Label(lend_out_frame, text='Buscar por socio/DNI')
         lbl_num_socio_dni.place(x=20, y=380)    
 
         var_id_partner=tkinter.IntVar()
+        var_id_to_create_loan=tkinter.IntVar()
+
         validate_entry = lambda text: text.isdecimal()
         ntry_socio=ttk.Entry(lend_out_frame,state='disabled',validate="key",validatecommand=(lend_out_frame.register(validate_entry), "%S"), textvariable=var_id_partner)#Validar para que solo se puedan ingresar numeros enteros positivos
         ntry_socio.place(x=20, y=400, width=80)

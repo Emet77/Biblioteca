@@ -7,7 +7,7 @@ class catalog_driver():
     
     def ejecutar_consulta(self, consulta):
         self.consulta = consulta
-        conexion = mysql.connector.connect( host='localhost' , user='root' , passwd='' , database='biblioteca4117test2')
+        conexion = mysql.connector.connect( host='localhost' , user='root' , passwd='' , database='biblioteca4117')
         cursor= conexion.cursor()
         cursor.execute(consulta)
         resultado= cursor.fetchall()
@@ -53,6 +53,6 @@ class catalog_driver():
             result.insert(4, cantidad_ejemp_total[0][0])
             
             lista_datos.append(result)
-        
+        pprint(lista_datos)
         return lista_datos
 

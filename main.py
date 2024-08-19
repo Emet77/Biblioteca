@@ -2,7 +2,7 @@ import tkinter
 import ttkbootstrap  
 from ttkbootstrap.constants import *
 import ttkbootstrap.window
-from views import catalog_view , lend_out_view
+from views import catalog_view , lend_out_view, return_book_view
 
 main_window=ttkbootstrap.Window(themename="litera")##Esta es la ventana principal que contiene todo
 #podria agregar un selector deslizante para cambiar entre modo obscuro y claro#
@@ -13,13 +13,17 @@ main_tabs= ttkbootstrap.Notebook(main_window , bootstyle="info")#pestañas que o
 main_tabs.place(x=0 , y=0)
 
 obj_view_catalog=catalog_view.catalog_view(main_tabs)# objeto que permite crear las vistass
-obj_lend_out_view= lend_out_view.lend_out_view(main_tabs)
-
 frame_catalog=obj_view_catalog.catalog_view()#funcion que devuelve el un cuadro para agrearlo a las pestañas
-frame_lend_out=obj_lend_out_view.lend_out_frame()
 
-main_tabs.add(frame_catalog,text="catalogo")
+obj_lend_out_view= lend_out_view.lend_out_view(main_tabs)#crear objeto
+frame_lend_out=obj_lend_out_view.lend_out_frame()#objeto devuelve un cuadro
+
+obj_frame_return_book=return_book_view.return_book_view(main_tabs)
+frame_return_book=obj_frame_return_book.return_book_frame()
+  
+main_tabs.add(frame_catalog,text="Catalogo")#implementacion del cuadro a las pesañas
 main_tabs.add(frame_lend_out, text="Crear prestamo")
+main_tabs.add(frame_return_book, text="Devolver libro")
 
 
 

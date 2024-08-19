@@ -78,7 +78,16 @@ class lend_out_view():
                                 lbl_second_step.configure(text=f"Intente nuevamente")
                     else:
                         print("este seria un prestamo grupal")
-                        
+                        curse=var_course.get()
+                        section=var_sections.get()
+                        id_curse=int(curse[0])
+                        id_section=int(section[0])
+                        group_loan=self.lend_out_driver.crear_prestamo(id_curse, id_section, None, 0 , list_of_ids)
+                        if(group_loan==True):
+                            interface_clean()
+                            print("Prestamo grupal, creado con exito")
+                        else:
+                            print("Something went wrong")
       
         def interface_clean():
              lbl_second_step.configure(text="prestamo realizado con exitooo ")
@@ -206,46 +215,47 @@ class lend_out_view():
         
         lbl_list_advice=ttk.Label(lend_out_frame, text='Lista de ejemplares',font='Helvetica')
         lbl_list_advice.place(x=590, y=50+5)
+#<-------------------------------------------ZONA BENEFICIARIO DEL PRESTAMO--------------------------------------------->
 
         lbl_second_step=ttk.Label(lend_out_frame, text='Beneficiario del prestamo',font='Helvetica')
-        lbl_second_step.place(x=20 , y=250)
+        lbl_second_step.place(x=320 , y=250)
 
         lbl_course=ttk.Label(lend_out_frame, text='Curso')
-        lbl_course.place(x=20,y=290, width='150')
+        lbl_course.place(x=320,y=290, width='150')
 
         list_of_curses=self.lend_out_driver.cursos_disponibles()
         var_course=tkinter.StringVar()
         course_select=ttk.Combobox(lend_out_frame, state="readonly", values=list_of_curses,textvariable=var_course)#, values=lista_de_cursos
-        course_select.place(x=20, y=310,width='60')
+        course_select.place(x=320, y=310,width='100')
 
         lbl_sections=ttk.Label(lend_out_frame, text='Divicion')
-        lbl_sections.place(x=90,y=290, width='150')
+        lbl_sections.place(x=440,y=290, width='150')
 
         list_of_sections=self.lend_out_driver.diviciones_disponibles()
         var_sections=tkinter.StringVar()
         section_select=ttk.Combobox(lend_out_frame, state="readonly", values=list_of_sections,textvariable=var_sections)#, values=lista_de_cursos
-        section_select.place(x=90, y=310,width='60')
+        section_select.place(x=440, y=310,width='100')
 
         var_chkbox_home_loan=tkinter.IntVar()
         chkbox_home_loan=tkinter.Checkbutton(lend_out_frame, text='Para llevar a casa',state='normal', var=var_chkbox_home_loan,onvalue=1, offvalue=0, command=func_on_off_home_loan)
-        chkbox_home_loan.place(x=20, y=350)
+        chkbox_home_loan.place(x=320, y=350)
 
         lbl_num_socio_dni=ttk.Label(lend_out_frame, text='Buscar por socio/DNI')
-        lbl_num_socio_dni.place(x=20, y=380)    
+        lbl_num_socio_dni.place(x=320, y=380)    
 
         var_id_partner=tkinter.IntVar()
         var_id_to_create_loan=tkinter.IntVar()
 
         validate_entry = lambda text: text.isdecimal()
         ntry_socio=ttk.Entry(lend_out_frame,state='disabled',validate="key",validatecommand=(lend_out_frame.register(validate_entry), "%S"), textvariable=var_id_partner)#Validar para que solo se puedan ingresar numeros enteros positivos
-        ntry_socio.place(x=20, y=400, width=80)
+        ntry_socio.place(x=320, y=400, width=80)
         
         btn_search_partner=ttk.Button(lend_out_frame , text="Buscar",state='disabled', command= func_btn_search_partner)
-        btn_search_partner.place(x=130, y=400)
+        btn_search_partner.place(x=130+300, y=400)
     
 
         frame_search_partner=ttk.Treeview(lend_out_frame, columns=('Nombre','DNI','id') )
-        frame_search_partner.place(x=20 , y=440 , width=170, height=80)
+        frame_search_partner.place(x=320 , y=440 , width=170, height=80)
         frame_search_partner.heading('#0', text='Nombre')
         frame_search_partner.heading('#1',text='DNI')
         frame_search_partner.heading('#2',text='id')
@@ -256,7 +266,7 @@ class lend_out_view():
         frame_search_partner.bind("<<TreeviewSelect>>", select_partner)
 
         btn_create_loan=ttk.Button(lend_out_frame, text='Prestar' , command=func_btn_create_loan)
-        btn_create_loan.place(x=220, y=350 )
+        btn_create_loan.place(x=580, y=350 )
         
 
 

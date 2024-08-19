@@ -140,7 +140,7 @@ class lend_out_driver():
                 consulta_id_detalle="SELECT MAX(id_detalle_prestamo) FROM detalle_prestamo;"
                 id_detalle=self.ejecutar_consulta(consulta_id_detalle)
                 
-                consulta_cambia_disp_ejemplar=f"""UPDATE `ejemplar` SET `disponibilidad`= {id_detalle[0][0]} WHERE ejemplar.id_ejemplar={id}"""
+                consulta_cambia_disp_ejemplar=f"""UPDATE `ejemplar` SET `disponibilidad`= 0 WHERE ejemplar.id_ejemplar={id}"""
                 self.ejecutar_consulta(consulta_cambia_disp_ejemplar)
             return True
     

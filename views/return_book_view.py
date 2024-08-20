@@ -30,12 +30,28 @@ class return_book_view():
 
 
         def function_btn_search_loan():
-            pass
+            search_this=var_where_i_search.get()
+            loan_list=self.return_book_driver.busca_prestamo(search_this)
+            clean_frame=frame_to_show_loans.get_children()
+            for i in clean_frame:
+                frame_to_show_loans.delete(i)
+            
+            for e in loan_list:
+                frame_to_show_loans.insert('',0, text=f"{e[0]} ,{e[1]} ,{e[2]}",values=(e[3],e[4],e[5]))
 
 
 
-        def function_btn_detalle():
-            pass
+        def function_btn_detail(s):
+            select_loan=frame_to_show_loans.item(frame_to_show_loans.selection())
+            loan_id=select_loan['values'][2]
+            loan_details=self.return_book_driver.busca_detalle_prestamo(loan_id)
+
+            inf= details_frame_loan.get_children()
+            for i in inf:
+                details_frame_loan.delete(i)
+
+            for element in loan_details:
+                details_frame_loan.insert('',0,text=element[0],values=(element[1],element[2],element[3])) 
 
         return_book_frame=ttkbootstrap.Frame(self.main_window, border=5, bootstyle='ligth')
         return_book_frame.configure(width="990",height="560")
@@ -65,7 +81,7 @@ class return_book_view():
         cmbox_where_i_search=ttkbootstrap.Combobox(return_book_frame, state='readonly', values=('Finalizado', 'Sin finalizar', 'Grupal','Personal'), textvariable=var_where_i_search)
         cmbox_where_i_search.place(x=30, y=160,width=100 , height=30)
 
-        btn_search_loans=ttkbootstrap.Button(return_book_frame, text='Buscar')
+        btn_search_loans=ttkbootstrap.Button(return_book_frame, text='Buscar' , command=function_btn_search_loan)
         btn_search_loans.place(x=150, y=160)
 
         frame_to_show_loans=ttk.Treeview(return_book_frame, columns=('Responsable','Fecha Inicio','Fecha Finaliza','id') )
@@ -80,6 +96,7 @@ class return_book_view():
         frame_to_show_loans.column('#1', width=100, minwidth=100)
         frame_to_show_loans.column('#2', width=115, minwidth=110)
         frame_to_show_loans.column('#3', width=20, minwidth=20)
+        frame_to_show_loans.bind("<<TreeviewSelect>>", function_btn_detail)
         #Agregar un bind para que cada vez que selecciona algo del cuadro se muestren los detalles
         scrollbar_frame_loans = ttk.Scrollbar(return_book_frame, orient=tkinter.VERTICAL, command=frame_to_show_loans.yview)
         scrollbar_frame_loans.place(x=480 , y=200 ,height="150")
@@ -99,7 +116,9 @@ class return_book_view():
         details_frame_loan.column('#1', width=90, minwidth=90)
         details_frame_loan.column('#2', width=70, minwidth=70)
         details_frame_loan.column('#3', width=70, minwidth=70)   
+
         
+         
         scrollbar_details_frame_loan = ttk.Scrollbar(return_book_frame, orient=tkinter.VERTICAL, command=details_frame_loan.yview)
         scrollbar_details_frame_loan.place(x=957 , y=200 ,height="150")
 

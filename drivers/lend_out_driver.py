@@ -151,6 +151,7 @@ class lend_out_driver():
     
     def busca_prestamo(self, donde_buscar):
         E='Finalizado', 'Sin finalizar', 'Grupal','Personal'
+    
         match donde_buscar:
             case 'Finalizado':
                 condicion='prestamo.estado_prestamo=True'
@@ -160,6 +161,9 @@ class lend_out_driver():
                 condicion='prestamo.tipo_prestamo=False'
             case 'Personal':
                 condicion='prestamo.tipo_prestamo=True'
+            case '':
+                condicion=1
+
 
         criterio=''
         lista_inf_prestamo=[]

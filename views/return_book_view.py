@@ -17,10 +17,14 @@ class return_book_view():
         def function_btn_return():
             num_book=var_id_book_to_return.get()
             if(num_book != 0):
-                # self.return_book_driver.devuelve_ejemplar(num_book)
-                # ntry_id_book_to_return.delete(0,tkinter.END)
-                # var_id_book_to_return.set([])
-                lbl_show_info.configure(text="Libro devuelto con exito")
+                is_it_returned=self.return_book_driver.devuelve_ejemplar(num_book)
+                ntry_id_book_to_return.delete(0,tkinter.END)
+                var_id_book_to_return.set([])
+                
+                if(is_it_returned==True):
+                    lbl_show_info.configure(text="Libro devuelto con exito")
+                elif(is_it_returned==False):
+                    lbl_show_info.configure(text="Error al devolver el libro")
             elif(num_book==0):
                 lbl_show_info.configure(text="Ingrese un numero\ndiferente de 0")
 

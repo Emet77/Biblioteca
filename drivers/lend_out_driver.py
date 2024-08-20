@@ -57,9 +57,9 @@ class lend_out_driver():
             consulta=f"""SELECT obraliteraria.titulo, obraliteraria.autor, obraliteraria.editorial,ejemplar.id_ejemplar
                         FROM obraliteraria , ejemplar 
                         WHERE obraliteraria.id_obra=ejemplar.id_obra_fk
-                        AND ejemplar.disponibilidad=1
+                        AND ejemplar.disponibilidad=0
                         ORDER BY ejemplar.id_ejemplar;"""  
-        pprint(consulta)
+        
         resultado_busqueda=self.ejecutar_consulta(consulta)
   
  
@@ -105,21 +105,26 @@ class lend_out_driver():
         fecha_inicio=fecha.date()
         if(tipo_prestamo ==1):   
             print("#prestamo personal desde el controlador")   
+            #consulta_crea_prestamo_estudiante   -----------creamos prestamo
             consulta_crea_prestamo_estudiante=f"""INSERT INTO `prestamo`(`id_prestamo`, `id_curso_fk`, `id_divicion_fk`, `id_estudiante_fk`, `tipo_prestamo`, `fecha_inicio`, `fecha_finaliza`) 
                         VALUES (null,'{id_curso}','{id_divicion}','{id_estudiante}','{tipo_prestamo}','{fecha_inicio}',null);"""
             self.ejecutar_consulta(consulta_crea_prestamo_estudiante)
+
+            #Obtenemos el id del prestamo creado anteriormente
             consulta_id_prestamo=f"""SELECT MAX(id_prestamo) FROM prestamo;"""
             id_ultimo_prestamo=self.ejecutar_consulta(consulta_id_prestamo)
             
             for id in lista_ids_ejemplares:
-               
+               #para cada id en la lista de libros
+               #primero se creara un detalle  con el numero de prestamo creado anteriormente , el numero del libro, y la fecha actual
                 consulta_crea_detalle_prestamo=f"""INSERT INTO `detalle_prestamo`(`id_detalle_prestamo`, `id_prestamo_fk`, `id_ejemplar_fk`, `fecha_prestado`, `fecha_devuelto`) 
-                                                    VALUES (null,{id_ultimo_prestamo[0][0]},{id},'{fecha_inicio}',null);"""
+                                                                         VALUES  (null,{id_ultimo_prestamo[0][0]},{id},'{fecha_inicio}',null);"""
                 self.ejecutar_consulta(consulta_crea_detalle_prestamo)
+                # segundo se busca el ide del detalle al cual se asocio el libro y se actualiza con ese numero en la disponibilidad
                 consulta_id_detalle="SELECT MAX(id_detalle_prestamo) FROM detalle_prestamo;"
                 id_detalle=self.ejecutar_consulta(consulta_id_detalle)
                 #{id_detalle[0][0]}
-                consulta_cambia_disp_ejemplar=f"""UPDATE `ejemplar` SET `disponibilidad`= 0 WHERE ejemplar.id_ejemplar={id}"""
+                consulta_cambia_disp_ejemplar=f"""UPDATE `ejemplar` SET `disponibilidad`= {id_detalle[0][0]} WHERE ejemplar.id_ejemplar={id}"""
                 self.ejecutar_consulta(consulta_cambia_disp_ejemplar)
 
             return True
@@ -140,7 +145,7 @@ class lend_out_driver():
                 consulta_id_detalle="SELECT MAX(id_detalle_prestamo) FROM detalle_prestamo;"
                 id_detalle=self.ejecutar_consulta(consulta_id_detalle)
                 
-                consulta_cambia_disp_ejemplar=f"""UPDATE `ejemplar` SET `disponibilidad`= 0 WHERE ejemplar.id_ejemplar={id}"""
+                consulta_cambia_disp_ejemplar=f"""UPDATE `ejemplar` SET `disponibilidad`= {id_detalle[0][0]} WHERE ejemplar.id_ejemplar={id}"""
                 self.ejecutar_consulta(consulta_cambia_disp_ejemplar)
             return True
     
@@ -234,9 +239,11 @@ class lend_out_driver():
         consulta_id_detalle=f"SELECT ejemplar.disponibilidad FROM ejemplar WHERE ejemplar.id_ejemplar={id_ejemplar_dev};"
         id_detalle=self.ejecutar_consulta(consulta_id_detalle)
         print("consulta el numero identificador del detalle: ", id_detalle[0][0])
-        if(id_detalle==0):
+
+        if(id_detalle[0][0]==0):
+            #Significa que el libro esta disponible
             return False
-        else:    
+        elif(id_detalle[0][0]>0):    
             
             
             consulta_finaliza_detalle=f"UPDATE `detalle_prestamo` SET `fecha_devuelto`= '{devolucion_fech}',`finalizado`=1 WHERE detalle_prestamo.id_detalle_prestamo={id_detalle[0][0]}"

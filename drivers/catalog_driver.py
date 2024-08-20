@@ -43,7 +43,7 @@ class catalog_driver():
         
         for resultado in resultado_busqueda:
             result=list(resultado)
-            consulta_disponibles=f"SELECT COUNT(ejemplar.id_ejemplar) FROM ejemplar WHERE ejemplar.id_obra_fk = {resultado[3]} AND ejemplar.disponibilidad>0; "
+            consulta_disponibles=f"SELECT COUNT(ejemplar.id_ejemplar) FROM ejemplar WHERE ejemplar.id_obra_fk = {resultado[3]} AND ejemplar.disponibilidad=0; "
             cantidad_ejemplares_disp= self.ejecutar_consulta(consulta_disponibles)
      
             

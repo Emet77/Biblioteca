@@ -101,8 +101,6 @@ class return_book_view():
         scrollbar_frame_loans = ttk.Scrollbar(return_book_frame, orient=tkinter.VERTICAL, command=frame_to_show_loans.yview)
         scrollbar_frame_loans.place(x=480 , y=200 ,height="150")
 
-        btn_loan_details=ttkbootstrap.Button(return_book_frame, text="Detalle")
-        btn_loan_details.place(x=510, y=260)
 
         details_frame_loan=ttk.Treeview(return_book_frame, columns=('Titulos','Identificadores','Fecha Prestado','Fecha Devuelto') )
         details_frame_loan.place(x=580, y=200,width="380" , height="150")

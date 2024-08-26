@@ -114,7 +114,6 @@ class lend_out_view():
             search_this=var_word_to_search_book.get()
             in_this_place=var_where_search.get()
             resultado_busqueda=self.lend_out_driver.buscar_ejemplares_prestamo(search_this, in_this_place)
-            pprint(resultado_busqueda)
             
             delete_frame_search = frame_to_show_search.get_children()
             for element in delete_frame_search:

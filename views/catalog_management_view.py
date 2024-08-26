@@ -27,6 +27,6 @@ class catalog_magement_view():
         frame_to_show_results.column('#2',width=120, minwidth=120)
         frame_to_show_results.column('#3',width=80, minwidth=80)
         frame_to_show_results.place(x=10 , y=120 , width='400', height='300')
-
+        
 
         return catalog_magement_view_frame

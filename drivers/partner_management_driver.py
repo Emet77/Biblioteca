@@ -25,3 +25,10 @@ class partner_management_driver():
 
         resultado = self.ejecutar_consulta(consulta)
         return resultado
+    def editar_datos_socio(self , id, nombre, telefono, dni):
+        consulta=f"""UPDATE `estudiante` SET `nombre`='{nombre}',`telefono`={telefono},`dni`={dni} 
+                        WHERE estudiante.id_estudiante = {id};"""
+        resultado=self.ejecutar_consulta(consulta)
+        
+    def crear_socio(self, nombre , telefono, dni):
+        pass

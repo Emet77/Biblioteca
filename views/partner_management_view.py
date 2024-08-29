@@ -80,7 +80,12 @@ class partner_management_view():
             print(type(cellphone), cellphone)
             print(type(dni), dni)
             print(id,' ', name ,' ',cellphone,' ' , dni )
-
+            if(name ==[]):
+                lbl_partner_name.configure(text='El nombre , no debe estar vacio')
+            elif(cellphone==[]):
+                lbl_partner_phone_number.configure(text='El telefono, no debe estar vacio')
+            elif(dni==[]):
+                lbl_partner_dni.configure(text='El DNI, no debe estar vacio')
             # cellphone=var_ntry_phone_number.get()
             # dni=var_ntry_partner_dni.get()
             # if(self.flag_create_edit_data==True):#eedita datos y podemos hacer .get al var_id

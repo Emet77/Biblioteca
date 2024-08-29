@@ -13,7 +13,7 @@ class catalog_magement_view():
         catalog_magement_view_frame=ttkbootstrap.Frame(self.main_window, border=5, bootstyle='ligth')
         catalog_magement_view_frame.configure(width="990",height="560")
 
-        lbl_welcome_message = ttkbootstrap.Label(catalog_magement_view_frame,text="Administracion de obras literarias", font='Helvetica')
+        lbl_welcome_message = ttkbootstrap.Label(catalog_magement_view_frame,text="Administracion de obras literarias\n AÚN EN CONSTRUCCIÓN", font='Helvetica')
         lbl_welcome_message.place(x=400 , y= 30)
 
         frame_to_show_results=ttk.Treeview(catalog_magement_view_frame,columns=('id','titulo','editorial','cantidad'))

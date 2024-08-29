@@ -1,4 +1,7 @@
-import tkinter  
+import tkinter
+
+import ttkbootstrap.dialogs
+import ttkbootstrap.dialogs.dialogs  
 from drivers import catalog_driver,  lend_out_driver, partner_management_driver
 from pprint import *
 import ttkbootstrap  as ttk
@@ -50,9 +53,11 @@ class partner_management_view():
             function_clean_ntrys()
             self.flag_create_edit_data=False
             btn_save_info.configure(text='Crea Socio')
+            btn_delete_partner.configure(state='normal')
         def function_clean_ntrys():
 
             lbl_partner_id.configure(text=f'Numero Identificador de Socio: ', font='Helvetica')
+            lbl_show_info.configure(text="")
             ntry_partner_name.delete(0,tkinter.END)
             ntry_phone_number.delete(0,tkinter.END)
             ntry_partner_dni.delete(0,tkinter.END)
@@ -68,38 +73,39 @@ class partner_management_view():
             ntry_phone_number.configure(state='disable')
             ntry_partner_name.configure(state='disable')
         
+        def function_btn_delete():
+            selected_partner=frame_to_show_results.item(frame_to_show_results.selection())
+            id_partner=selected_partner['text']  
+            print(type(id_partner))
+            print(f"El socio con id {id_partner} , sera eliminado :( ")
+            #Agregar alerta preguntando si realmente quiere eliminar el socio
+            # delete_warning=ttkbootstrap.dialogs.dialogs.MessageDialog( title='Eliminar Socio' , parent=partner_management_view_frame)
+            
         def function_create_save():
             # esta funcionando pero hay que validad para que no vallan espacios en blanco para que no crashee el programa
             print(self.flag_create_edit_data)
-            id=var_id_partner.get()
-            name=var_ntry_partner_name.get()
-            cellphone=var_ntry_phone_number.get()
-            dni=var_ntry_partner_dni.get()
-            print(type(id) , id)
-            print(type(name) , name)
-            print(type(cellphone), cellphone)
-            print(type(dni), dni)
-            print(id,' ', name ,' ',cellphone,' ' , dni )
-            if(name ==[]):
-                lbl_partner_name.configure(text='El nombre , no debe estar vacio')
-            elif(cellphone==[]):
-                lbl_partner_phone_number.configure(text='El telefono, no debe estar vacio')
-            elif(dni==[]):
-                lbl_partner_dni.configure(text='El DNI, no debe estar vacio')
-            # cellphone=var_ntry_phone_number.get()
-            # dni=var_ntry_partner_dni.get()
-            # if(self.flag_create_edit_data==True):#eedita datos y podemos hacer .get al var_id
-            #     selected_partner=frame_to_show_results.item(frame_to_show_results.selection())
-            #     id_partner=selected_partner['text']  
-            #     name=selected_partner['values'][0]
-               
-            #     print(f"estos son los datos a enviar para editar el socio: {id_partner} , {name} , {cellphone} , {dni}")
-            # elif(self.flag_create_edit_data==False):
-            #     name2=var_ntry_partner_name.get()
-            #     cellphone=var_ntry_phone_number.get()
-            #     dni=var_ntry_partner_dni.get()
-            #     print(f"estos son los datos a enviar para Crear el socio:  {name2} , {cellphone} , {dni}")  
-            
+            try:
+                
+                id=var_id_partner.get()
+                name=var_ntry_partner_name.get()
+                cellphone=var_ntry_phone_number.get()
+                dni=var_ntry_partner_dni.get()
+                lbl_show_info.configure(text="")
+                
+                if(self.flag_create_edit_data==True):
+                    print("Cambia los datos")
+                    self.partner_management_driver.editar_datos_socio(id, name, cellphone, dni)
+                    function_clean_ntrys()
+                    function_partner_search()
+                elif(self.flag_create_edit_data==False):
+                    #verificar que el dni no este asociado a otro estudiante antes de crearlo
+                    print("crea Socio")
+                    self.partner_management_driver.crear_socio(name , cellphone, dni)
+                    function_clean_ntrys()
+                    function_partner_search()
+
+            except:
+                lbl_show_info.configure(text="Faltan campos por agregar")
             
             
         partner_management_view_frame=ttkbootstrap.Frame(self.main_window, border=5, bootstyle='ligth')
@@ -140,7 +146,7 @@ class partner_management_view():
         # btn_info_edit.place(x=450 , y=200)
 
         # btn elimina
-        btn_delete_partner=ttkbootstrap.Button(partner_management_view_frame, state='disable',text='Eliminar', width='10')
+        btn_delete_partner=ttkbootstrap.Button(partner_management_view_frame, state='disable',text='Eliminar', width='10' , command= function_btn_delete)
         btn_delete_partner.place(x=450, y=250) 
 
         #lista de labels y entrys para editar o crear un socio       
@@ -148,7 +154,9 @@ class partner_management_view():
         lbl_partner_id=ttkbootstrap.Label(partner_management_view_frame, text='Numero Identificador de Socio:', font='Helvetica')
         lbl_partner_id.place(x=540 ,y=60)
         var_id_partner=tkinter.IntVar() #Esta variable es solo para editar un socio se le asigna valor en el momento que seleccionamos en el cuadro
-  
+        lbl_show_info=ttkbootstrap.Label(partner_management_view_frame, text='' , font='Helvetica')
+
+        lbl_show_info.place(x=540 , y=90)
         lbl_partner_name=ttkbootstrap.Label(partner_management_view_frame , text='Nombre del asociado' , font='Helvetica')
         lbl_partner_name.place(x=540, y=130)
         
@@ -176,6 +184,6 @@ class partner_management_view():
         btn_save_info=ttkbootstrap.Button(partner_management_view_frame, text='Crea Socio', width='20' , command=function_create_save)
         btn_save_info.place(x=570, y=370)
         
-
+        function_clean_ntrys()
 
         return partner_management_view_frame

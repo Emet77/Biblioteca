@@ -31,4 +31,15 @@ class partner_management_driver():
         resultado=self.ejecutar_consulta(consulta)
         
     def crear_socio(self, nombre , telefono, dni):
-        pass
+        #consulta para ver si existe otro un dni con el mismo numero
+        #¿Deberia realizar una consulta para ver que no se repitan los dni?
+
+        consulta=f"""INSERT INTO `estudiante`(`id_estudiante`, `nombre`, `telefono`, `dni`) 
+                     VALUES (null,'{nombre}',{telefono},{dni})"""
+        resultado=self.ejecutar_consulta(consulta)
+    
+    def eliminar_socio(self, id):
+        # verificar primero si el id de socio existe de otra manera no se puede eliminar
+        consulta=f"""DELETE FROM `estudiante` WHERE estudiante.id_estudiante={id};"""
+        resultado=self.ejecutar_consulta(consulta)
+        

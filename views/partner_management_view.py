@@ -1,12 +1,10 @@
 import tkinter
-
-import ttkbootstrap.dialogs
-import ttkbootstrap.dialogs.dialogs  
 from drivers import catalog_driver,  lend_out_driver, partner_management_driver
 from pprint import *
 import ttkbootstrap  as ttk
 from ttkbootstrap.constants import *
-import ttkbootstrap.window
+import ttkbootstrap.window  
+from ttkbootstrap.dialogs import MessageDialog , Messagebox
 
 class partner_management_view():
     def __init__(self, contenedor):
@@ -38,8 +36,7 @@ class partner_management_view():
             phone=selected_partner['values'][1]
             dni_partner=selected_partner['values'][2]
 
-            # btn_info_edit.configure(state='normal')
-            # function_show_panel_edit()
+            btn_delete_partner.configure(state='disable')
             function_clean_ntrys()
             
             ntry_partner_name.insert( 0, string=name) #Antes de insertar el valor primero borrar el anterior
@@ -61,29 +58,21 @@ class partner_management_view():
             ntry_partner_name.delete(0,tkinter.END)
             ntry_phone_number.delete(0,tkinter.END)
             ntry_partner_dni.delete(0,tkinter.END)
-
-
-        def function_show_panel_edit():
-            ntry_partner_dni.configure(state='normal')
-            ntry_phone_number.configure(state='normal')
-            ntry_partner_name.configure(state='normal')
-            # ntry_id_partner.configure(state='normal')
-        def function_hiden_panel_edit():
-            ntry_partner_dni.configure(state='disable')
-            ntry_phone_number.configure(state='disable')
-            ntry_partner_name.configure(state='disable')
         
         def function_btn_delete():
             selected_partner=frame_to_show_results.item(frame_to_show_results.selection())
             id_partner=selected_partner['text']  
-            print(type(id_partner))
-            print(f"El socio con id {id_partner} , sera eliminado :( ")
             #Agregar alerta preguntando si realmente quiere eliminar el socio
-            # delete_warning=ttkbootstrap.dialogs.dialogs.MessageDialog( title='Eliminar Socio' , parent=partner_management_view_frame)
+            delete_warning= Messagebox.show_question( message='¿Desea eliminar el socio seleccionado?' , title='Titulo' ,buttons=['No:secondary', 'Sí:primary'])
+            print(delete_warning)
+            if(delete_warning=='Sí'):
+                self.partner_management_driver.eliminar_socio(id_partner)
+                function_partner_search()
+            elif(delete_warning=='No'):
+                function_partner_search()
             
         def function_create_save():
             # esta funcionando pero hay que validad para que no vallan espacios en blanco para que no crashee el programa
-            print(self.flag_create_edit_data)
             try:
                 
                 id=var_id_partner.get()
@@ -99,7 +88,6 @@ class partner_management_view():
                     function_partner_search()
                 elif(self.flag_create_edit_data==False):
                     #verificar que el dni no este asociado a otro estudiante antes de crearlo
-                    print("crea Socio")
                     self.partner_management_driver.crear_socio(name , cellphone, dni)
                     function_clean_ntrys()
                     function_partner_search()
@@ -146,7 +134,7 @@ class partner_management_view():
         # btn_info_edit.place(x=450 , y=200)
 
         # btn elimina
-        btn_delete_partner=ttkbootstrap.Button(partner_management_view_frame, state='disable',text='Eliminar', width='10' , command= function_btn_delete)
+        btn_delete_partner=ttkbootstrap.Button(partner_management_view_frame, state='disable',text='Eliminar', width='10' ,style='danger', command= function_btn_delete)
         btn_delete_partner.place(x=450, y=250) 
 
         #lista de labels y entrys para editar o crear un socio       
@@ -181,7 +169,7 @@ class partner_management_view():
         ntry_partner_dni.place(x=540, y=300)
         
 
-        btn_save_info=ttkbootstrap.Button(partner_management_view_frame, text='Crea Socio', width='20' , command=function_create_save)
+        btn_save_info=ttkbootstrap.Button(partner_management_view_frame, text='Crea Socio', width='20' , command=function_create_save )
         btn_save_info.place(x=570, y=370)
         
         function_clean_ntrys()

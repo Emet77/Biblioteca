@@ -1,6 +1,8 @@
 import tkinter
 
 import ttkbootstrap.localization  
+from tkinter import filedialog
+from PIL import Image , ImageTk
 from drivers import catalog_driver,  lend_out_driver
 from pprint import *
 import ttkbootstrap  as ttk
@@ -14,6 +16,20 @@ class catalog_magement_view():
     def catalog_management_view(self ):
         #<-----------------------Pantallas para cada boton--------------------------------------->
         def function_btn_edit():
+            def function_btn_add_cover():
+                global img_tk
+                # filename=filedialog.askopenfilename(title='Buscar Portada', filetypes=(('archivos PNG','.txt')))
+                filename = filedialog.askopenfilename(filetypes=(("Archivos de imagen", "*.jpg"),("Todos los archivos", "*.*")))
+                lbl_link=ttkbootstrap.Label(book_cover, text=filename)
+                lbl_link.place(x=0 , y=0)
+                img=Image.open(filename)
+                img_tk = ImageTk.PhotoImage(img)
+
+                lbl_image= ttkbootstrap.Label(book_cover, image=img_tk)
+                lbl_image.place(x=2, y=3)
+
+                
+
             btn_edit_frame=ttkbootstrap.LabelFrame(big_frame, text='Editar Obra Literaria' ,width=825, height=550, bootstyle='info')
             btn_edit_frame.place(x=155 , y=0)
 
@@ -39,10 +55,10 @@ class catalog_magement_view():
 
             book_cover=ttkbootstrap.Frame(btn_edit_frame)
             # front_frame.config(relief='solid', bd=3, background='red')
-            book_cover.configure(bootstyle='dark')
+            # book_cover.configure(bootstyle='dark')
             book_cover.place(x=400, y=20, width='150', height='150')
 
-            btn_add_cover=ttkbootstrap.Button(btn_edit_frame, text='Agregar portada' , bootstyle='success')
+            btn_add_cover=ttkbootstrap.Button(btn_edit_frame, text='Agregar portada' , bootstyle='success', command=function_btn_add_cover) 
             btn_add_cover.place(x=580 , y=30)
             
             btn_delete_cover=ttkbootstrap.Button(btn_edit_frame, text='Eliminar portada', bootstyle='warning')
@@ -105,6 +121,7 @@ class catalog_magement_view():
         def function_btn_delete_copy():
             #solo eliminar un ejemplar
             pass
+        
 
 
 

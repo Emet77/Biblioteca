@@ -50,21 +50,3 @@ main_window.mainloop()
 
 
 
-
-# import tkinter  
-# import ttkbootstrap  
-# from ttkbootstrap.constants import *
-# import ttkbootstrap.window
-
-# main_window=ttkbootstrap.Window(themename="superhero")
-# main_window.title("biblioteca 4-117")
-# main_window.geometry('500x400')
-
-# main_tabs= ttkbootstrap.Notebook(main_window , bootstyle="dark")
-# main_tabs.pack()
-# tab_catalog=ttkbootstrap.Frame(main_tabs)
-
-# main_tabs.add(tab_catalog, text="Catalogo")
-
-
-# main_window.mainloop()

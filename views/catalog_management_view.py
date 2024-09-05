@@ -1,5 +1,6 @@
+import shutil
 import tkinter
-
+import os
 import ttkbootstrap.localization  
 from tkinter import filedialog
 from PIL import Image , ImageTk
@@ -19,14 +20,19 @@ class catalog_magement_view():
             def function_btn_add_cover():
                 global img_tk
                 # filename=filedialog.askopenfilename(title='Buscar Portada', filetypes=(('archivos PNG','.txt')))
-                filename = filedialog.askopenfilename(filetypes=(("Archivos de imagen", "*.jpg"),("Todos los archivos", "*.*")))
-                lbl_link=ttkbootstrap.Label(book_cover, text=filename)
-                lbl_link.place(x=0 , y=0)
+                #La copia de la informacion debe hacerse desde el controlador
+                #esta funcion solo tiene que proveer el soporte grafico
+                # filename = filedialog.askopenfilename(filetypes=(("Archivos de imagen",( "*.jpg","*.png" ))))
+                filename = filedialog.askopenfilename(filetypes=(("Archivos de imagen",( "*.jpg","*.png" )),("Todos los archivos", "*.*")))
+                # lbl_link=ttkbootstrap.Label(book_cover, text=filename)
+                # lbl_link.place(x=0 , y=0)
                 img=Image.open(filename)
-                img_tk = ImageTk.PhotoImage(img)
-
-                lbl_image= ttkbootstrap.Label(book_cover, image=img_tk)
-                lbl_image.place(x=2, y=3)
+                img=img.resize(size=(130,130))
+                img_tk = ImageTk.PhotoImage(img)    
+                print(filename)
+                # shutil.copy(filename, "D:\Proyectos en python\Biblioteca\resources\covers")
+                lbl_image= ttkbootstrap.Label(book_cover,image=img_tk)
+                lbl_image.place(x=0, y=0)
 
                 
 
@@ -53,7 +59,7 @@ class catalog_magement_view():
             #Agregar una barra de desplazamiento para el cuadro
             frame_to_show_search.place(x=10 , y=90 , width='350', height='300')
 
-            book_cover=ttkbootstrap.Frame(btn_edit_frame)
+            book_cover=ttkbootstrap.LabelFrame(btn_edit_frame,text='Portada', bootstyle='info')
             # front_frame.config(relief='solid', bd=3, background='red')
             # book_cover.configure(bootstyle='dark')
             book_cover.place(x=400, y=20, width='150', height='150')

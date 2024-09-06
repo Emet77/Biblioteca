@@ -56,3 +56,5 @@ class catalog_driver():
         pprint(lista_datos)
         return lista_datos
 
+    def agregarportada_obra(self ,documento_copia,id_obra):
+        pass

@@ -15,26 +15,61 @@ class catalog_magement_view():
         self.main_window=contenedor
     
     def catalog_management_view(self ):
+        
+        self.catalog_driver= catalog_driver.catalog_driver()
         #<-----------------------Pantallas para cada boton--------------------------------------->
         def function_btn_edit():
             def function_btn_add_cover():
                 global img_tk
-                # filename=filedialog.askopenfilename(title='Buscar Portada', filetypes=(('archivos PNG','.txt')))
-                #La copia de la informacion debe hacerse desde el controlador
-                #esta funcion solo tiene que proveer el soporte grafico
-                # filename = filedialog.askopenfilename(filetypes=(("Archivos de imagen",( "*.jpg","*.png" ))))
                 filename = filedialog.askopenfilename(filetypes=(("Archivos de imagen",( "*.jpg","*.png" )),("Todos los archivos", "*.*")))
                 # lbl_link=ttkbootstrap.Label(book_cover, text=filename)
                 # lbl_link.place(x=0 , y=0)
+                var_link_cover.set(filename)
                 img=Image.open(filename)
-                img=img.resize(size=(130,130))
+                img=img.resize(size=(130,130))#ajustar resize para que llene el cuadro
                 img_tk = ImageTk.PhotoImage(img)    
-                print(filename)
                 # shutil.copy(filename, "D:\Proyectos en python\Biblioteca\resources\covers")
                 lbl_image= ttkbootstrap.Label(book_cover,image=img_tk)
                 lbl_image.place(x=0, y=0)
+            def function_delete_cover():
+                # necesitamos eliminar la referencia de la foto en la bd 
+                pass
+            def function_save_changes():
+                self.catalog_driver.agregarportada_obra() #aca agregar link_cover
+                print(var_link_cover.get())
+            
+            def btn_search():
+                selected_book= frame_to_show_search.item(frame_to_show_search.selection())
+                search_this= var_search_literary_work.get()
+                in_this_place=''
+                search_results=self.catalog_driver.buscar_obra_catalogo(search_this,in_this_place)
 
-                
+                eliminar = frame_to_show_search.get_children()
+                for elemento in eliminar:
+                    frame_to_show_search.delete(elemento)
+            
+                search_results.reverse()
+                for element in search_results:  
+                    frame_to_show_search.insert('',0,text=element[5],values=(element[0], element[1], element[2]) )
+            def function_clean_ntrys():
+                ntry_edit_title.delete(0,tkinter.END)
+                ntry_edit_author.delete(0,tkinter.END)
+                ntry_edit_editorial.delete(0,tkinter.END)
+            def function_selected_book(s):
+                selected_book= frame_to_show_search.item(frame_to_show_search.selection())
+                book_id=selected_book['text']
+                book_title=selected_book['values'][0]
+                book_author=selected_book['values'][1]
+                book_editorial=selected_book['values'][2]
+                function_clean_ntrys()
+                ntry_edit_title.insert( 0, string=book_title)
+                ntry_edit_author.insert( 0, string=book_author)
+                ntry_edit_editorial.insert( 0, string=book_editorial)
+                print('nombre del libro a editrar= ',book_title)
+                print('id del libro a editar = ',book_id)
+                print('autor libro= ', book_author)
+                print('editorial libro= ', book_editorial)
+
 
             btn_edit_frame=ttkbootstrap.LabelFrame(big_frame, text='Editar Obra Literaria' ,width=825, height=550, bootstyle='info')
             btn_edit_frame.place(x=155 , y=0)
@@ -43,7 +78,7 @@ class catalog_magement_view():
             ntry_search_literary_work=ttkbootstrap.Entry(btn_edit_frame, textvariable=var_search_literary_work)
             ntry_search_literary_work.place(x=10 , y=20)
 
-            btn_search=ttkbootstrap.Button(btn_edit_frame, text='Buscar')
+            btn_search=ttkbootstrap.Button(btn_edit_frame, text='Buscar', command=btn_search)
             btn_search.place(x=150 , y=20)
 
             frame_to_show_search=ttk.Treeview(btn_edit_frame,columns=('id','titulo','autor','editorial'))
@@ -58,6 +93,7 @@ class catalog_magement_view():
             frame_to_show_search.column('#3',width=80, minwidth=80)
             #Agregar una barra de desplazamiento para el cuadro
             frame_to_show_search.place(x=10 , y=90 , width='350', height='300')
+            frame_to_show_search.bind("<<TreeviewSelect>>", function_selected_book)
 
             book_cover=ttkbootstrap.LabelFrame(btn_edit_frame,text='Portada', bootstyle='info')
             # front_frame.config(relief='solid', bd=3, background='red')
@@ -66,6 +102,7 @@ class catalog_magement_view():
 
             btn_add_cover=ttkbootstrap.Button(btn_edit_frame, text='Agregar portada' , bootstyle='success', command=function_btn_add_cover) 
             btn_add_cover.place(x=580 , y=30)
+            var_link_cover=tkinter.StringVar()
             
             btn_delete_cover=ttkbootstrap.Button(btn_edit_frame, text='Eliminar portada', bootstyle='warning')
             btn_delete_cover.place(x=580 , y=80)
@@ -74,6 +111,7 @@ class catalog_magement_view():
             lbl_title.place(x=400, y=180)
 
             var_edit_title=tkinter.StringVar()
+            var_id_literary_work=tkinter.IntVar()
             ntry_edit_title=ttkbootstrap.Entry(btn_edit_frame, textvariable=var_edit_title)
             ntry_edit_title.place(x=400, y=200)
 
@@ -101,7 +139,7 @@ class catalog_magement_view():
             btn_cancel_edit=ttkbootstrap.Button(btn_edit_frame, text='Cancelar Edición')
             btn_cancel_edit.place(x=350, y=430)
 
-            btn_save_changes=ttkbootstrap.Button(btn_edit_frame, text='Guardar Cambios')
+            btn_save_changes=ttkbootstrap.Button(btn_edit_frame, text='Guardar Cambios' , command=function_save_changes)
             btn_save_changes.place(x=500 , y=430)
 
         def function_btn_create():

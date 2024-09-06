@@ -65,10 +65,7 @@ class catalog_magement_view():
                 ntry_edit_title.insert( 0, string=book_title)
                 ntry_edit_author.insert( 0, string=book_author)
                 ntry_edit_editorial.insert( 0, string=book_editorial)
-                print('nombre del libro a editrar= ',book_title)
-                print('id del libro a editar = ',book_id)
-                print('autor libro= ', book_author)
-                print('editorial libro= ', book_editorial)
+    
 
 
             btn_edit_frame=ttkbootstrap.LabelFrame(big_frame, text='Editar Obra Literaria' ,width=825, height=550, bootstyle='info')

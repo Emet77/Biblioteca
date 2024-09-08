@@ -28,15 +28,14 @@ class catalog_magement_view():
                 img=Image.open(filename)
                 img=img.resize(size=(130,130))#ajustar resize para que llene el cuadro
                 img_tk = ImageTk.PhotoImage(img)    
-                # shutil.copy(filename, "D:\Proyectos en python\Biblioteca\resources\covers")
                 lbl_image= ttkbootstrap.Label(book_cover,image=img_tk)
                 lbl_image.place(x=0, y=0)
             def function_delete_cover():
                 # necesitamos eliminar la referencia de la foto en la bd 
                 pass
             def function_save_changes():
-                self.catalog_driver.agregarportada_obra() #aca agregar link_cover
-                print(var_link_cover.get())
+                self.catalog_driver.agregarportada_obra(var_link_cover.get(),var_id_literary_work.get() ) #aca agregar link_cover
+                
             
             def btn_search():
                 selected_book= frame_to_show_search.item(frame_to_show_search.selection())
@@ -50,22 +49,44 @@ class catalog_magement_view():
             
                 search_results.reverse()
                 for element in search_results:  
-                    frame_to_show_search.insert('',0,text=element[5],values=(element[0], element[1], element[2]) )
+                    frame_to_show_search.insert('',0,text=element[5],values=(element[0], element[1], element[2],element[6]) )
+
             def function_clean_ntrys():
                 ntry_edit_title.delete(0,tkinter.END)
                 ntry_edit_author.delete(0,tkinter.END)
                 ntry_edit_editorial.delete(0,tkinter.END)
+           
+
+
             def function_selected_book(s):
+                function_clean_ntrys()
+                global img_tk
                 selected_book= frame_to_show_search.item(frame_to_show_search.selection())
-                book_id=selected_book['text']
+                var_id_literary_work.set(selected_book['text'])
                 book_title=selected_book['values'][0]
                 book_author=selected_book['values'][1]
                 book_editorial=selected_book['values'][2]
-                function_clean_ntrys()
+                book_cover_label=selected_book['values'][3]
+                pprint(selected_book)
+                
                 ntry_edit_title.insert( 0, string=book_title)
                 ntry_edit_author.insert( 0, string=book_author)
                 ntry_edit_editorial.insert( 0, string=book_editorial)
-    
+                if(book_cover_label=='None'):
+                    no_cover='D:\\Proyectos en python\\Biblioteca\\resources\\covers\\no_cover.PNG'
+                    img=Image.open(no_cover)
+                    img=img.resize(size=(130,130))#ajustar resize para que llene el cuadro
+                    img_tk = ImageTk.PhotoImage(img)    
+                    lbl_image= ttkbootstrap.Label(book_cover,image=img_tk)
+                    lbl_image.place(x=0, y=0)                  
+                else:
+                    # print(book_cover_label)
+                    img=Image.open(book_cover_label )
+                    img=img.resize(size=(130,130))#ajustar resize para que llene el cuadro
+                    img_tk = ImageTk.PhotoImage(img)    
+                    lbl_image= ttkbootstrap.Label(book_cover,image=img_tk)
+                    lbl_image.place(x=0, y=0)
+                
 
 
             btn_edit_frame=ttkbootstrap.LabelFrame(big_frame, text='Editar Obra Literaria' ,width=825, height=550, bootstyle='info')
@@ -78,28 +99,29 @@ class catalog_magement_view():
             btn_search=ttkbootstrap.Button(btn_edit_frame, text='Buscar', command=btn_search)
             btn_search.place(x=150 , y=20)
 
-            frame_to_show_search=ttk.Treeview(btn_edit_frame,columns=('id','titulo','autor','editorial'))
+            frame_to_show_search=ttk.Treeview(btn_edit_frame,columns=('id','titulo','autor','editorial','portada'))
             frame_to_show_search.heading('#0',text='id')
             frame_to_show_search.heading('#1',text='Titulo')
             frame_to_show_search.heading('#2',text='Autor')
             frame_to_show_search.heading('#3',text='Editorial')
+            frame_to_show_search.heading('#4',text='portada')
 
             frame_to_show_search.column('#0',width=40, minwidth=40) 
             frame_to_show_search.column('#1',width=80, minwidth=80)
             frame_to_show_search.column('#2',width=100, minwidth=120)
             frame_to_show_search.column('#3',width=80, minwidth=80)
+            frame_to_show_search.column('#4',width=5, minwidth=5)
             #Agregar una barra de desplazamiento para el cuadro
             frame_to_show_search.place(x=10 , y=90 , width='350', height='300')
             frame_to_show_search.bind("<<TreeviewSelect>>", function_selected_book)
 
             book_cover=ttkbootstrap.LabelFrame(btn_edit_frame,text='Portada', bootstyle='info')
-            # front_frame.config(relief='solid', bd=3, background='red')
-            # book_cover.configure(bootstyle='dark')
             book_cover.place(x=400, y=20, width='150', height='150')
 
             btn_add_cover=ttkbootstrap.Button(btn_edit_frame, text='Agregar portada' , bootstyle='success', command=function_btn_add_cover) 
             btn_add_cover.place(x=580 , y=30)
             var_link_cover=tkinter.StringVar()
+            var_id_literary_work=tkinter.StringVar()
             
             btn_delete_cover=ttkbootstrap.Button(btn_edit_frame, text='Eliminar portada', bootstyle='warning')
             btn_delete_cover.place(x=580 , y=80)

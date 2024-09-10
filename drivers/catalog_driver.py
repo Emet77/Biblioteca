@@ -71,3 +71,7 @@ class catalog_driver():
         nuevo_dir=dir.replace('\\','//')
         consulta=f"UPDATE `obraliteraria` SET `portada`='{nuevo_dir} 'WHERE obraliteraria.id_obra={id_obra};"
         self.ejecutar_consulta(consulta)
+    
+    def eliminar_portada(self, id_obra):
+        consulta=f"UPDATE `obraliteraria` SET `portada`=NULL WHERE obraliteraria.id_obra={id_obra};"
+        self.ejecutar_consulta(consulta)

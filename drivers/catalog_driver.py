@@ -39,7 +39,7 @@ class catalog_driver():
                 consulta=f"""SELECT obraliteraria.titulo, obraliteraria.autor, obraliteraria.editorial,obraliteraria.id_obra,obraliteraria.portada
                         FROM obraliteraria
                         ORDER BY obraliteraria.titulo;""" 
-                
+                #Agregar un where a esta consulta para que devuelva datos cuando se le da un criterio de busqueda
         resultado_busqueda=self.ejecutar_consulta(consulta)
         lista_datos=[]
         

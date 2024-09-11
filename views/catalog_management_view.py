@@ -32,15 +32,18 @@ class catalog_magement_view():
                 lbl_image.place(x=0, y=0)
             def function_delete_cover():
                 # necesitamos eliminar la referencia de la foto en la bd 
-                pass
+                id_lit_work=var_id_literary_work.get()
+                self.catalog_driver.eliminar_portada(id_lit_work)
+                function_btn_search()
             def function_save_changes():
                 self.catalog_driver.agregarportada_obra(var_link_cover.get(),var_id_literary_work.get() ) #aca agregar link_cover
+                function_btn_search()
                 
             
-            def btn_search():
+            def function_btn_search():
                 selected_book= frame_to_show_search.item(frame_to_show_search.selection())
                 search_this= var_search_literary_work.get()
-                in_this_place=''
+                in_this_place='Titulo'
                 search_results=self.catalog_driver.buscar_obra_catalogo(search_this,in_this_place)
 
                 eliminar = frame_to_show_search.get_children()
@@ -96,7 +99,7 @@ class catalog_magement_view():
             ntry_search_literary_work=ttkbootstrap.Entry(btn_edit_frame, textvariable=var_search_literary_work)
             ntry_search_literary_work.place(x=10 , y=20)
 
-            btn_search=ttkbootstrap.Button(btn_edit_frame, text='Buscar', command=btn_search)
+            btn_search=ttkbootstrap.Button(btn_edit_frame, text='Buscar', command=function_btn_search)
             btn_search.place(x=150 , y=20)
 
             frame_to_show_search=ttk.Treeview(btn_edit_frame,columns=('id','titulo','autor','editorial','portada'))
@@ -123,7 +126,7 @@ class catalog_magement_view():
             var_link_cover=tkinter.StringVar()
             var_id_literary_work=tkinter.StringVar()
             
-            btn_delete_cover=ttkbootstrap.Button(btn_edit_frame, text='Eliminar portada', bootstyle='warning')
+            btn_delete_cover=ttkbootstrap.Button(btn_edit_frame, text='Eliminar portada', bootstyle='warning', command=function_delete_cover)
             btn_delete_cover.place(x=580 , y=80)
 
             lbl_title=ttkbootstrap.Label(btn_edit_frame, text='Titulo')

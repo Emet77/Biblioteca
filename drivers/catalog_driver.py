@@ -75,3 +75,7 @@ class catalog_driver():
     def eliminar_portada(self, id_obra):
         consulta=f"UPDATE `obraliteraria` SET `portada`=NULL WHERE obraliteraria.id_obra={id_obra};"
         self.ejecutar_consulta(consulta)
+    def agregar_resumen(self, id_obra , ):
+        #agregar a la base de datos el campo resumen donde se almacenara el texto con el resumen de la obra
+        
+        pass

@@ -75,7 +75,10 @@ class catalog_driver():
     def eliminar_portada(self, id_obra):
         consulta=f"UPDATE `obraliteraria` SET `portada`=NULL WHERE obraliteraria.id_obra={id_obra};"
         self.ejecutar_consulta(consulta)
-    def agregar_resumen(self, id_obra , ):
+    def agregar_resumen(self, id_obra , resumen):
         #agregar a la base de datos el campo resumen donde se almacenara el texto con el resumen de la obra
-        
+        #f = open("myfile.txt", "x") Ejemplo para crear un archivo en python usando open y agregando "x" como parametro
+        pass
+    def guardar_datos(self, id, autor, titulo, editorial, resumen):
+        #agregar un resumen enlazado con el numero de la obra
         pass

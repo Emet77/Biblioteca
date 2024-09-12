@@ -37,7 +37,16 @@ class catalog_magement_view():
                 function_btn_search()
             def function_save_changes():
                 self.catalog_driver.agregarportada_obra(var_link_cover.get(),var_id_literary_work.get() ) #aca agregar link_cover
+                id_literary_work=var_id_literary_work.get()
+                author=var_edit_author.get()
+                title=var_edit_title.get()
+                editorial=var_edit_editorial.get()
+                summary=var_summary_literary_work.get()
+
+
+
                 function_btn_search()
+
                 
             
             def function_btn_search():
@@ -58,7 +67,7 @@ class catalog_magement_view():
                 ntry_edit_title.delete(0,tkinter.END)
                 ntry_edit_author.delete(0,tkinter.END)
                 ntry_edit_editorial.delete(0,tkinter.END)
-           
+                var_link_cover.set('')
 
 
             def function_selected_book(s):
@@ -89,7 +98,9 @@ class catalog_magement_view():
                     img_tk = ImageTk.PhotoImage(img)    
                     lbl_image= ttkbootstrap.Label(book_cover,image=img_tk)
                     lbl_image.place(x=0, y=0)
-                
+            def funcion_cancel_changes():
+                function_btn_search()
+                function_clean_ntrys()
 
 
             btn_edit_frame=ttkbootstrap.LabelFrame(big_frame, text='Editar Obra Literaria' ,width=825, height=550, bootstyle='info')
@@ -152,11 +163,11 @@ class catalog_magement_view():
             ntry_edit_editorial.place(x=400, y=340)
 
             # var_summary_literary_work=tkinter.StringVar()
-            var_summary_literary_work="""Acá se van a mostrar los resumenes de obras literarias"""
+            var_summary_literary_work=tkinter.StringVar()
             txt_summary_obra=ttkbootstrap.Text(btn_edit_frame)
             txt_summary_obra.place(x=580, y=120, width='230', height='270')
             txt_summary_obra.insert('1.0', var_summary_literary_work)
-            txt_summary_obra.configure(state='disabled')
+            txt_summary_obra.configure(state='normal')
 
             btn_cancel_edit=ttkbootstrap.Button(btn_edit_frame, text='Cancelar Edición')
             btn_cancel_edit.place(x=350, y=430)

@@ -69,7 +69,7 @@ class catalog_driver():
         #al parecer este caracter '\' genera problemas en la base de datos pero si lo reemplazamos por '//'
         #se soluciona 
         nuevo_dir=dir.replace('\\','//')
-        consulta=f"UPDATE `obraliteraria` SET `portada`='{nuevo_dir} 'WHERE obraliteraria.id_obra={id_obra};"
+        consulta=f"UPDATE `obraliteraria` SET `portada`='{nuevo_dir}' WHERE obraliteraria.id_obra={id_obra};"
         self.ejecutar_consulta(consulta)
     
     def eliminar_portada(self, id_obra):
@@ -78,7 +78,21 @@ class catalog_driver():
     def agregar_resumen(self, id_obra , resumen):
         #agregar a la base de datos el campo resumen donde se almacenara el texto con el resumen de la obra
         #f = open("myfile.txt", "x") Ejemplo para crear un archivo en python usando open y agregando "x" como parametro
+        # f = open("myfile.txt", "w") crea y sobreescribe si ya existe un archivo con ese nombre
+        pass
+    def leer_resumen(self, id_obra):
+
         pass
     def guardar_datos(self, id, autor, titulo, editorial, resumen):
-        #agregar un resumen enlazado con el numero de la obra
-        pass
+        #crear un archivo .txt que sirva de resumen enlazado con el numero de la obra
+        actual_dir=os.getcwd()
+        resumen_texto = open(f"{actual_dir}\\resources\\summaries\\{id}.txt", "w")
+        resumen_texto.write(resumen)
+        resumen_texto.close()
+        directorio_resumen=f"{actual_dir}\\resources\\summaries\\{id}.txt"
+        directorio_resumen_n=directorio_resumen.replace('\\','//')
+        print(directorio_resumen)
+        print(directorio_resumen_n)
+        consulta=f"UPDATE `obraliteraria` SET `resumen`='{directorio_resumen_n}' WHERE obraliteraria.id_obra={id};"
+        self.ejecutar_consulta(consulta)
+        #ahora que ya crea texto y guarda la ubicacion en la base de datos debemmos agregar los demas datos

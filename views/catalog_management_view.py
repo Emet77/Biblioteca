@@ -30,22 +30,22 @@ class catalog_magement_view():
                 img_tk = ImageTk.PhotoImage(img)    
                 lbl_image= ttkbootstrap.Label(book_cover,image=img_tk)
                 lbl_image.place(x=0, y=0)
+                self.catalog_driver.agregarportada_obra(var_link_cover.get(),var_id_literary_work.get() )
+                function_btn_search()
             def function_delete_cover():
                 # necesitamos eliminar la referencia de la foto en la bd 
                 id_lit_work=var_id_literary_work.get()
                 self.catalog_driver.eliminar_portada(id_lit_work)
                 function_btn_search()
             def function_save_changes():
-                self.catalog_driver.agregarportada_obra(var_link_cover.get(),var_id_literary_work.get() ) #aca agregar link_cover
+
+                 #aca agregar link_cover
                 id_literary_work=var_id_literary_work.get()
                 author=var_edit_author.get()
                 title=var_edit_title.get()
                 editorial=var_edit_editorial.get()
-                summary=var_summary_literary_work.get()
-
-
-
-                function_btn_search()
+                summary=txt_summary_obra.get("1.0", "end-1c")
+                self.catalog_driver.guardar_datos(id_literary_work, author,title,editorial,summary)
 
                 
             
@@ -69,7 +69,7 @@ class catalog_magement_view():
                 ntry_edit_editorial.delete(0,tkinter.END)
                 var_link_cover.set('')
 
-
+            
             def function_selected_book(s):
                 function_clean_ntrys()
                 global img_tk
@@ -79,13 +79,13 @@ class catalog_magement_view():
                 book_author=selected_book['values'][1]
                 book_editorial=selected_book['values'][2]
                 book_cover_label=selected_book['values'][3]
-                pprint(selected_book)
-                
+        
+                txt_summary_obra.configure(state='normal')
                 ntry_edit_title.insert( 0, string=book_title)
                 ntry_edit_author.insert( 0, string=book_author)
                 ntry_edit_editorial.insert( 0, string=book_editorial)
                 if(book_cover_label=='None'):
-                    no_cover='D:\\Proyectos en python\\Biblioteca\\resources\\covers\\no_cover.PNG'
+                    no_cover='D:\\Proyectos en python\\Biblioteca\\resources\\covers\\no_cover.PNG'#cambiar esto por una direccion relativa
                     img=Image.open(no_cover)
                     img=img.resize(size=(130,130))#ajustar resize para que llene el cuadro
                     img_tk = ImageTk.PhotoImage(img)    
@@ -167,9 +167,9 @@ class catalog_magement_view():
             txt_summary_obra=ttkbootstrap.Text(btn_edit_frame)
             txt_summary_obra.place(x=580, y=120, width='230', height='270')
             txt_summary_obra.insert('1.0', var_summary_literary_work)
-            txt_summary_obra.configure(state='normal')
-
-            btn_cancel_edit=ttkbootstrap.Button(btn_edit_frame, text='Cancelar Edición')
+            txt_summary_obra.configure(state='disable')
+            
+            btn_cancel_edit=ttkbootstrap.Button(btn_edit_frame, text='Cancelar Edición', command=funcion_cancel_changes)
             btn_cancel_edit.place(x=350, y=430)
 
             btn_save_changes=ttkbootstrap.Button(btn_edit_frame, text='Guardar Cambios' , command=function_save_changes)

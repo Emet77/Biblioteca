@@ -162,7 +162,7 @@ class catalog_magement_view():
             ntry_edit_editorial=ttkbootstrap.Entry(btn_edit_frame, textvariable=var_edit_editorial)
             ntry_edit_editorial.place(x=400, y=340)
 
-            # var_summary_literary_work=tkinter.StringVar()
+            
             var_summary_literary_work=tkinter.StringVar()
             txt_summary_obra=ttkbootstrap.Text(btn_edit_frame)
             txt_summary_obra.place(x=580, y=120, width='230', height='270')

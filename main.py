@@ -34,6 +34,7 @@ main_tabs.add(frame_partner_management_view, text="Gestion de socios")
 main_tabs.add(frame_catalog_management_view , text="Gestion de obras")
 
 
+
 main_window.mainloop()
 
 

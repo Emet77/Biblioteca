@@ -47,20 +47,7 @@ class catalog_driver():
         lista_datos=[]
         for obra in resultado_busqueda:
             lista_datos.append(obra)
-        # for resultado in resultado_busqueda:
-        #     result=list(resultado)
-        #     consulta_disponibles=f"SELECT COUNT(ejemplar.id_ejemplar) FROM ejemplar WHERE ejemplar.id_obra_fk = {resultado[3]} AND ejemplar.disponibilidad=0; "
-        #     cantidad_ejemplares_disp= self.ejecutar_consulta(consulta_disponibles)
-     
-            
-        #     consulta_totales=f"SELECT COUNT(ejemplar.id_ejemplar) FROM ejemplar WHERE ejemplar.id_obra_fk = {resultado[3]};" 
-        #     cantidad_ejemp_total=self.ejecutar_consulta(consulta_totales)
-        #     result.insert(3, cantidad_ejemplares_disp[0][0])
-        #     result.insert(4, cantidad_ejemp_total[0][0])
-            
-        #     lista_datos.append(result)
-
-        # pprint(lista_datos)
+        
         return lista_datos
     def ejemplares_disponibles(self,id):
         consulta_disponibles=f"SELECT COUNT(ejemplar.id_ejemplar) FROM ejemplar WHERE ejemplar.id_obra_fk = {id} AND ejemplar.disponibilidad=0; "

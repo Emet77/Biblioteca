@@ -8,9 +8,8 @@ main_window=ttkbootstrap.Window(themename="litera")##Esta es la ventana principa
 #podria agregar un selector deslizante para cambiar entre modo obscuro y claro#
 main_window.title("biblioteca 4-117")
 main_window.geometry('1100x600')
-# main_window.resizable(0,0)
 main_tabs= ttkbootstrap.Notebook(main_window , bootstyle="info")#pestañas que ordenaran el programa
-# main_tabs.place(x=0 , y=0)
+
 main_tabs.pack(fill='both')
 
 obj_view_catalog=catalog_view.catalog_view(main_tabs)# objeto que permite crear las vistass

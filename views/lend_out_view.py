@@ -244,89 +244,89 @@ class lend_out_view():
 
 
 
-#         # frame_data_create_loan.grid_rowconfigure(0,weight=1)
-#         # frame_data_create_loan.grid_rowconfigure(1,weight=1)
-#         # frame_data_create_loan.grid_rowconfigure(2,weight=1)
-#         frame_data_create_loan.grid_rowconfigure(3,weight=1)
-#         # frame_data_create_loan.grid_columnconfigure(0,weight=1)
-#         frame_data_create_loan.grid_columnconfigure(1,weight=1)
-#         frame_course=ttkbootstrap.LabelFrame(frame_data_create_loan, text='Seleccione Curso y División',bootstyle='info')
-#         frame_course.grid(row=1,column=0,sticky='new',columnspan=3,padx=10,pady=10)
-#         frame_course.grid_columnconfigure(1,weight=1)
-#         frame_course.grid_columnconfigure(3,weight=1)
+        # frame_data_create_loan.grid_rowconfigure(0,weight=1)
+        # frame_data_create_loan.grid_rowconfigure(1,weight=1)
+        # frame_data_create_loan.grid_rowconfigure(2,weight=1)
+        frame_data_create_loan.grid_rowconfigure(3,weight=1)
+        # frame_data_create_loan.grid_columnconfigure(0,weight=1)
+        frame_data_create_loan.grid_columnconfigure(1,weight=1)
+        frame_course=ttkbootstrap.LabelFrame(frame_data_create_loan, text='Seleccione Curso y División',bootstyle='info')
+        frame_course.grid(row=1,column=0,sticky='new',columnspan=3,padx=10,pady=10)
+        frame_course.grid_columnconfigure(1,weight=1)
+        frame_course.grid_columnconfigure(3,weight=1)
 
-#         lbl_course=ttk.Label(frame_course, text='Curso',font='Helvetica')
-#         lbl_course.grid(row=1,column=0,sticky='w',padx=2,pady=5)#anchor='center'
+        lbl_course=ttk.Label(frame_course, text='Curso',font='Helvetica')
+        lbl_course.grid(row=1,column=0,sticky='w',padx=2,pady=5)#anchor='center'
 
-#         list_of_curses=self.lend_out_driver.cursos_disponibles()
-#         var_course=tkinter.StringVar()
-#         course_select=ttk.Combobox(frame_course, state="readonly", values=list_of_curses,textvariable=var_course)#, values=lista_de_cursos
-#         course_select.grid(row=1,column=1,sticky='w',pady=5)
+        list_of_curses=self.lend_out_driver.cursos_disponibles()
+        var_course=tkinter.StringVar()
+        course_select=ttk.Combobox(frame_course, state="readonly", values=list_of_curses,textvariable=var_course)#, values=lista_de_cursos
+        course_select.grid(row=1,column=1,sticky='w',pady=5)
 
-#         lbl_sections=ttk.Label(frame_course, text='División',font='Helvetica')
-#         lbl_sections.grid(row=1,column=2,sticky='w',pady=5)#anchor='center'
+        lbl_sections=ttk.Label(frame_course, text='División',font='Helvetica')
+        lbl_sections.grid(row=1,column=2,sticky='w',pady=5)#anchor='center'
 
-#         list_of_sections=self.lend_out_driver.diviciones_disponibles()
-#         var_sections=tkinter.StringVar()#self.lend_out_driver.cursos_disponibles()
-#         course_select=ttk.Combobox(frame_course, state="readonly", values=list_of_sections,textvariable=var_sections)#, values=lista_de_cursos
-#         course_select.grid(row=1,column=3,sticky='w',padx=5,pady=5)
-
-
-#         frame_home_loan=ttkbootstrap.LabelFrame(frame_data_create_loan, text='¿Es un prestamo para llevar fuera del colegio?',bootstyle='info')
-#         frame_home_loan.grid(row=2,column=0,sticky='new',columnspan=3,padx=10,pady=10)
-#         frame_home_loan.grid_columnconfigure(1,weight=1)
-#         # frame_home_loan.grid_columnconfigure(3,weight=1)
-
-#         var_chkbox_home_loan=tkinter.IntVar()
-#         chkbox_home_loan=tkinter.Checkbutton(frame_home_loan, text='¿Para llevar a casa?',font='Helvetica',state='normal', var=var_chkbox_home_loan,onvalue=1, offvalue=0, command=func_on_off_home_loan)#
-#         chkbox_home_loan.grid(row=0,column=0,padx=5,pady=5,sticky='w')
-
-#         var_id_partner=tkinter.IntVar()
-#         var_id_to_create_loan=tkinter.IntVar()
-# # 
-#         validate_entry = lambda text: text.isdecimal()
-#         ntry_socio=ttk.Entry(frame_home_loan,state='disabled',validate="key",validatecommand=(frame_home_loan.register(validate_entry), "%S"), textvariable=var_id_partner)#Validar para que solo se puedan ingresar numeros enteros positivos
-#         ntry_socio.grid(row=0,column=1,padx=5,pady=5,sticky='w')
+        list_of_sections=self.lend_out_driver.diviciones_disponibles()
+        var_sections=tkinter.StringVar()#self.lend_out_driver.cursos_disponibles()
+        course_select=ttk.Combobox(frame_course, state="readonly", values=list_of_sections,textvariable=var_sections)#, values=lista_de_cursos
+        course_select.grid(row=1,column=3,sticky='w',padx=5,pady=5)
 
 
-#         btn_search_partner=ttk.Button(frame_home_loan , text="Buscar",state='disable', command= func_btn_search_partner)#
-#         btn_search_partner.grid(row=0,column=2,padx=5,pady=5,sticky='w')
+        frame_home_loan=ttkbootstrap.LabelFrame(frame_data_create_loan, text='¿Es un prestamo para llevar fuera del colegio?',bootstyle='info')
+        frame_home_loan.grid(row=2,column=0,sticky='new',columnspan=3,padx=10,pady=10)
+        frame_home_loan.grid_columnconfigure(1,weight=1)
+        # frame_home_loan.grid_columnconfigure(3,weight=1)
+
+        var_chkbox_home_loan=tkinter.IntVar()
+        chkbox_home_loan=tkinter.Checkbutton(frame_home_loan, text='¿Para llevar a casa?',font='Helvetica',state='normal', var=var_chkbox_home_loan,onvalue=1, offvalue=0, command=func_on_off_home_loan)#
+        chkbox_home_loan.grid(row=0,column=0,padx=5,pady=5,sticky='w')
+
+        var_id_partner=tkinter.IntVar()
+        var_id_to_create_loan=tkinter.IntVar()
+# 
+        validate_entry = lambda text: text.isdecimal()
+        ntry_socio=ttk.Entry(frame_home_loan,state='disabled',validate="key",validatecommand=(frame_home_loan.register(validate_entry), "%S"), textvariable=var_id_partner)#Validar para que solo se puedan ingresar numeros enteros positivos
+        ntry_socio.grid(row=0,column=1,padx=5,pady=5,sticky='w')
 
 
-#         frame_show_partner=ttkbootstrap.LabelFrame(frame_data_create_loan, text='Estos son los socios encontrados',bootstyle='info')
-#         frame_show_partner.grid(row=3,column=0,sticky='new',columnspan=3,padx=10,pady=10)
-
-#         frame_show_partner.grid_columnconfigure(0,weight=1)
-#         frame_show_partner.grid_rowconfigure(0,weight=1)
-
-#         frame_search_partner=ttk.Treeview(frame_show_partner, columns=('Nombre','DNI') )
-#         frame_search_partner.heading('#0', text='Nombre')
-#         frame_search_partner.heading('#1',text='DNI')
-#         frame_search_partner.heading('#2',text='id')
-#         frame_search_partner.column('#0', width=90, minwidth=90)
-#         frame_search_partner.column('#1', width=80, minwidth=80)
-#         frame_search_partner.column('#2', width=5, minwidth=5)
-
-#         frame_search_partner.bind("<<TreeviewSelect>>", select_partner)#
-
-#         frame_search_partner.grid(row=0,column=0,sticky='we',padx=10,pady=10)
+        btn_search_partner=ttk.Button(frame_home_loan , text="Buscar",state='disable', command= func_btn_search_partner)#
+        btn_search_partner.grid(row=0,column=2,padx=5,pady=5,sticky='w')
 
 
-#         #<-----------------cuadro Información ------------------------------->
-#         frame_information=ttkbootstrap.LabelFrame(loan_frame_container,text='Informacion',bootstyle='dark')
-#         frame_information.grid(row=3,column=1,sticky='nwe',pady=10,padx=10)#row=2,column=0
-#         frame_information.grid_columnconfigure(0,weight=1)
-#         lbl_general_information=ttkbootstrap.Label(frame_information,text='¡Bienvenido al Programa!',bootstyle='danger',font='Helvetica')
-#         lbl_general_information.grid(row=0,column=0,sticky='n',columnspan=3,pady=10,padx=10)
+        frame_show_partner=ttkbootstrap.LabelFrame(frame_data_create_loan, text='Estos son los socios encontrados',bootstyle='info')
+        frame_show_partner.grid(row=3,column=0,sticky='new',columnspan=3,padx=10,pady=10)
 
-#         #<-----------------cuadro Boton prestar ------------------------------->
-#         frame_button=ttkbootstrap.LabelFrame(loan_frame_container,text='Para Finalizar, Oprima el boton',bootstyle='info')
-#         frame_button.grid(row=4,column=1,sticky='nsew',pady=10,padx=10)#row=2,column=0
-#         frame_button.grid_columnconfigure(0,weight=1)
-#         frame_button.grid_rowconfigure(0,weight=1)
+        frame_show_partner.grid_columnconfigure(0,weight=1)
+        frame_show_partner.grid_rowconfigure(0,weight=1)
 
-#         button_lend_out=ttkbootstrap.Button(frame_button,text='boton prestar',bootstyle='success', command=func_btn_create_loan)
-#         button_lend_out.grid(sticky='nsew',pady=10,padx=10)
+        frame_search_partner=ttk.Treeview(frame_show_partner, columns=('Nombre','DNI') )
+        frame_search_partner.heading('#0', text='Nombre')
+        frame_search_partner.heading('#1',text='DNI')
+        frame_search_partner.heading('#2',text='id')
+        frame_search_partner.column('#0', width=90, minwidth=90)
+        frame_search_partner.column('#1', width=80, minwidth=80)
+        frame_search_partner.column('#2', width=5, minwidth=5)
+
+        frame_search_partner.bind("<<TreeviewSelect>>", select_partner)#
+
+        frame_search_partner.grid(row=0,column=0,sticky='we',padx=10,pady=10)
+
+
+        #<-----------------cuadro Información ------------------------------->
+        frame_information=ttkbootstrap.LabelFrame(loan_frame_container,text='Informacion',bootstyle='dark')
+        frame_information.grid(row=3,column=1,sticky='nwe',pady=10,padx=10)#row=2,column=0
+        frame_information.grid_columnconfigure(0,weight=1)
+        lbl_general_information=ttkbootstrap.Label(frame_information,text='¡Bienvenido al Programa!',bootstyle='danger',font='Helvetica')
+        lbl_general_information.grid(row=0,column=0,sticky='n',columnspan=3,pady=10,padx=10)
+
+        #<-----------------cuadro Boton prestar ------------------------------->
+        frame_button=ttkbootstrap.LabelFrame(loan_frame_container,text='Para Finalizar, Oprima el boton',bootstyle='info')
+        frame_button.grid(row=4,column=1,sticky='nsew',pady=10,padx=10)#row=2,column=0
+        frame_button.grid_columnconfigure(0,weight=1)
+        frame_button.grid_rowconfigure(0,weight=1)
+
+        button_lend_out=ttkbootstrap.Button(frame_button,text='boton prestar',bootstyle='success', command=func_btn_create_loan)
+        button_lend_out.grid(sticky='nsew',pady=10,padx=10)
         
 
-#         return loan_frame_container
+        return loan_frame_container

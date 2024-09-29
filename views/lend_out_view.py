@@ -219,7 +219,7 @@ class lend_out_view():
         frame_search.column('#2',width=55,minwidth=55)
         frame_search.column('#3',width=55,minwidth=55)
         frame_search.bind("<Double-1>",add_book_to_list)
-        frame_search.grid(row=0,column=0,sticky='nswe',)#row=0,column=0,sticky='ew',padx=10,pady=10
+        frame_search.grid(row=0,column=0,sticky='nswe')#row=0,column=0,sticky='ew',padx=10,pady=10
 
         scrollbar_frame_search = ttk.Scrollbar(frame_list_search_results, orient=tkinter.VERTICAL, command=frame_search.yview)
         scrollbar_frame_search.grid(row=0,column=1,sticky='ns',padx=3,pady=1)

@@ -121,7 +121,7 @@ class return_book_view():
         btn_search_loan.grid(row=0,column=1,padx=3,pady=3,sticky='nw')
 
 
-        #<------------------------procasda cuadro un frame que los contenga----------------->
+        #<------------------------por cada cuadro un frame que los contenga----------------->
         frame_five=ttkbootstrap.LabelFrame(return_book_frame,text='cuadros de resultados', bootstyle='info')#este los contiene a los demas
         frame_five.grid(row=6,column=0,sticky='news',padx=5,pady=5,columnspan=2)
         frame_five.grid_rowconfigure(0,weight=1)

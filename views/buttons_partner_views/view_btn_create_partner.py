@@ -11,16 +11,31 @@ from drivers import partner_management_driver
 class view_btn_create_partner():
     def __init__(self, contenedor):
         self.main_window=contenedor
-        self.management_driver=partner_management_driver.partner_management_driver()
+        self.partner_management_driver=partner_management_driver.partner_management_driver()
     
     def frame_create_partner(self):
         def function_clean_interface():
             pass
         def function_btn_create_partner():
-            name=var_partner_name.get()
-            cellphone_number=var_partner_cellphone.get()
-            dni=var_partner_dni.get()
-            print('esto va al controlador: ',name,' ',cellphone_number,' ',dni )
+            try:
+                name=var_partner_name.get()
+                cellphone_number=var_partner_cellphone.get()
+                cant_number=len(str(cellphone_number))
+                dni=var_partner_dni.get()
+                cant_dni=len(str(dni))
+                if(name==''):
+                    lbl_title.configure(text='faltan nombre',bootstyle='danger')
+                elif(cant_number<10):
+                    lbl_title.configure(text='el telefono esta icompleto',bootstyle='danger')
+                elif( cant_dni<8):
+                    lbl_title.configure(text='el dni esta incompleto',bootstyle='danger')
+
+                elif(name!='' and cellphone_number>=0 and dni>=0):
+                    lbl_title.configure(text='¡Socio Agregado Con Exito!',bootstyle='success')
+                    self.partner_management_driver.crear_socio(name,cellphone_number,dni)
+            except:
+                lbl_title.configure(text='Faltan Datos',bootstyle='danger')
+            
 
         container_frame=ttkbootstrap.LabelFrame(self.main_window,text='Contenedor de todo xd')
         container_frame.grid(row=0,column=0)

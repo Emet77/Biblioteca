@@ -107,38 +107,6 @@ class view_btn_create_partner():
         btn_create_parner=ttkbootstrap.Button(frame_three,text='Crear Socio',bootstyle='success',command=function_btn_create_partner)
         btn_create_parner.grid(row=0,column=1,sticky='e',pady=3,padx=3)
 
-        print(frame_three.grid_size())
-
-
-        # ntry_name=ttkbootstrap.Entry(frame_one)
-        # ntry_name.grid(row=0,column=1,sticky='e',pady=3,padx=3)   
-
-        # frame_2=ttkbootstrap.LabelFrame(container_frame,text='entry y label telefono',bootstyle='danger')
-        # frame_2.grid(row=2,column=0,sticky='new')
-        # frame_2.grid_rowconfigure(0,weight=1)
-        # # frame_one.grid_columnconfigure(0,weight=1)
-        # # frame_one.grid_columnconfigure(1,weight=1)
-
-        # lbl_cellphone=ttkbootstrap.Label(frame_2,text='Numero Telefonico : ',font='Helvetica',bootstyle='dark')
-        # lbl_cellphone.grid(row=0,column=0,sticky='w',pady=3,padx=3)
-
-        # ntry_cellphone=ttkbootstrap.Entry(frame_2)
-        # ntry_cellphone.grid(row=0,column=1,sticky='e',pady=3,padx=3)
-
-        # frame_3=ttkbootstrap.LabelFrame(container_frame,text='entry y label DNI',bootstyle='danger')
-        # frame_3.grid(row=3,column=0,sticky='new')
-        # frame_3.grid_rowconfigure(0,weight=1)
-        # frame_3.grid_columnconfigure(1,weight=1)
-        # # frame_one.grid_columnconfigure(1,weight=1)
-
-        # lbl_dni=ttkbootstrap.Label(frame_3,text='Ingrese DNI: ',font='Helvetica',bootstyle='dark')
-        # lbl_dni.grid(row=0,column=0,sticky='w',pady=3,padx=3)
-
-        # ntry_dni=ttkbootstrap.Entry(frame_3)
-        # ntry_dni.grid(row=0,column=1,sticky='w',pady=3,padx=3)
-        
-
-
-
+        # print(frame_three.grid_size())
 
         return container_frame

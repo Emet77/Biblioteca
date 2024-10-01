@@ -21,7 +21,7 @@ class partner_management_driver():
     def buscar_socio(self, criterio):
         consulta=f"""SELECT estudiante.id_estudiante , estudiante.nombre , estudiante.telefono , estudiante.dni
                     FROM `estudiante` WHERE estudiante.dni LIKE '%{criterio}%' OR estudiante.nombre LIKE '%{criterio}%'
-                    ORDER BY estudiante.id_estudiante;"""
+                    ORDER BY estudiante.id_estudiante DESC;"""
 
         resultado = self.ejecutar_consulta(consulta)
         return resultado

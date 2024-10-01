@@ -5,7 +5,7 @@ import ttkbootstrap  as ttk
 from ttkbootstrap.constants import *
 import ttkbootstrap.window  
 from ttkbootstrap.dialogs import MessageDialog , Messagebox
-from views.buttons_partner_views import view_btn_create_partner
+from views.buttons_partner_views import view_btn_create_partner,view_btn_modify_partner
 class partner_management_view():
     def __init__(self, contenedor):
         self.main_window=contenedor
@@ -17,6 +17,10 @@ class partner_management_view():
             fram.grid(row=0,column=0,sticky='news')
             # frame_buttons_views=ttkbootstrap.LabelFrame(frame_container,text='Vistas de los Botones', bootstyle='info')
             # frame_buttons_views.grid(row=0,column=1,sticky='news',padx=5,pady=5,columnspan=3)
+        def function_btn_modify_partner():   
+            objeto_btn_mod_partnr=view_btn_modify_partner.view_btn_modify_partner(frame_buttons_views)
+            frame_mod_partner=objeto_btn_mod_partnr.frame_modify_partner()
+            frame_mod_partner.grid(row=0,column=0,sticky='news')
         partner_management_frame=ttkbootstrap.Frame(self.main_window)
         partner_management_frame.grid_rowconfigure(0,weight=1)
         partner_management_frame.grid_columnconfigure(0,weight=1)
@@ -39,7 +43,7 @@ class partner_management_view():
         btn_create_partner.grid(row=0,column=0,padx=3,pady=3,sticky='ewns')
 
 
-        btn_modify_partner=ttkbootstrap.Button(frame_buttons,text='Modificar Socio')
+        btn_modify_partner=ttkbootstrap.Button(frame_buttons,text='Modificar Socio',command=function_btn_modify_partner)
         btn_modify_partner.grid(row=1,column=0,padx=3,pady=3,sticky='ewns')
 
         btn_delete_partner=ttkbootstrap.Button(frame_buttons,text='Eliminar Socio')

@@ -15,7 +15,10 @@ class view_btn_create_partner():
     
     def frame_create_partner(self):
         def function_clean_interface():
-            pass
+            ntry_name.delete(0,tkinter.END)
+            ntry_cellphone.delete(0,tkinter.END)
+            ntry_dni.delete(0,tkinter.END)
+            
         def function_btn_create_partner():
             try:
                 name=var_partner_name.get()
@@ -97,9 +100,12 @@ class view_btn_create_partner():
         # frame_three.grid_rowconfigure(0,weight=1)
         frame_three.grid_columnconfigure(0,weight=1)
         # frame_three.grid_columnconfigure(1,weight=1)
+        
+        btn_cancell=ttkbootstrap.Button(frame_three,text='Cancelar',bootstyle='info',command=function_clean_interface)
+        btn_cancell.grid(row=0,column=0,sticky='e',pady=3,padx=3)
 
         btn_create_parner=ttkbootstrap.Button(frame_three,text='Crear Socio',bootstyle='success',command=function_btn_create_partner)
-        btn_create_parner.grid(row=0,column=0,sticky='e',pady=3,padx=3)
+        btn_create_parner.grid(row=0,column=1,sticky='e',pady=3,padx=3)
 
         print(frame_three.grid_size())
 

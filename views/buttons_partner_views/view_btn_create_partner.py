@@ -81,18 +81,17 @@ class view_btn_create_partner():
         frame_two.grid_columnconfigure(0,weight=1)
         
         var_partner_name=tkinter.StringVar()
-        ntry_name=ttkbootstrap.Entry(frame_two,textvariable=var_partner_name)
+        ntry_name=ttkbootstrap.Entry(frame_two,font='Helvetica',textvariable=var_partner_name)
         ntry_name.grid(row=0,column=0,sticky='we',pady=3,padx=3) 
 
         # Validar que solo ingresen numeros enteros el los ntry cellphone y dni
         var_partner_cellphone=tkinter.IntVar()
         validate_entry = lambda text: text.isdecimal()
-        ntry_cellphone=ttkbootstrap.Entry(frame_two,state='normal',validate="key",validatecommand=(frame_two.register(validate_entry), "%S"), textvariable=var_partner_cellphone)
-        
+        ntry_cellphone=ttkbootstrap.Entry(frame_two,font='Helvetica',state='normal',validate="key",validatecommand=(frame_two.register(validate_entry), "%S"), textvariable=var_partner_cellphone)
         ntry_cellphone.grid(row=1,column=0,sticky='we',pady=3,padx=3)
 
         var_partner_dni=tkinter.IntVar()
-        ntry_dni=ttkbootstrap.Entry(frame_two,state='normal',validate="key",validatecommand=(frame_two.register(validate_entry), "%S"), textvariable=var_partner_dni)
+        ntry_dni=ttkbootstrap.Entry(frame_two,font='Helvetica',state='normal',validate="key",validatecommand=(frame_two.register(validate_entry), "%S"), textvariable=var_partner_dni)
         ntry_dni.grid(row=2,column=0,sticky='we',pady=3,padx=3)
 
         frame_three=ttkbootstrap.LabelFrame(container_frame,text='Boton crear ',bootstyle='danger')

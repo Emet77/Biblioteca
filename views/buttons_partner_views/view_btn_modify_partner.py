@@ -24,8 +24,6 @@ class view_btn_modify_partner():
             # function_btn_search()
 
         def function_btn_search():
-            # function_clean_interface()
-            # lbl_title.configure(text='Editar Datos de Socio',bootstyle='dark')
             search_this=var_partner_dni_search.get()
             search_results=self.driver_partner_management.buscar_socio(search_this)
             delete_elements=frame_partner_list.get_children()
@@ -151,18 +149,18 @@ class view_btn_modify_partner():
         ntry_id=ttkbootstrap.Entry(frame_three,textvariable=var_partner_id)#esta variable se coloca en el frame pero no se muestra 
 
         var_partner_name=tkinter.StringVar()
-        ntry_name=ttkbootstrap.Entry(frame_three,textvariable=var_partner_name)
+        ntry_name=ttkbootstrap.Entry(frame_three, font='Helvetica',textvariable=var_partner_name)
         ntry_name.grid(row=0,column=0,sticky='we',pady=3,padx=3) 
 
         # Validar que solo ingresen numeros enteros el los ntry cellphone y dni
         validate_entry = lambda text: text.isdecimal()
         var_partner_cellphone=tkinter.IntVar()
         validate_entry = lambda text: text.isdecimal()
-        ntry_cellphone=ttkbootstrap.Entry(frame_three,state='normal',validate="key",validatecommand=(frame_three.register(validate_entry), "%S"), textvariable=var_partner_cellphone)  
+        ntry_cellphone=ttkbootstrap.Entry(frame_three,font='Helvetica',state='normal',validate="key",validatecommand=(frame_three.register(validate_entry), "%S"), textvariable=var_partner_cellphone)  
         ntry_cellphone.grid(row=1,column=0,sticky='we',pady=3,padx=3)
 
         var_partner_dni=tkinter.IntVar()
-        ntry_dni=ttkbootstrap.Entry(frame_three,state='normal',validate="key",validatecommand=(frame_three.register(validate_entry), "%S"), textvariable=var_partner_dni)
+        ntry_dni=ttkbootstrap.Entry(frame_three,font='Helvetica',state='normal',validate="key",validatecommand=(frame_three.register(validate_entry), "%S"), textvariable=var_partner_dni)
         ntry_dni.grid(row=2,column=0,sticky='we',pady=3,padx=3)
 
          #<----------------------boton modifi y cancel--------------------->

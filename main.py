@@ -24,8 +24,8 @@ frame_return_book=obj_frame_return_book.return_book_frame()
 obj_management_view=partner_management_view.partner_management_view(main_tabs)
 frame_partner_management_view = obj_management_view.partner_management_frame()
 
-obj_catalog_management= catalog_management_view.catalog_magement_view(main_tabs)
-frame_catalog_management_view= obj_catalog_management.catalog_management_view() 
+obj_catalog_management= catalog_management_view.catalog_management_view(main_tabs)
+frame_catalog_management_view= obj_catalog_management.catalog_management_frame()
 
 main_tabs.add(frame_catalog,text="Catalogo")#implementacion del cuadro a las pesañas
 main_tabs.add(frame_lend_out, text="Crear prestamo")

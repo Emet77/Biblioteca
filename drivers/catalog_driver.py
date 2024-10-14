@@ -114,3 +114,63 @@ class catalog_driver():
         consulta=f"UPDATE `obraliteraria` SET `resumen`='{directorio_resumen_n}' WHERE obraliteraria.id_obra={id};"
         self.ejecutar_consulta(consulta)
         #ahora que ya crea texto y guarda la ubicacion en la base de datos debemmos agregar los demas datos
+
+    def agregar_obra_existente(self,desde,hasta,titulo,autor,editorial,resumen,portada):
+        #validar si el rango de ejemplares esta ocupado por otra obra literaria
+        #el rango ingresado es correspondiente a los ids que tendran los ejemplares en su portada,,osea que el campo id_secundario
+        #devbe agregarse en la tabla ejemplares
+        numero_desde=desde.get()
+        numero_hasta=hasta.get()
+        titulo=titulo.get()
+        autor=autor.get()
+        editorial=editorial.get()
+        resumen=resumen.get()
+        portada=portada.get()
+        #evaluar los numeos de desde y hasta
+        if(numero_desde==''or numero_hasta==''):
+            # print('El rango de identificadores no debe estar vacio')
+            return 0
+        else:
+            int_desde=int(numero_desde)
+            int_hasta=int(numero_hasta)
+            if(int_desde>int_hasta):
+                # print('El numero indicado en el rango desde tiene que ser menor ')
+                # print('Que el numero indicado en el rango hasta')
+                return 1
+            elif(titulo=='' or autor=='' or editorial==''):
+                #Los campos de titulo autor o editorial no deben estar vacios
+                return 2
+            #Como crear la obra con un rango?
+            #se toma el ide de la obra creada y apartir de eso se aplica el rango para crear los ejemplares
+            #antes de crear los ejemplares debemos comprobar si el rango de id no esta ya utilizado con otro ejemplar
+            #la obra se crea normalmente con los datos de la interface
+
+            #La bd no deja insertar datos repetidos en el ide de ejemplar
+            #Si nos saltamos el orden en id_ejemplar la bd roma el ultimo id y apartir de ahi continua con la numeracion            
+            contador=int_desde
+            lista_ejemplares_repetidos=[]
+            while(contador<=int_hasta):
+                consulta=f"SELECT COUNT(ejemplar.id_ejemplar) FROM `ejemplar` WHERE ejemplar.id_ejemplar={contador};"
+                resultado=self.ejecutar_consulta(consulta)
+                if(resultado[0][0]!=0):
+                    lista_ejemplares_repetidos.append(contador)
+                contador=contador+1
+            if(lista_ejemplares_repetidos==[]):
+                print("ningum ejemplar se repite, Se crea la obra normalmente")
+                consulta=f"""INSERT INTO `obraliteraria`(`id_obra`, `titulo`, `autor`, `editorial`, `portada`, `resumen`) 
+                                VALUES (null,'{titulo}','{autor}','{editorial}','{portada}','{resumen}');"""
+                # print(consulta)
+                resultado_obra=self.ejecutar_consulta(consulta)
+                print(resultado_obra)
+                consulta_id_obra=f"SELECT MAX(id_obra) FROM obraliteraria;"
+                obra=self.ejecutar_consulta(consulta_id_obra)
+                id_obra=obra[0][0]
+                contador=int_desde
+                while(contador<=int_hasta):
+                    consulta=f"INSERT INTO `ejemplar`(`id_ejemplar`, `id_obra_fk`, `disponibilidad`) VALUES ({contador},{id_obra},0);"
+                    resultado=self.ejecutar_consulta(consulta)
+                    contador=contador+1
+                return 3
+            elif(lista_ejemplares_repetidos!=[]):
+                print("Estos ejemplares se repiten :( ", lista_ejemplares_repetidos)
+                return lista_ejemplares_repetidos

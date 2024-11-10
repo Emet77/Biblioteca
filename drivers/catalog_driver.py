@@ -80,15 +80,20 @@ class catalog_driver():
         consulta=f"UPDATE `obraliteraria` SET `portada`=NULL WHERE obraliteraria.id_obra={id_obra};"
         self.ejecutar_consulta(consulta)
     def agregar_resumen(self, id_obra , resumen):
-        #agregar a la base de datos el campo resumen donde se almacenara el texto con el resumen de la obra
-        #f = open("myfile.txt", "x") Ejemplo para crear un archivo en python usando open y agregando "x" como parametro
-        # f = open("myfile.txt", "w") crea y sobreescribe si ya existe un archivo con ese nombre
-        pass
+        actual_dir=os.getcwd()
+        resumen_texto = open(f"{actual_dir}\\resources\\summaries\\{id_obra}.txt", "w")
+        resumen_texto.write(resumen)
+        resumen_texto.close()
+        directorio_resumen=f"{actual_dir}\\resources\\summaries\\{id_obra}.txt"
+        directorio_resumen=directorio_resumen.replace('\\','//')
+        consulta=f"UPDATE `obraliteraria` SET `resumen`='{directorio_resumen}' WHERE obraliteraria.id_obra={id_obra};"
+        self.ejecutar_consulta(consulta)
+
     def leer_resumen(self, id_obra):
         #consultar la bd por la informacion del texto a leer 
         consulta=f"SELECT `resumen` FROM `obraliteraria` WHERE obraliteraria.id_obra={id_obra}; "
         direccion=self.ejecutar_consulta(consulta)
-        if(direccion[0][0]==None):
+        if(direccion[0][0]==None or direccion[0][0]=='NULL' or direccion[0][0]==''):
             # no ejecutar
             n="Este libro no tiene Resumen  :("
             return n
@@ -109,8 +114,6 @@ class catalog_driver():
         resumen_texto.close()
         directorio_resumen=f"{actual_dir}\\resources\\summaries\\{id}.txt"
         directorio_resumen_n=directorio_resumen.replace('\\','//')
-        print(directorio_resumen)
-        print(directorio_resumen_n)
         consulta=f"UPDATE `obraliteraria` SET `resumen`='{directorio_resumen_n}' WHERE obraliteraria.id_obra={id};"
         self.ejecutar_consulta(consulta)
         #ahora que ya crea texto y guarda la ubicacion en la base de datos debemmos agregar los demas datos
@@ -126,16 +129,15 @@ class catalog_driver():
         editorial=editorial.get()
         resumen=resumen.get()
         portada=portada.get()
+        print(resumen)
+        print(portada)
         #evaluar los numeos de desde y hasta
         if(numero_desde==''or numero_hasta==''):
-            # print('El rango de identificadores no debe estar vacio')
             return 0
         else:
             int_desde=int(numero_desde)
             int_hasta=int(numero_hasta)
             if(int_desde>int_hasta):
-                # print('El numero indicado en el rango desde tiene que ser menor ')
-                # print('Que el numero indicado en el rango hasta')
                 return 1
             elif(titulo=='' or autor=='' or editorial==''):
                 #Los campos de titulo autor o editorial no deben estar vacios
@@ -156,20 +158,29 @@ class catalog_driver():
                     lista_ejemplares_repetidos.append(contador)
                 contador=contador+1
             if(lista_ejemplares_repetidos==[]):
+                #evaluar portada y resumen
                 print("ningum ejemplar se repite, Se crea la obra normalmente")
-                consulta=f"""INSERT INTO `obraliteraria`(`id_obra`, `titulo`, `autor`, `editorial`, `portada`, `resumen`) 
-                                VALUES (null,'{titulo}','{autor}','{editorial}','{portada}','{resumen}');"""
-                # print(consulta)
-                resultado_obra=self.ejecutar_consulta(consulta)
-                print(resultado_obra)
-                consulta_id_obra=f"SELECT MAX(id_obra) FROM obraliteraria;"
-                obra=self.ejecutar_consulta(consulta_id_obra)
-                id_obra=obra[0][0]
-                contador=int_desde
-                while(contador<=int_hasta):
-                    consulta=f"INSERT INTO `ejemplar`(`id_ejemplar`, `id_obra_fk`, `disponibilidad`) VALUES ({contador},{id_obra},0);"
-                    resultado=self.ejecutar_consulta(consulta)
-                    contador=contador+1
+                print('este es el dir del resumen: ',resumen)
+                print(type(resumen))
+                
+                print('esta es la dir dela port: ',portada)
+                print(type(portada))
+                
+                # consulta=f"""INSERT INTO `obraliteraria`(`id_obra`, `titulo`, `autor`, `editorial`, `portada`, `resumen`) 
+                #                 VALUES (null,'{titulo}','{autor}','{editorial}','{portada}','{resumen}');"""
+                # resultado_obra=self.ejecutar_consulta(consulta)
+                # print(resultado_obra)
+                # consulta_id_obra=f"SELECT MAX(id_obra) FROM obraliteraria;"
+                # obra=self.ejecutar_consulta(consulta_id_obra)
+                # id_obra=obra[0][0]
+                # #aca crea el resumen desde la funcion pasandole el texto y el id a la funcion
+                # # if(resumen != ''):
+                # #     self.agregar_resumen(id_obra,resumen)
+                # contador=int_desde
+                # while(contador<=int_hasta):
+                #     consulta=f"INSERT INTO `ejemplar`(`id_ejemplar`, `id_obra_fk`, `disponibilidad`) VALUES ({contador},{id_obra},0);"
+                #     resultado=self.ejecutar_consulta(consulta)
+                #     contador=contador+1
                 return 3
             elif(lista_ejemplares_repetidos!=[]):
                 print("Estos ejemplares se repiten :( ", lista_ejemplares_repetidos)

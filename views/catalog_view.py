@@ -53,8 +53,8 @@ class catalog_view():
             lbl_quantity.configure(text=f'Cantidad total: {total_books}')
             lbl_quantity_available.configure(text=f'Cantidad disponible: {quantity_available_books}')
 
-            
-            if(book_cover==None):
+  
+            if(book_cover==None or book_cover=='' or book_cover=='NULL'):
                 actual_dir= os.getcwd()
                 no_cover=f"{actual_dir}\\resources\\covers\\no_cover.PNG"
                 img=Image.open(no_cover)
@@ -70,11 +70,14 @@ class catalog_view():
                 img_tk = ImageTk.PhotoImage(img)    
                 lbl_image= ttkbootstrap.Label(frame_cover,image=img_tk)
                 lbl_image.place(x=0,y=0)
+                
             summary_obra.configure(state='normal')
-
             summary_obra.delete('1.0',END)
             summary_obra.insert('1.0', book_summary)
             summary_obra.configure(state='disabled')
+
+
+
         the_biggest_frame=ttkbootstrap.LabelFrame(self.main_window,text='este cuadro contiene todos los demas', bootstyle='primary')
         the_biggest_frame.pack( pady=5,padx=5,expand=True,fill='both')
 

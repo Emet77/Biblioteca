@@ -34,16 +34,14 @@ class view_add_legacy_literary_work():
             ntry_until_id.delete(0,tkinter.END)
             ntry_title.delete(0,tkinter.END)
             txt_summary_obra.delete('1.0',END)
-            var_summary_literary_work.set('No hay Resumen, Para esta obra')
-            txt_summary_obra.insert('1.0', var_summary_literary_work.get())
+            # var_summary_literary_work.set('No hay Resumen, Para esta obra')
+            # txt_summary_obra.insert('1.0', var_summary_literary_work.get())
 
             function_btn_cancel_cover()
                         
         def function_btn_cancel_cover():
             #Para cancelar debemos eliminar el link guardado en el var anterior
-            print(var_link_cover.get())
             var_link_cover.set('NULL')#Con esto nos aseguramos que en la BD aparezca el valor null y se reemplaze la portada cuando la busqyen en el catalogo
-            print(var_link_cover.get())
             global img_tk
             actual_dir= os.getcwd()
             no_cover=f"{actual_dir}\\resources\\covers\\no_cover.PNG"
@@ -55,12 +53,12 @@ class view_add_legacy_literary_work():
             
         def function_btn_add_legacy_literary_work():
             # var_from_id,var_until_id,var_title,var_author,var_editorial,var_summary_literary_work,var_link_cover
-            result=self.controlador.agregar_obra_existente(var_from_id,var_until_id,var_title,var_author,var_editorial,var_summary_literary_work,var_link_cover)
+            result=self.controlador.agregar_obra_existente(var_from_id,var_until_id,var_title,var_author,var_editorial,txt_summary_obra,var_link_cover)
             if(result==0):
                 Messagebox.show_info(message='El rango de identificadores no debe estar vacio',title='Información')
             elif(result==1):
-                Messagebox.show_info(message="""El numero indicado en la casilla 'Desde numero ejemplar' 
-                                                debe ser menor que la casilla 'Hasta numero ejemplar'
+                Messagebox.show_info(message="""El numero indicado en la casilla 'Desde el numero ejemplar' 
+                                                debe ser menor que la casilla 'Hasta el numero ejemplar'
                                                 """,title='Información')
             elif(result==2):
                 Messagebox.show_info(message='Los campos de Titulo, Autor o Editorial no deben estar vacios',title='Información')
@@ -68,7 +66,8 @@ class view_add_legacy_literary_work():
                 Messagebox.show_info(message='¡Obra agregada exitosamente!',title='Información',bootstyle='success')
                 function_btn_cancel()
             else:
-                Messagebox.show_info(message=f'Los siguientes identificadores de ejemplares pertenecen a otra obra: {result}',title='Información',bootstyle='success')
+                Messagebox.show_info(message=f"""Los siguientes identificadores de ejemplares pertenecen a otra obra: {result} \n 
+                                                Puede que el inventario fisico tenga errores""",title='Información',bootstyle='success')
 
 
             #Para agregar una obra existente neceito 
@@ -160,7 +159,7 @@ class view_add_legacy_literary_work():
         
         frame_three.grid_columnconfigure(0,weight=1)
         frame_three.grid_rowconfigure(0,weight=1)
-        var_summary_literary_work=tkinter.StringVar()
+        # var_summary_literary_work=tkinter.StringVar()
         txt_summary_obra=ttkbootstrap.Text(frame_three,padx=3,pady=3)
         txt_summary_obra.grid(row=0,column=0)
         # txt_summary_obra.insert('1.0', var_summary_literary_work)
@@ -212,6 +211,6 @@ class view_add_legacy_literary_work():
         btn_add_literary_work.grid(row=0,column=0,sticky='nsew',padx=3,pady=3)
         
 
-        print(container_frame.grid_size())#(coulumna,Fila)
+        # print(container_frame.grid_size())#(coulumna,Fila)
 
         return container_frame

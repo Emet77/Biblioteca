@@ -3,18 +3,24 @@ import pprint
 import shutil 
 import mysql.connector
 from pprint import *
+import sqlite3
 class catalog_driver():
     def __init__(self) -> None:
         pass
     
     def ejecutar_consulta(self, consulta):
-        self.consulta = consulta
-        conexion = mysql.connector.connect( host='localhost' , user='root' , passwd='' , database='biblioteca4117')
+        # self.consulta = consulta
+        # conexion = mysql.connector.connect( host='localhost' , user='root' , passwd='' , database='biblioteca4117')
+        # cursor= conexion.cursor()
+        # cursor.execute(consulta)
+        # resultado= cursor.fetchall()
+        # conexion.commit()
+        # return resultado 
+        conexion = sqlite3.connect('databaseStructure/sqlite_biblioteca.db')
         cursor= conexion.cursor()
-        cursor.execute(consulta)
-        resultado= cursor.fetchall()
+        resultado = cursor.execute(consulta)
         conexion.commit()
-        return resultado 
+        return resultado
     
     def buscar_obra_catalogo(self, criterio_busqueda, donde_buscar):
         match donde_buscar:
@@ -52,15 +58,21 @@ class catalog_driver():
     def ejemplares_disponibles(self,id):
         consulta_disponibles=f"SELECT COUNT(ejemplar.id_ejemplar) FROM ejemplar WHERE ejemplar.id_obra_fk = {id} AND ejemplar.disponibilidad=0; "
         cantidad_ejemplares_disp= self.ejecutar_consulta(consulta_disponibles)
-        return cantidad_ejemplares_disp[0][0]
+        #print(cantidad_ejemplares_disp.fetchall()) #Debemos agregar el campo fetchall para que los datosque vienen del cursor puedan ser vistos
+        disp = cantidad_ejemplares_disp.fetchall()
+        print("estos son los disponibles... ",disp[0][0])
+        return disp[0][0]
+    
     def ejemplares_totales(self,id):
         consulta_totales=f"SELECT COUNT(ejemplar.id_ejemplar) FROM ejemplar WHERE ejemplar.id_obra_fk = {id};" 
         cantidad_ejemp_total=self.ejecutar_consulta(consulta_totales)
-        return cantidad_ejemp_total[0][0]
+        total= cantidad_ejemp_total.fetchall()
+        return total[0][0]
     def mostrar_portada(self,id):
         consulta=f"SELECT `portada` FROM `obraliteraria` WHERE obraliteraria.id_obra={id};"
         portada=self.ejecutar_consulta(consulta)
-        return portada[0][0]
+        portada=portada.fetchall()
+        return portada[0][0] 
     
     def agregarportada_obra(self ,documento_copia,id_obra):
 
@@ -93,6 +105,7 @@ class catalog_driver():
         #consultar la bd por la informacion del texto a leer 
         consulta=f"SELECT `resumen` FROM `obraliteraria` WHERE obraliteraria.id_obra={id_obra}; "
         direccion=self.ejecutar_consulta(consulta)
+        direccion=direccion.fetchall()
         if(direccion[0][0]==None or direccion[0][0]=='NULL' or direccion[0][0]==''):
             # no ejecutar
             n="Este libro no tiene Resumen  :("

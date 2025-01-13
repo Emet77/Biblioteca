@@ -140,7 +140,7 @@ class catalog_driver():
         titulo=titulo.get()
         autor=autor.get()
         editorial=editorial.get()
-        resumen=resumen.get()
+        resumen=resumen.get()#tenemos que acceder a esta variale para ver que tiene 
         portada=portada.get()
         print(resumen)
         print(portada)

@@ -178,22 +178,6 @@ class catalog_driver():
                 
                 print('esta es la dir dela port: ',portada)
                 print(type(portada))
-                
-                # consulta=f"""INSERT INTO `obraliteraria`(`id_obra`, `titulo`, `autor`, `editorial`, `portada`, `resumen`) 
-                #                 VALUES (null,'{titulo}','{autor}','{editorial}','{portada}','{resumen}');"""
-                # resultado_obra=self.ejecutar_consulta(consulta)
-                # print(resultado_obra)
-                # consulta_id_obra=f"SELECT MAX(id_obra) FROM obraliteraria;"
-                # obra=self.ejecutar_consulta(consulta_id_obra)
-                # id_obra=obra[0][0]
-                # #aca crea el resumen desde la funcion pasandole el texto y el id a la funcion
-                # # if(resumen != ''):
-                # #     self.agregar_resumen(id_obra,resumen)
-                # contador=int_desde
-                # while(contador<=int_hasta):
-                #     consulta=f"INSERT INTO `ejemplar`(`id_ejemplar`, `id_obra_fk`, `disponibilidad`) VALUES ({contador},{id_obra},0);"
-                #     resultado=self.ejecutar_consulta(consulta)
-                #     contador=contador+1
                 return 3
             elif(lista_ejemplares_repetidos!=[]):
                 print("Estos ejemplares se repiten :( ", lista_ejemplares_repetidos)

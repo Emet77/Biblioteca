@@ -192,6 +192,7 @@ class lend_out_driver():
                             WHERE {condicion};
                             """
             resultado=self.ejecutar_consulta(consuta_todo)
+            resultado=resultado.fetchall()
             
             for registro in resultado:
                 pprint(registro)
@@ -217,6 +218,7 @@ class lend_out_driver():
                             consulta_general=f"""SELECT {campo} FROM {tabla} WHERE {condicion} ={indice};"""
                             # print(consulta_general)
                             dato=self.ejecutar_consulta(consulta_general)
+                            dato=dato.fetchall()
                             info_mostrar.append(dato[0][0])
                         else:
                             # print("agrega el campo Date correspondiente al indice", i)
@@ -244,6 +246,7 @@ class lend_out_driver():
                                 FROM obraliteraria
                                 WHERE obraliteraria.id_obra=(SELECT ejemplar.id_obra_fk FROM ejemplar WHERE ejemplar.id_ejemplar={id_ejem} ); """
             titulo=self.ejecutar_consulta(consulta_titulo)   
+            titulo=titulo.fetchall()
             lista_inf_detalle.append(titulo[0][0])
             lista_inf_detalle.append(detalle[0])
             lista_inf_detalle.append(detalle[1])

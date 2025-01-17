@@ -52,28 +52,29 @@ class view_add_legacy_literary_work():
             lbl_image2.grid(row=0,column=0,sticky='news')
             
         def function_btn_add_legacy_literary_work():
-            # var_from_id,var_until_id,var_title,var_author,var_editorial,var_summary_literary_work,var_link_cover
-            result=self.controlador.agregar_obra_existente(var_from_id,var_until_id,var_title,var_author,var_editorial,txt_summary_obra,var_link_cover)
-            if(result==0):
+            #print(type(var_from_id.get()))#son de tipo string
+            if(var_title.get()=="" or var_author.get()=="" or var_editorial.get()==""):
+                Messagebox.show_info(message='Los campos de Titulo, Autor o Editorial no deben estar vacios',title='Información')           
+            elif(var_from_id.get()=="" or var_until_id.get()==""):
                 Messagebox.show_info(message='El rango de identificadores no debe estar vacio',title='Información')
-            elif(result==1):
+            elif(int(var_from_id.get())>int(var_until_id.get())):
                 Messagebox.show_info(message="""El numero indicado en la casilla 'Desde el numero ejemplar' 
                                                 debe ser menor que la casilla 'Hasta el numero ejemplar'
                                                 """,title='Información')
-            elif(result==2):
-                Messagebox.show_info(message='Los campos de Titulo, Autor o Editorial no deben estar vacios',title='Información')
-            elif(result==3):
-                Messagebox.show_info(message='¡Obra agregada exitosamente!',title='Información',bootstyle='success')
-                function_btn_cancel()
+
             else:
-                Messagebox.show_info(message=f"""Los siguientes identificadores de ejemplares pertenecen a otra obra: {result} \n 
-                                                Puede que el inventario fisico tenga errores""",title='Información',bootstyle='success')
+                if(int(var_from_id.get())==int(var_until_id.get())):
+                      Messagebox.show_info(message="""El numero indicado en la casilla 'Desde el numero ejemplar' es el mismo que el indicado en la casilla 'Hasta el numero ejemplar'.
+                                     El programa entendera que la obra literaria solamente tiene un solo ejemplar.
+                                                """,title='Información')
 
-
-            #Para agregar una obra existente neceito 
-            #comprobar que el numero 'desde' sea mayor que 'Hasta'
-            #Que los campos importantes esten llenos(Titulo,autor,editorial,'Desde' y 'hasta')
-            #La validacion de los campos debe llevarse a cabo en el controlador, si algun dato falta mostrar advertencia.
+                result=self.controlador.agregar_obra_existente(var_from_id,var_until_id,var_title,var_author,var_editorial,txt_summary_obra,var_link_cover)
+                if(result==1):
+                  Messagebox.show_info(message='¡Obra agregada exitosamente!',title='Información',bootstyle='success')
+                  function_btn_cancel()
+                else:
+                     Messagebox.show_info(message=f"""Los siguientes identificadores de ejemplares pertenecen a otra obra: {result} \n 
+                                                 Puede que el inventario fisico tenga errores""",title='Información',bootstyle='success')
 
 
 

@@ -1,6 +1,7 @@
 import os
 import pprint
-import shutil 
+import shutil
+import tkinter 
 import mysql.connector
 from pprint import *
 import sqlite3
@@ -140,10 +141,9 @@ class catalog_driver():
         titulo=titulo.get()
         autor=autor.get()
         editorial=editorial.get()
-        resumen=resumen.get()#tenemos que acceder a esta variale para ver que tiene 
+        resumen=resumen.get(1.0,tkinter.END)
         portada=portada.get()
-        print(resumen)
-        print(portada)
+    
         #evaluar los numeos de desde y hasta
         if(numero_desde==''or numero_hasta==''):
             return 0
@@ -167,18 +167,28 @@ class catalog_driver():
             while(contador<=int_hasta):
                 consulta=f"SELECT COUNT(ejemplar.id_ejemplar) FROM `ejemplar` WHERE ejemplar.id_ejemplar={contador};"
                 resultado=self.ejecutar_consulta(consulta)
+                resultado=resultado.fetchall()
                 if(resultado[0][0]!=0):
                     lista_ejemplares_repetidos.append(contador)
                 contador=contador+1
             if(lista_ejemplares_repetidos==[]):
-                #evaluar portada y resumen
-                print("ningum ejemplar se repite, Se crea la obra normalmente")
-                print('este es el dir del resumen: ',resumen)
-                print(type(resumen))
+                print("No existen ejemplares repetidos. proceder a la creacion de la obra")
+                #tomar datos y realizar un insert con la obra
+                # consulta=f"INSERT INTO obraliteraria (id_obra ,titulo,autor,editorial,portada,resumen)VALUES (NULL,'{titulo}','{autor}','{editorial}','{portada}','{resumen}');"
+                # m=self.ejecutar_consulta(consulta)
+                # consulta=f"SELECT max(id_obra)  FROM	obraliteraria;"
+                # max_id=self.ejecutar_consulta(consulta)
+                # max_id=max_id.fetchall()
+                # print("El ide de la ultima obra creada es: ",max_id[0][0])
+                # print("ningum ejemplar se repite, Se crea la obra normalmente")
+                # print('este es el dir del resumen: ',resumen)
+                # #para saber el maximoid de una obra:SELECT max(id_obra)  FROM	obraliteraria;
+                # print(type(resumen))
                 
-                print('esta es la dir dela port: ',portada)
-                print(type(portada))
-                return 3
+                # print('esta es la dir dela port: ',portada)
+                # print(type(portada))
+                return 1
             elif(lista_ejemplares_repetidos!=[]):
                 print("Estos ejemplares se repiten :( ", lista_ejemplares_repetidos)
+                print("No continuar con la ejecucion del programa ")
                 return lista_ejemplares_repetidos

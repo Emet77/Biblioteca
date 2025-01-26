@@ -172,21 +172,48 @@ class catalog_driver():
                     lista_ejemplares_repetidos.append(contador)
                 contador=contador+1
             if(lista_ejemplares_repetidos==[]):
-                print("No existen ejemplares repetidos. proceder a la creacion de la obra")
+                #print("No existen ejemplares repetidos. proceder a la creacion de la obra")
                 #tomar datos y realizar un insert con la obra
-                # consulta=f"INSERT INTO obraliteraria (id_obra ,titulo,autor,editorial,portada,resumen)VALUES (NULL,'{titulo}','{autor}','{editorial}','{portada}','{resumen}');"
-                # m=self.ejecutar_consulta(consulta)
-                # consulta=f"SELECT max(id_obra)  FROM	obraliteraria;"
-                # max_id=self.ejecutar_consulta(consulta)
-                # max_id=max_id.fetchall()
-                # print("El ide de la ultima obra creada es: ",max_id[0][0])
-                # print("ningum ejemplar se repite, Se crea la obra normalmente")
-                # print('este es el dir del resumen: ',resumen)
-                # #para saber el maximoid de una obra:SELECT max(id_obra)  FROM	obraliteraria;
-                # print(type(resumen))
+                #1-crear insert de la obra lit
+                consulta=f"INSERT INTO obraliteraria (id_obra ,titulo,autor,editorial,portada,resumen)VALUES (NULL,'{titulo}','{autor}','{editorial}',NULL,NULL);"
+                m=self.ejecutar_consulta(consulta)
+                consulta=f"SELECT max(id_obra)  FROM	obraliteraria;"
+                max_id=self.ejecutar_consulta(consulta)
+                max_id=max_id.fetchall()
+                max_id=max_id[0][0]
+                #<------------2 Agregas el rango de ejemplares----------->
                 
-                # print('esta es la dir dela port: ',portada)
-                # print(type(portada))
+                contador_rango=int_desde
+                #print("el inicio del rango es : ", contador_rango)
+                while(contador_rango<=int_hasta):
+                    print("se agrega el ejemplar n°= " , contador_rango)
+                    consulta=f"INSERT INTO ejemplar(id_ejemplar,id_obra_fk,disponibilidad)VALUES({contador_rango},{max_id},{0});"
+                    self.ejecutar_consulta(consulta)
+                    #print(consulta)
+                    contador_rango=contador_rango+1
+
+
+                #<------------crea resumen----------->
+                print("el resumen tiene : ",len(resumen))
+                print(portada)
+                #print(type(portada))
+                p=len(portada)
+                print(p,type(p))
+                if (len(resumen)>3):
+                    self.agregar_resumen(max_id,resumen) 
+                    print("evalua correctamente, el resumen tiene informacion")
+                #<------------agrega portada---------->
+                elif(len(resumen)<3):
+                    print("no tiene resumen")
+                
+                if(p>4):#el problema era que nunca salia por falso aca
+                    #ahora ya evalua
+                    print("hay portada")
+                    print(type(portada))
+                    self.agregarportada_obra(portada,max_id)
+                elif(p<3 or portada=="NULL"):
+                    print("no hay portada")
+
                 return 1
             elif(lista_ejemplares_repetidos!=[]):
                 print("Estos ejemplares se repiten :( ", lista_ejemplares_repetidos)

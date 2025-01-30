@@ -30,8 +30,7 @@ class view_add_literary_work():
         def function_btn_cancel():
             ntry_author.delete(0,tkinter.END)
             ntry_editorial.delete(0,tkinter.END)
-            ntry_from_id.delete(0,tkinter.END)
-            ntry_until_id.delete(0,tkinter.END)
+            ntry_book_copies.delete(0,tkinter.END)
             ntry_title.delete(0,tkinter.END)
             txt_summary_obra.delete('1.0',END)
             # var_summary_literary_work.set('No hay Resumen, Para esta obra')
@@ -51,24 +50,16 @@ class view_add_literary_work():
             lbl_image2=ttkbootstrap.Label(frame_cover,image=img_tk)
             lbl_image2.grid(row=0,column=0,sticky='news')
             
-        def function_btn_add_legacy_literary_work():
-            # var_from_id,var_until_id,var_title,var_author,var_editorial,var_summary_literary_work,var_link_cover
-            result=self.controlador.agregar_obra_existente(var_from_id,var_until_id,var_title,var_author,var_editorial,txt_summary_obra,var_link_cover)
-            if(result==0):
-                Messagebox.show_info(message='El rango de identificadores no debe estar vacio',title='Información')
-            elif(result==1):
-                Messagebox.show_info(message="""El numero indicado en la casilla 'Desde el numero ejemplar' 
-                                                debe ser menor que la casilla 'Hasta el numero ejemplar'
-                                                """,title='Información')
-            elif(result==2):
+        def function_btn_add_new_literary_work():
+            if(var_title.get()=="" or var_author.get()=="" or var_editorial.get()==""):
                 Messagebox.show_info(message='Los campos de Titulo, Autor o Editorial no deben estar vacios',title='Información')
-            elif(result==3):
-                Messagebox.show_info(message='¡Obra agregada exitosamente!',title='Información',bootstyle='success')
-                function_btn_cancel()
+            elif(var_book_copies.get()==""):
+                Messagebox.show_info(message='El campo cantidad de ejemplares no deben estar vacio',title='Información')
             else:
-                Messagebox.show_info(message=f"""Los siguientes identificadores de ejemplares pertenecen a otra obra: {result} \n 
-                                                Puede que el inventario fisico tenga errores""",title='Información',bootstyle='success')
-
+                print("los datos estan completos, agregar la obra")
+                #titulo,autor,editorial,resumen,portada,cantidad_ejemplares
+                self.controlador.agregar_obra_nueva(var_title,var_author,var_editorial,txt_summary_obra,var_link_cover,var_book_copies)
+                
 
             #Para agregar una obra existente neceito 
             #comprobar que el numero 'desde' sea mayor que 'Hasta'
@@ -143,10 +134,10 @@ class view_add_literary_work():
         # lbl_until=ttkbootstrap.Label(frame_two,text='Hasta el numero de ejemplar : ' , font='Helvetica',bootstyle='dark')
         # lbl_until.grid(row=2,column=0,sticky='w',padx=3,pady=3)
 
-        var_from_id=tkinter.StringVar()#tkinter.IntVar() #Para evitar el error cuando el campo esta vacio le vamos a dejar el tipo string var y despues lo casteamos en el controlador
+        var_book_copies=tkinter.StringVar()#tkinter.IntVar() #Para evitar el error cuando el campo esta vacio le vamos a dejar el tipo string var y despues lo casteamos en el controlador
         validate_entry = lambda text: text.isdecimal()
-        ntry_from_id=ttkbootstrap.Entry(frame_two,font='Helvetica',state='normal',validate="key",validatecommand=(frame_two.register(validate_entry), "%S"), textvariable=var_from_id)
-        ntry_from_id.grid(row=1,column=1,sticky='nw',padx=3,pady=3)
+        ntry_book_copies=ttkbootstrap.Entry(frame_two,font='Helvetica',state='normal',validate="key",validatecommand=(frame_two.register(validate_entry), "%S"), textvariable=var_book_copies)
+        ntry_book_copies.grid(row=1,column=1,sticky='nw',padx=3,pady=3)
 
         # var_until_id=tkinter.StringVar()
         # ntry_until_id=ttkbootstrap.Entry(frame_two,font='Helvetica',state='normal',validate="key",validatecommand=(frame_two.register(validate_entry), "%S"), textvariable=var_until_id)
@@ -207,7 +198,7 @@ class view_add_literary_work():
         btn_cancelar_literary_work=ttkbootstrap.Button(frame_five,text='Cancelar',bootstyle='danger',command=function_btn_cancel)
         btn_cancelar_literary_work.grid(row=1,column=0,sticky='nsew',padx=3,pady=3)
 
-        btn_add_literary_work=ttkbootstrap.Button(frame_five,text='Agregar Obra',bootstyle='info',command=function_btn_add_legacy_literary_work)
+        btn_add_literary_work=ttkbootstrap.Button(frame_five,text='Agregar Obra',bootstyle='info',command=function_btn_add_new_literary_work)
         btn_add_literary_work.grid(row=0,column=0,sticky='nsew',padx=3,pady=3)
         
 

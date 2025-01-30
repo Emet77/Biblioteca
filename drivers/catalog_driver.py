@@ -1,20 +1,27 @@
 import os
 import pprint
-import shutil 
+import shutil
+import tkinter 
 import mysql.connector
 from pprint import *
+import sqlite3
 class catalog_driver():
     def __init__(self) -> None:
         pass
     
     def ejecutar_consulta(self, consulta):
-        self.consulta = consulta
-        conexion = mysql.connector.connect( host='localhost' , user='root' , passwd='' , database='biblioteca4117')
+        # self.consulta = consulta
+        # conexion = mysql.connector.connect( host='localhost' , user='root' , passwd='' , database='biblioteca4117')
+        # cursor= conexion.cursor()
+        # cursor.execute(consulta)
+        # resultado= cursor.fetchall()
+        # conexion.commit()
+        # return resultado 
+        conexion = sqlite3.connect('databaseStructure/sqlite_biblioteca.db')
         cursor= conexion.cursor()
-        cursor.execute(consulta)
-        resultado= cursor.fetchall()
+        resultado = cursor.execute(consulta)
         conexion.commit()
-        return resultado 
+        return resultado
     
     def buscar_obra_catalogo(self, criterio_busqueda, donde_buscar):
         match donde_buscar:
@@ -52,15 +59,21 @@ class catalog_driver():
     def ejemplares_disponibles(self,id):
         consulta_disponibles=f"SELECT COUNT(ejemplar.id_ejemplar) FROM ejemplar WHERE ejemplar.id_obra_fk = {id} AND ejemplar.disponibilidad=0; "
         cantidad_ejemplares_disp= self.ejecutar_consulta(consulta_disponibles)
-        return cantidad_ejemplares_disp[0][0]
+        #print(cantidad_ejemplares_disp.fetchall()) #Debemos agregar el campo fetchall para que los datosque vienen del cursor puedan ser vistos
+        disp = cantidad_ejemplares_disp.fetchall()
+        print("estos son los disponibles... ",disp[0][0])
+        return disp[0][0]
+    
     def ejemplares_totales(self,id):
         consulta_totales=f"SELECT COUNT(ejemplar.id_ejemplar) FROM ejemplar WHERE ejemplar.id_obra_fk = {id};" 
         cantidad_ejemp_total=self.ejecutar_consulta(consulta_totales)
-        return cantidad_ejemp_total[0][0]
+        total= cantidad_ejemp_total.fetchall()
+        return total[0][0]
     def mostrar_portada(self,id):
         consulta=f"SELECT `portada` FROM `obraliteraria` WHERE obraliteraria.id_obra={id};"
         portada=self.ejecutar_consulta(consulta)
-        return portada[0][0]
+        portada=portada.fetchall()
+        return portada[0][0] 
     
     def agregarportada_obra(self ,documento_copia,id_obra):
 
@@ -93,6 +106,7 @@ class catalog_driver():
         #consultar la bd por la informacion del texto a leer 
         consulta=f"SELECT `resumen` FROM `obraliteraria` WHERE obraliteraria.id_obra={id_obra}; "
         direccion=self.ejecutar_consulta(consulta)
+        direccion=direccion.fetchall()
         if(direccion[0][0]==None or direccion[0][0]=='NULL' or direccion[0][0]==''):
             # no ejecutar
             n="Este libro no tiene Resumen  :("
@@ -118,6 +132,58 @@ class catalog_driver():
         self.ejecutar_consulta(consulta)
         #ahora que ya crea texto y guarda la ubicacion en la base de datos debemmos agregar los demas datos
 
+    def agregar_obra_nueva(self,titulo,autor,editorial,resumen,portada,cantidad_ejemplares):
+        titulo=titulo.get()
+        autor=autor.get()
+        editorial=editorial.get()
+        resumen=resumen.get(1.0,tkinter.END)
+        portada=portada.get()
+        cantidad_ejemplares=cantidad_ejemplares.get()
+        cantidad_ejemplares=int(cantidad_ejemplares)
+
+        print("desdecontrolador estos son los datos que llegaron: ")
+        print(titulo," ",autor," ",editorial," ",resumen," ",portada," ",cantidad_ejemplares)
+        consulta=f"INSERT INTO obraliteraria (id_obra ,titulo,autor,editorial,portada,resumen)VALUES (NULL,'{titulo}','{autor}','{editorial}',NULL,NULL);"
+        #m=self.ejecutar_consulta(consulta)
+        consulta=f"SELECT max(id_obra)  FROM	obraliteraria;"
+        max_id=self.ejecutar_consulta(consulta)
+        max_id=max_id.fetchall()
+        max_id=max_id[0][0]
+        max_id=0
+        #<------------2 Agregas el rango de ejemplares----------->
+        
+        contador_rango=1
+        #print("el inicio del rango es : ", contador_rango)
+        while(contador_rango<=cantidad_ejemplares):
+            print("se agrega el ejemplar n°= " , contador_rango)
+            consulta=f"INSERT INTO ejemplar(id_ejemplar,id_obra_fk,disponibilidad)VALUES({contador_rango},{max_id},{0});"
+            #self.ejecutar_consulta(consulta)
+            print(consulta)
+            contador_rango=contador_rango+1
+
+
+        #<------------crea resumen----------->
+        print("el resumen tiene : ",len(resumen))
+        print(portada)
+        #print(type(portada))
+        p=len(portada)
+        print(p,type(p))
+        if (len(resumen)>3):
+            #self.agregar_resumen(max_id,resumen) 
+            print("evalua correctamente, el resumen tiene informacion")
+        #<------------agrega portada---------->
+        elif(len(resumen)<3):
+            print("no tiene resumen")
+        
+        if(p>4):#el problema era que nunca salia por falso aca
+            #ahora ya evalua
+            print("hay portada")
+            print(type(portada))
+            #self.agregarportada_obra(portada,max_id)
+        elif(p<3 or portada=="NULL"):
+            print("no hay portada")
+
+
     def agregar_obra_existente(self,desde,hasta,titulo,autor,editorial,resumen,portada):
         #validar si el rango de ejemplares esta ocupado por otra obra literaria
         #el rango ingresado es correspondiente a los ids que tendran los ejemplares en su portada,,osea que el campo id_secundario
@@ -127,10 +193,9 @@ class catalog_driver():
         titulo=titulo.get()
         autor=autor.get()
         editorial=editorial.get()
-        resumen=resumen.get()
+        resumen=resumen.get(1.0,tkinter.END)
         portada=portada.get()
-        print(resumen)
-        print(portada)
+    
         #evaluar los numeos de desde y hasta
         if(numero_desde==''or numero_hasta==''):
             return 0
@@ -154,34 +219,55 @@ class catalog_driver():
             while(contador<=int_hasta):
                 consulta=f"SELECT COUNT(ejemplar.id_ejemplar) FROM `ejemplar` WHERE ejemplar.id_ejemplar={contador};"
                 resultado=self.ejecutar_consulta(consulta)
+                resultado=resultado.fetchall()
                 if(resultado[0][0]!=0):
                     lista_ejemplares_repetidos.append(contador)
                 contador=contador+1
             if(lista_ejemplares_repetidos==[]):
-                #evaluar portada y resumen
-                print("ningum ejemplar se repite, Se crea la obra normalmente")
-                print('este es el dir del resumen: ',resumen)
-                print(type(resumen))
+                #print("No existen ejemplares repetidos. proceder a la creacion de la obra")
+                #tomar datos y realizar un insert con la obra
+                #1-crear insert de la obra lit
+                consulta=f"INSERT INTO obraliteraria (id_obra ,titulo,autor,editorial,portada,resumen)VALUES (NULL,'{titulo}','{autor}','{editorial}',NULL,NULL);"
+                m=self.ejecutar_consulta(consulta)
+                consulta=f"SELECT max(id_obra)  FROM	obraliteraria;"
+                max_id=self.ejecutar_consulta(consulta)
+                max_id=max_id.fetchall()
+                max_id=max_id[0][0]
+                #<------------2 Agregas el rango de ejemplares----------->
                 
-                print('esta es la dir dela port: ',portada)
-                print(type(portada))
+                contador_rango=int_desde
+                #print("el inicio del rango es : ", contador_rango)
+                while(contador_rango<=int_hasta):
+                    print("se agrega el ejemplar n°= " , contador_rango)
+                    consulta=f"INSERT INTO ejemplar(id_ejemplar,id_obra_fk,disponibilidad)VALUES({contador_rango},{max_id},{0});"
+                    self.ejecutar_consulta(consulta)
+                    #print(consulta)
+                    contador_rango=contador_rango+1
+
+
+                #<------------crea resumen----------->
+                print("el resumen tiene : ",len(resumen))
+                print(portada)
+                #print(type(portada))
+                p=len(portada)
+                print(p,type(p))
+                if (len(resumen)>3):
+                    self.agregar_resumen(max_id,resumen) 
+                    print("evalua correctamente, el resumen tiene informacion")
+                #<------------agrega portada---------->
+                elif(len(resumen)<3):
+                    print("no tiene resumen")
                 
-                # consulta=f"""INSERT INTO `obraliteraria`(`id_obra`, `titulo`, `autor`, `editorial`, `portada`, `resumen`) 
-                #                 VALUES (null,'{titulo}','{autor}','{editorial}','{portada}','{resumen}');"""
-                # resultado_obra=self.ejecutar_consulta(consulta)
-                # print(resultado_obra)
-                # consulta_id_obra=f"SELECT MAX(id_obra) FROM obraliteraria;"
-                # obra=self.ejecutar_consulta(consulta_id_obra)
-                # id_obra=obra[0][0]
-                # #aca crea el resumen desde la funcion pasandole el texto y el id a la funcion
-                # # if(resumen != ''):
-                # #     self.agregar_resumen(id_obra,resumen)
-                # contador=int_desde
-                # while(contador<=int_hasta):
-                #     consulta=f"INSERT INTO `ejemplar`(`id_ejemplar`, `id_obra_fk`, `disponibilidad`) VALUES ({contador},{id_obra},0);"
-                #     resultado=self.ejecutar_consulta(consulta)
-                #     contador=contador+1
-                return 3
+                if(p>4):#el problema era que nunca salia por falso aca
+                    #ahora ya evalua
+                    print("hay portada")
+                    print(type(portada))
+                    self.agregarportada_obra(portada,max_id)
+                elif(p<3 or portada=="NULL"):
+                    print("no hay portada")
+
+                return 1
             elif(lista_ejemplares_repetidos!=[]):
                 print("Estos ejemplares se repiten :( ", lista_ejemplares_repetidos)
+                print("No continuar con la ejecucion del programa ")
                 return lista_ejemplares_repetidos

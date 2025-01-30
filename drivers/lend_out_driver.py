@@ -1,4 +1,5 @@
-import pprint 
+import pprint
+import sqlite3 
 import mysql.connector
 from pprint import *
 from datetime import datetime
@@ -9,26 +10,35 @@ class lend_out_driver():
     def __init__(self) -> None:
         pass
     def ejecutar_consulta(self, consulta):
-        self.consulta = consulta
-        conexion = mysql.connector.connect( host='localhost' , user='root' , passwd='' , database='biblioteca4117')
+        #self.consulta = consulta
+        #conexion = mysql.connector.connect( host='localhost' , user='root' , passwd='' , database='biblioteca4117')
+        #cursor= conexion.cursor()
+        #cursor.execute(consulta)
+        #resultado= cursor.fetchall()
+        #conexion.commit()
+        conexion = sqlite3.connect('databaseStructure/sqlite_biblioteca.db')
         cursor= conexion.cursor()
-        cursor.execute(consulta)
-        resultado= cursor.fetchall()
+        resultado = cursor.execute(consulta)
         conexion.commit()
-        return resultado 
+        return resultado
+
     
     
     
     def buscar_ejemplares_prestamo(self, criterio_busqueda, donde_buscar):
         match donde_buscar:
             case 'Titulo':
+                print("Estamos buscando esto " , criterio_busqueda, " en el titulo")
+                
                 consulta=f"""SELECT obraliteraria.titulo, obraliteraria.autor, obraliteraria.editorial,ejemplar.id_ejemplar,obraliteraria.id_obra
                         FROM obraliteraria , ejemplar 
                         WHERE obraLiteraria.titulo LIKE '%{criterio_busqueda}%' 
                         AND obraliteraria.id_obra=ejemplar.id_obra_fk
                         AND ejemplar.disponibilidad=0
                         ORDER BY obraliteraria.titulo;"""
+ 
             case 'Autor':
+                print("Estamos buscando por Autor")
                 consulta=f"""SELECT obraliteraria.titulo, obraliteraria.autor, obraliteraria.editorial,ejemplar.id_ejemplar,obraliteraria.id_obra
                         FROM obraliteraria , ejemplar 
                         WHERE obraLiteraria.autor LIKE '%{criterio_busqueda}%' 
@@ -36,6 +46,7 @@ class lend_out_driver():
                         AND ejemplar.disponibilidad=0
                         ORDER BY obraliteraria.autor;"""
             case 'Editorial':
+                print("Estamos buscando por Editorial")
                 consulta=f"""SELECT obraliteraria.titulo, obraliteraria.autor, obraliteraria.editorial,ejemplar.id_ejemplar,obraliteraria.id_obra
                         FROM obraliteraria , ejemplar 
                         WHERE obraliteraria.editorial LIKE '%{criterio_busqueda}%' 
@@ -43,6 +54,7 @@ class lend_out_driver():
                         AND ejemplar.disponibilidad=0
                         ORDER BY obraliteraria.editorial;"""
             case 'Identificador':
+                print("Estamos buscando por Identificador")
                 consulta=f"""SELECT obraliteraria.titulo, obraliteraria.autor, obraliteraria.editorial, obraliteraria.id_obra 
                         FROM obraliteraria , ejemplar 
                         WHERE obraliteraria.id_obra=(SELECT ejemplar.id_obra_fk FROM ejemplar WHERE ejemplar.id_ejemplar = '{criterio_busqueda}'); """
@@ -61,6 +73,7 @@ class lend_out_driver():
                         ORDER BY ejemplar.id_ejemplar;"""  
         
         resultado_busqueda=self.ejecutar_consulta(consulta)
+        resultado_busqueda=resultado_busqueda.fetchall()
   
  
         return resultado_busqueda
@@ -70,12 +83,14 @@ class lend_out_driver():
         consulta="SELECT curso.id_curso , curso.curso FROM curso ORDER BY curso.id_curso;"
         resultado=[]
         resultado=self.ejecutar_consulta(consulta)
+        resultado=resultado.fetchall()
         return resultado
     
     def diviciones_disponibles(self):
         consulta="SELECT divicion.id_divicion , divicion.divicion FROM divicion ORDER BY divicion.id_divicion; "
         resultado=[]
         resultado=self.ejecutar_consulta(consulta)
+        resultado=resultado.fetchall()
         return resultado
     def verifica_id_socio(self,id_estudiante):
         consulta=f"""SELECT estudiante.nombre, estudiante.dni, estudiante.id_estudiante
@@ -84,6 +99,7 @@ class lend_out_driver():
                     
         informacion_estudiante=[]
         informacion_estudiante=self.ejecutar_consulta(consulta)
+        informacion_estudiante=informacion_estudiante.fetchall()
         
         fecha_actual=datetime.now()
         f=fecha_actual.date()
@@ -113,7 +129,7 @@ class lend_out_driver():
             #Obtenemos el id del prestamo creado anteriormente
             consulta_id_prestamo=f"""SELECT MAX(id_prestamo) FROM prestamo;"""
             id_ultimo_prestamo=self.ejecutar_consulta(consulta_id_prestamo)
-            
+            id_ultimo_prestamo=id_ultimo_prestamo.fetchall()
             for id in lista_ids_ejemplares:
                #para cada id en la lista de libros
                #primero se creara un detalle  con el numero de prestamo creado anteriormente , el numero del libro, y la fecha actual
@@ -123,6 +139,7 @@ class lend_out_driver():
                 # segundo se busca el ide del detalle al cual se asocio el libro y se actualiza con ese numero en la disponibilidad
                 consulta_id_detalle="SELECT MAX(id_detalle_prestamo) FROM detalle_prestamo;"
                 id_detalle=self.ejecutar_consulta(consulta_id_detalle)
+                id_detalle=id_detalle.fetchall()
                 #{id_detalle[0][0]}
                 consulta_cambia_disp_ejemplar=f"""UPDATE `ejemplar` SET `disponibilidad`= {id_detalle[0][0]} WHERE ejemplar.id_ejemplar={id}"""
                 self.ejecutar_consulta(consulta_cambia_disp_ejemplar)
@@ -136,6 +153,7 @@ class lend_out_driver():
             self.ejecutar_consulta(consulta_crea_prestamo_grupal)
             consulta_id_prestamo=f"""SELECT MAX(id_prestamo) FROM prestamo;"""
             id_ultimo_prestamo_grup=self.ejecutar_consulta(consulta_id_prestamo)
+            id_ultimo_prestamo_grup=id_ultimo_prestamo_grup.fetchall()
             
             for id in lista_ids_ejemplares:
            
@@ -144,6 +162,7 @@ class lend_out_driver():
                 self.ejecutar_consulta(consulta_crea_detalle_prestamo)
                 consulta_id_detalle="SELECT MAX(id_detalle_prestamo) FROM detalle_prestamo;"
                 id_detalle=self.ejecutar_consulta(consulta_id_detalle)
+                id_detalle=id_detalle.fetchall()
                 
                 consulta_cambia_disp_ejemplar=f"""UPDATE `ejemplar` SET `disponibilidad`= {id_detalle[0][0]} WHERE ejemplar.id_ejemplar={id}"""
                 self.ejecutar_consulta(consulta_cambia_disp_ejemplar)
@@ -173,6 +192,7 @@ class lend_out_driver():
                             WHERE {condicion};
                             """
             resultado=self.ejecutar_consulta(consuta_todo)
+            resultado=resultado.fetchall()
             
             for registro in resultado:
                 pprint(registro)
@@ -198,6 +218,7 @@ class lend_out_driver():
                             consulta_general=f"""SELECT {campo} FROM {tabla} WHERE {condicion} ={indice};"""
                             # print(consulta_general)
                             dato=self.ejecutar_consulta(consulta_general)
+                            dato=dato.fetchall()
                             info_mostrar.append(dato[0][0])
                         else:
                             # print("agrega el campo Date correspondiente al indice", i)
@@ -225,6 +246,7 @@ class lend_out_driver():
                                 FROM obraliteraria
                                 WHERE obraliteraria.id_obra=(SELECT ejemplar.id_obra_fk FROM ejemplar WHERE ejemplar.id_ejemplar={id_ejem} ); """
             titulo=self.ejecutar_consulta(consulta_titulo)   
+            titulo=titulo.fetchall()
             lista_inf_detalle.append(titulo[0][0])
             lista_inf_detalle.append(detalle[0])
             lista_inf_detalle.append(detalle[1])

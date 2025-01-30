@@ -109,39 +109,45 @@ class lend_out_view():
 
         def select_partner(s):
             selected_partner=frame_search_partner.item(frame_search_partner.selection())
+        def clean_frame_search():
+            delete_frame_search = frame_search.get_children()
+            for element in delete_frame_search:
+                print("estos elementos voy a borrar", element)
+                frame_search.delete(element)
 
         def function_btn_search():
             lbl_general_information.configure(text="¡Bienvenido al Programa!")
-            search_this=var_word_to_search_book.get()
+
+            search_this=var_word_to_search_book.get()            
             in_this_place=var_where_search.get()
             resultado_busqueda=self.lend_out_driver.buscar_ejemplares_prestamo(search_this, in_this_place)
+            #resultado_busqueda=resultado_busqueda.fetchall()
             
             delete_frame_search = frame_search.get_children()
             for element in delete_frame_search:
                 frame_search.delete(element)
        
-            resultado_busqueda.reverse()
+            #resultado_busqueda.reverse()
             for elemento in resultado_busqueda:         
                 frame_search.insert('',0,text=elemento[0],values=(elemento[1],elemento[2],elemento[3]) )
 
         def func_btn_search_partner():
-            try:
-                search_this_id=var_id_partner.get()
-                clean_frame_partners=frame_search_partner.get_children()
-                for element in clean_frame_partners:
-                    frame_search_partner.delete(element)
         
-                search_partner=self.lend_out_driver.verifica_id_socio(search_this_id)
-                # pprint(search_partner)
+            search_this_id=var_id_partner.get()
+            print(search_this_id)
+            clean_frame_partners=frame_search_partner.get_children()
+            for element in clean_frame_partners:
+                frame_search_partner.delete(element)
     
-                if(search_partner==[]):
-                    lbl_general_information.configure(text='No se encontro coincidencia')
-                else:
-                    for element in search_partner:
-                        frame_search_partner.insert('',0,text=element[0], values=(element[1],element[2]))
-            except:
-                pass          
+            search_partner=self.lend_out_driver.verifica_id_socio(search_this_id)
+            pprint(search_partner)
 
+            if(search_partner==[]):
+                lbl_general_information.configure(text='No se encontro coincidencia')
+            else:
+                for element in search_partner:
+                    frame_search_partner.insert('',0,text=element[0], values=(element[1],element[2]))
+            
         def func_on_off_home_loan():
             select_type=var_chkbox_home_loan.get()
             if(select_type==0):
@@ -181,7 +187,7 @@ class lend_out_view():
 
 
         var_word_to_search_book=tkinter.StringVar()
-        ntry_busca=ttkbootstrap.Entry(frame_ntry_btn_search)
+        ntry_busca=ttkbootstrap.Entry(frame_ntry_btn_search, textvariable=var_word_to_search_book)
         ntry_busca.grid(row=0,column=0,sticky='we',padx=5,pady=5)
 
         var_where_search=tkinter.StringVar()

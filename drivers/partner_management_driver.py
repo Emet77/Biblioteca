@@ -1,4 +1,5 @@
-import pprint 
+import pprint
+import sqlite3 
 import mysql.connector
 from pprint import *
 from datetime import datetime
@@ -9,8 +10,9 @@ class partner_management_driver():
     def __init__(self) -> None:
         pass
     def ejecutar_consulta(self, consulta):
-        self.consulta = consulta
-        conexion = mysql.connector.connect( host='localhost' , user='root' , passwd='' , database='biblioteca4117')
+        #self.consulta = consulta
+        #conexion = mysql.connector.connect( host='localhost' , user='root' , passwd='' , database='biblioteca4117')
+        conexion = sqlite3.connect('databaseStructure/sqlite_biblioteca.db')
         cursor= conexion.cursor()
         cursor.execute(consulta)
         resultado= cursor.fetchall()

@@ -5,7 +5,7 @@ import ttkbootstrap  as ttk
 from ttkbootstrap.constants import *
 import ttkbootstrap.window  
 from ttkbootstrap.dialogs import MessageDialog , Messagebox
-from views.buttons_catalog_management import view_add_legacy_literary_work
+from views.buttons_catalog_management import view_add_legacy_literary_work ,view_add_literary_work
 class catalog_management_view():
     def __init__(self, contenedor):
         self.main_window=contenedor
@@ -19,13 +19,15 @@ class catalog_management_view():
             frame_add_legacy_literary_wrk.grid(row=0,column=0,sticky='news')
         def function_add_literary_work():
             #elije de que manera agregar la obra
-            election=Messagebox.show_question(message='¿De que manera desea agregar la obra?',title='Información',buttons=['Agregar Obra Existente:info','Crear Desde Cero:info'])
-            if(election=='Agregar Obra Existente'):
-                function_add_legacy_literary_work()
+            # election=Messagebox.show_question(message='¿De que manera desea agregar la obra?',title='Información',buttons=['Agregar Obra Existente:info','Crear Desde Cero:info'])
+            # if(election=='Agregar Obra Existente'):
+            #     function_add_legacy_literary_work()
 
-            elif(election=='Crear Desde Cero'):
-                print('Invocar vista agrega obra desde cero')
-                
+            # elif(election=='Crear Desde Cero'):
+            #     print('Invocar vista agrega obra desde cero')
+            object_add_literary_wrk=view_add_literary_work.view_add_literary_work(frame_buttons_views)
+            frame_add_literary_wrk=object_add_literary_wrk.view_add_literary_work_frame()
+            frame_add_literary_wrk.grid(row=0,column=0,sticky='news')
 
         partner_management_frame=ttkbootstrap.Frame(self.main_window)
         partner_management_frame.grid_rowconfigure(0,weight=1)

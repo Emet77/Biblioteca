@@ -119,6 +119,8 @@ class view_btn_modify_partner():
         frame_partner_list.column('#3',width=55,minwidth=55)   
 
         frame_partner_list.bind("<Double-1>",function_select_partner)
+
+        
         frame_two=ttkbootstrap.LabelFrame(container_frame,text='frame Labels',bootstyle='info')
         frame_two.grid(row=1,column=1,sticky='news',pady=5,padx=5)
 

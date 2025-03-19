@@ -5,7 +5,7 @@ import ttkbootstrap  as ttk
 from ttkbootstrap.constants import *
 import ttkbootstrap.window  
 from ttkbootstrap.dialogs import MessageDialog , Messagebox
-from views.buttons_catalog_management import view_add_legacy_literary_work ,view_add_literary_work, view_btn_edit_literary_work, view_btn_delete_literary_work
+from views.buttons_catalog_management import view_add_legacy_literary_work ,view_add_literary_work, view_btn_edit_literary_work, view_btn_delete_literary_work,view_delete_one_book
 class catalog_management_view():
     def __init__(self, contenedor):
         self.main_window=contenedor
@@ -36,7 +36,11 @@ class catalog_management_view():
             object_delete_literary_wrk=view_btn_delete_literary_work.view_btn_delete_literary_work(frame_buttons_views)
             frame_delete_literary_wrk=object_delete_literary_wrk.frame_delete_partner()
             frame_delete_literary_wrk.grid(row=0,column=0,sticky='news')
-            
+        
+        def function_delete_book():
+            object_delete_book=view_delete_one_book.view_btn_delete_one_book(frame_buttons_views)
+            frame_delete_book=object_delete_book.frame_delete_one_book()
+            frame_delete_book.grid(row=0,column=0,sticky='news')
         partner_management_frame=ttkbootstrap.Frame(self.main_window)
         partner_management_frame.grid_rowconfigure(0,weight=1)
         partner_management_frame.grid_columnconfigure(0,weight=1)
@@ -67,7 +71,7 @@ class catalog_management_view():
         btn_delete_literary_work=ttkbootstrap.Button(frame_buttons,text='Eliminar Obra Literaria', command=function_delete_literary_work )
         btn_delete_literary_work.grid(row=2,column=0,padx=3,pady=3,sticky='ewns')
         
-        btn_delete_book=ttkbootstrap.Button(frame_buttons,text='Eliminar Ejemplar'  )
+        btn_delete_book=ttkbootstrap.Button(frame_buttons,text='Eliminar Ejemplar',command=function_delete_book  )
         btn_delete_book.grid(row=3,column=0,padx=3,pady=3,sticky='ewns')
         #<-------------------Botones-------------------->
 

@@ -144,27 +144,30 @@ class catalog_driver():
         print("desdecontrolador estos son los datos que llegaron: ")
         print(titulo," ",autor," ",editorial," ",resumen," ",portada," ",cantidad_ejemplares)
         consulta=f"INSERT INTO obraliteraria (id_obra ,titulo,autor,editorial,portada,resumen)VALUES (NULL,'{titulo}','{autor}','{editorial}',NULL,NULL);"
-        #m=self.ejecutar_consulta(consulta)
+        m=self.ejecutar_consulta(consulta)
         consulta=f"SELECT max(id_obra)  FROM	obraliteraria;"
         max_id=self.ejecutar_consulta(consulta)
         max_id=max_id.fetchall()
         max_id=max_id[0][0]
-        max_id=0
+        max_id_obra=int(max_id)
+        #max_id=0
         #<------------2 Agregas el rango de ejemplares----------->
         
         contador_rango=1
         #print("el inicio del rango es : ", contador_rango)
         while(contador_rango<=cantidad_ejemplares):
             print("se agrega el ejemplar n°= " , contador_rango)
-            consulta=f"INSERT INTO ejemplar(id_ejemplar,id_obra_fk,disponibilidad)VALUES({contador_rango},{max_id},{0});"
-            #self.ejecutar_consulta(consulta)
+            #consulta=f"INSERT INTO ejemplar(id_ejemplar,id_obra_fk,disponibilidad)VALUES({contador_rango},{max_id},{0});"
+            consulta=f"INSERT INTO ejemplar(id_ejemplar,id_obra_fk,disponibilidad)VALUES(NULL,{max_id_obra},{0});"
+            
+            self.ejecutar_consulta(consulta)
             print(consulta)
             contador_rango=contador_rango+1
 
 
         #<------------crea resumen----------->
-        print("el resumen tiene : ",len(resumen))
-        print(portada)
+        #print("el resumen tiene : ",len(resumen))
+        #print(portada)
         #print(type(portada))
         p=len(portada)
         print(p,type(p))
@@ -179,9 +182,11 @@ class catalog_driver():
             #ahora ya evalua
             print("hay portada")
             print(type(portada))
-            #self.agregarportada_obra(portada,max_id)
+            self.agregarportada_obra(portada,max_id_obra)
         elif(p<3 or portada=="NULL"):
             print("no hay portada")
+        if(max_id_obra!=0):
+           return 1
 
 
     def agregar_obra_existente(self,desde,hasta,titulo,autor,editorial,resumen,portada):

@@ -17,6 +17,24 @@ class view_btn_edit_literary_work():
     
 
     def view_btn_edit_literary_work_frame(self):
+
+        def btn_search_literary_work():
+            search_this= var_word_to_search.get()
+            in_this_place=var_combobox_where_I_search.get()
+
+            search_results=self.catalog_driver.buscar_obra_catalogo(search_this, in_this_place)
+
+            eliminar = frame_to_show_search.get_children()
+            for elemento in eliminar:
+                frame_to_show_search.delete(elemento)
+        
+            search_results.reverse()
+            for element in search_results:  
+                frame_to_show_search.insert('',0,text=element[0],values=(element[1],element[2],element[3]) )
+
+
+
+ 
         container_frame=ttkbootstrap.LabelFrame(self.main_window,text='datos a editar obra')
         container_frame.grid(row=0,column=0)
 
@@ -43,11 +61,11 @@ class view_btn_edit_literary_work():
         frame_one.grid_rowconfigure(0,weight=1)
 
        
-        var_partner_dni_search=tkinter.StringVar()
+        var_literary_work=tkinter.StringVar()
         ntry_search_partner_dni=ttkbootstrap.Entry(frame_one,state='normal',textvariable=var_partner_dni_search)
         ntry_search_partner_dni.grid(row=0,column=0,sticky='news',pady=3,padx=3)
 
-        btn_search=ttkbootstrap.Button(frame_one,text='Buscar')#,command=function_btn_search
+        btn_search=ttkbootstrap.Button(frame_one,text='Buscar', command=btn_search_literary_work)#,command=function_btn_search
         btn_search.grid(row=0,column=1)
 
         frame_partner_list=ttkbootstrap.Treeview(frame_one,columns=('titulo','autor'))#titulo autor editorial

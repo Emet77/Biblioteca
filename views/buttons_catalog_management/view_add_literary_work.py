@@ -58,9 +58,10 @@ class view_add_literary_work():
             else:
                 print("los datos estan completos, agregar la obra")
                 #titulo,autor,editorial,resumen,portada,cantidad_ejemplares
-                self.controlador.agregar_obra_nueva(var_title,var_author,var_editorial,txt_summary_obra,var_link_cover,var_book_copies)
-                
-
+                m=self.controlador.agregar_obra_nueva(var_title,var_author,var_editorial,txt_summary_obra,var_link_cover,var_book_copies)
+                if(m==1):
+                    Messagebox.show_info(message='¡obra agregada con exito!',title='Información')
+                    function_btn_cancel()
             #Para agregar una obra existente neceito 
             #comprobar que el numero 'desde' sea mayor que 'Hasta'
             #Que los campos importantes esten llenos(Titulo,autor,editorial,'Desde' y 'hasta')

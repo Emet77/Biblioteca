@@ -46,6 +46,12 @@ class catalog_driver():
                 consulta=f"""SELECT obraliteraria.titulo, obraliteraria.autor, obraliteraria.editorial,obraliteraria.id_obra
                         FROM obraliteraria
                         ORDER BY obraliteraria.titulo;""" 
+            case 'edit':
+                consulta=f"""SELECT obraliteraria.id_obra,obraliteraria.titulo, obraliteraria.autor, obraliteraria.editorial,obraliteraria.id_obra
+                        FROM obraliteraria 
+                        WHERE obraLiteraria.editorial LIKE '%{criterio_busqueda}%'
+                        ORDER BY obraliteraria.titulo;""" 
+         
                 #Agregar un where a esta consulta para que devuelva datos cuando se le da un criterio de busqueda
         resultado_busqueda=self.ejecutar_consulta(consulta)
         #solo devolver los datos autor titulo editorial y identific

@@ -145,7 +145,7 @@ class view_add_literary_work():
         # ntry_until_id.grid(row=2,column=1,sticky='w',padx=3,pady=3)
 
 
-        #<----------------------------------FRAME Three------------------------>      
+        #<----------------------------------agregar resumen de la obra------------------------>      
         frame_three=ttkbootstrap.LabelFrame(container_frame,text='Botones',bootstyle='info')
         frame_three.grid(row=2,column=0,sticky='news',pady=5,padx=5)
         

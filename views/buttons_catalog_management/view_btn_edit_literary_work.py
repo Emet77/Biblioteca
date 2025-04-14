@@ -18,8 +18,8 @@ class view_btn_edit_literary_work():
 
     def view_btn_edit_literary_work_frame(self):
         self.literary_work_driver=catalog_driver.catalog_driver()
-        #PROBLEMA:  se tiene que guardar el ide de cada obra que seleccionemos para poder editarla.
-        #crear una var para almacenarla cada vez que seleccionamos una pero no mostrar esa var en el cuadro de resultados
+        #CONTINUAR:
+        #se debe agregar el cuadro para cambiar la portada de la obra literaria
         def btn_search_literary_work():
             search_this= var_search_literary_work.get()
             #in_this_place=var_combobox_where_I_search.get()
@@ -32,31 +32,40 @@ class view_btn_edit_literary_work():
         
             search_results.reverse()
             for element in search_results:  
-                frame_books_list.insert('',0,text=element[1],values=(element[2],element[3],element[4]) )
-
-
+                frame_books_list.insert('',0,text=element[0],values=(element[1],element[2],element[3]) )
 
         def function_select_literary_work(s):
             function_clean_interface()
             lbl_title.configure(text='Editar Datos de Socio',bootstyle='dark')
+
             selected_book= frame_books_list.item(frame_books_list.selection())
-            id=selected_book['text']
-            title=selected_book['values'][0]
-            author=selected_book['values'][1]
-            editorial=selected_book['values'][2]
+            id=selected_book['values'][2]
+            print("el id de esta obra es: ", id)
+        
+            title=selected_book['text']
+            author=selected_book['values'][0]
+            editorial=selected_book['values'][1]
             ntry_title.insert( 0, string=title)
             ntry_author.insert(0,string=author)
             ntry_editorial.insert(0,string=editorial)
-            print("el id de esta obra es: ", selected_book)
+            ntry_id.insert(0,id)
+          
 
         def function_clean_interface():
             ntry_id.delete(0,tkinter.END)
-            ntry_name.delete(0,tkinter.END)
-            ntry_cellphone.delete(0,tkinter.END)
-            ntry_dni.delete(0,tkinter.END)
-            ntry_search_partner_dni.delete(0,tkinter.END)            
+            ntry_title.delete(0,tkinter.END)
+            ntry_author.delete(0,tkinter.END)
+            ntry_editorial.delete(0,tkinter.END)
+            ntry_search_id_literary_work.delete(0,tkinter.END)    
+            var_literary_wrk_id        
 
+        def function_save_changes():
+            var_title
+            var_author
+            var_editorial
+            var_literary_wrk_id
 
+            pass
  
         container_frame=ttkbootstrap.LabelFrame(self.main_window,text='datos a editar obra')
         container_frame.grid(row=0,column=0)
@@ -66,8 +75,6 @@ class view_btn_edit_literary_work():
         container_frame.grid_columnconfigure(0,weight=1)
         container_frame.grid_columnconfigure(1,weight=1)
         container_frame.grid_columnconfigure(2,weight=1)
-        # container_frame.grid_rowconfigure(0,weight=1)
-        # container_frame.grid_rowconfigure(1,weight=1)
         container_frame.grid_rowconfigure(2,weight=1)
 
         frame_cero=ttkbootstrap.LabelFrame(container_frame,text='frame_titulo',bootstyle='info')
@@ -85,22 +92,23 @@ class view_btn_edit_literary_work():
 
        
         var_search_literary_work=tkinter.StringVar()
-        ntry_search_partner_dni=ttkbootstrap.Entry(frame_one,state='normal',textvariable=var_search_literary_work)
-        ntry_search_partner_dni.grid(row=0,column=0,sticky='news',pady=3,padx=3)
+        ntry_search_id_literary_work=ttkbootstrap.Entry(frame_one,state='normal',textvariable=var_search_literary_work)
+        ntry_search_id_literary_work.grid(row=0,column=0,sticky='news',pady=3,padx=3)
 
-        btn_search=ttkbootstrap.Button(frame_one,text='Buscar', command=btn_search_literary_work)#,command=function_btn_search
+        btn_search=ttkbootstrap.Button(frame_one,text='Buscar', command=btn_search_literary_work) 
         btn_search.grid(row=0,column=1)
 
-        frame_books_list=ttkbootstrap.Treeview(frame_one,columns=('titulo','autor'))#titulo autor editorial
+        frame_books_list=ttkbootstrap.Treeview(frame_one,columns=('titulo','autor','editorial'),displaycolumns=('titulo','autor','editorial'))#titulo autor editorial
         frame_books_list.grid(row=1,column=0,sticky='news',columnspan=2,pady=3,padx=3)
         frame_books_list.heading('#0',text='Titulo')
         frame_books_list.heading('#1',text='Autor')
         frame_books_list.heading('#2',text='Editorial')
-        #frame_books_list.heading('#3',text='Dni')
+        frame_books_list.heading('#3',text='N° Obra')
 
         frame_books_list.column('#0',width=25,minwidth=25)   
         frame_books_list.column('#1',width=55,minwidth=55)    
         frame_books_list.column('#2',width=55,minwidth=55)     
+        frame_books_list.column('#3',width=0,minwidth=0)     
 
         frame_books_list.bind("<Double-1>",function_select_literary_work)
 
@@ -130,8 +138,8 @@ class view_btn_edit_literary_work():
 
         frame_three.grid_columnconfigure(0,weight=1)
 
-        var_partner_id=tkinter.IntVar()
-        ntry_id=ttkbootstrap.Entry(frame_three,textvariable=var_partner_id)#esta variable se coloca en el frame pero no se muestra 
+        var_literary_wrk_id=tkinter.IntVar()
+        ntry_id=ttkbootstrap.Entry(frame_three,textvariable=var_literary_wrk_id)#esta variable se coloca en el frame pero no se muestra 
 
         var_title=tkinter.StringVar()
         ntry_title=ttkbootstrap.Entry(frame_three, font='Helvetica',textvariable=var_title)
@@ -147,17 +155,43 @@ class view_btn_edit_literary_work():
         ntry_editorial=ttkbootstrap.Entry(frame_three,font='Helvetica',state='normal', textvariable=var_editorial)
         ntry_editorial.grid(row=2,column=0,sticky='we',pady=3,padx=3)
 
+#<------------------------Cambiar portada------------------------>
+        frame_four=ttkbootstrap.LabelFrame(container_frame,text='edita portada', bootstyle='success')
+        frame_four.grid(row=2,column=0,sticky='news')
+        frame_four.grid_rowconfigure(0,weight=1)
+        frame_four.grid_rowconfigure(1,weight=1)
 
-#<------------------------area botones------------------------>
-        frame_four=ttkbootstrap.LabelFrame(container_frame,text='Boton crear ',bootstyle='danger')
-        frame_four.grid(row=2,column=0,sticky='new',pady=5,padx=5,columnspan=3,rowspan=2)
         frame_four.grid_columnconfigure(0,weight=1)
+
+        frame_cover=ttkbootstrap.LabelFrame(frame_four,text='imagen de la portada')
+        frame_cover.grid(row=0,column=0,sticky='news')
+        frame_cover.grid_rowconfigure(0,weight=1)
+        frame_cover.grid_columnconfigure(0,weight=1)
+
+        # lbl_image= ttkbootstrap.Label(frame_cover)     
+        # lbl_image.grid(row=0,column=0,sticky='news')
+        # function_btn_cancel_cover()
+        
+        frame_buttons=ttkbootstrap.LabelFrame(frame_four,text='botones portada',bootstyle='info')
+        frame_buttons.grid(row=1,column=0,sticky='sew',pady=5,padx=5)
+        frame_buttons.columnconfigure(0,weight=1)
+        frame_buttons.columnconfigure(1,weight=1)    
+
+        btn_cancelar=ttkbootstrap.Button(frame_buttons,text='Cancelar')#,command=function_btn_cancel_cover
+        btn_cancelar.grid(row=0,column=0,sticky='n',padx=3,pady=3)
+
+        btn_add_cover=ttkbootstrap.Button(frame_buttons,text='Agregar portada')#,command=function_btn_add_cover
+        btn_add_cover.grid(row=0,column=1,sticky='n',padx=3,pady=3)
+#<------------------------area botones------------------------>
+        frame_five=ttkbootstrap.LabelFrame(container_frame,text='Boton crear ',bootstyle='danger')
+        frame_five.grid(row=3,column=0,sticky='new',pady=5,padx=5,columnspan=3,rowspan=2)
+        frame_five.grid_columnconfigure(0,weight=1)
         
 
-        btn_cancell=ttkbootstrap.Button(frame_four,text='Cancelar',bootstyle='info')#,command=function_clean_interface
+        btn_cancell=ttkbootstrap.Button(frame_five,text='Cancelar',bootstyle='info',command=function_clean_interface)
         btn_cancell.grid(row=0,column=0,sticky='e',pady=3,padx=3)
 
-        btn_save_changes=ttkbootstrap.Button(frame_four,text='Guardar Cambios',bootstyle='success')#,command=function_save_changes
+        btn_save_changes=ttkbootstrap.Button(frame_five,text='Guardar Cambios',bootstyle='success',command=function_save_changes)
         btn_save_changes.grid(row=0,column=1,sticky='e',pady=3,padx=3)
 
        

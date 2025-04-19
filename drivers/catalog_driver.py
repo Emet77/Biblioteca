@@ -127,26 +127,31 @@ class catalog_driver():
 
         
     def guardar_datos(self, id, titulo, autor, editorial, resumen, portada):
-        #crear un archivo .txt que sirva de resumen enlazado con el numero de la obra
-        # actual_dir=os.getcwd()
-        # resumen_texto = open(f"{actual_dir}\\resources\\summaries\\{id}.txt", "w")
-        # resumen_texto.write(resumen)
-        # resumen_texto.close()
-        # directorio_resumen=f"{actual_dir}\\resources\\summaries\\{id}.txt"
-        # directorio_resumen_n=directorio_resumen.replace('\\','//')
-        # consulta=f"UPDATE `obraliteraria` SET `resumen`='{directorio_resumen_n}' WHERE obraliteraria.id_obra={id};"
-        # self.ejecutar_consulta(consulta)
-        # #ahora que ya crea texto y guarda la ubicacion en la base de datos debemmos agregar los demas datos
+        try:
+            resumen=resumen.get(1.0,tkinter.END)      
+            actual_dir=os.getcwd()
+            resumen_texto = open(f"{actual_dir}\\resources\\summaries\\{id}.txt", "w")
+            resumen_texto.write(resumen)
+            resumen_texto.close()
+            directorio_resumen=f"{actual_dir}\\resources\\summaries\\{id}.txt"
+            directorio_resumen_n=directorio_resumen.replace('\\','//')
+            consulta=f"UPDATE `obraliteraria` SET `titulo`='{titulo}',`autor`='{autor}',`editorial`='{editorial}',`resumen`='{directorio_resumen_n}' WHERE obraliteraria.id_obra={id};"
+            self.ejecutar_consulta(consulta)
+            if(portada == 'NULL'):
+                l=1
+            else:
+                self.agregarportada_obra(portada,id)
+            
+            return "success"    
+        except:
+            return "wrong"
+
+  
+   
+
+
         
-        actual_dir=os.getcwd()
-        resumen_texto = open(f"{actual_dir}\\resources\\summaries\\{id}.txt", "w")
-        resumen_texto.write(resumen)
-        resumen_texto.close()
-        directorio_resumen=f"{actual_dir}\\resources\\summaries\\{id}.txt"
-        directorio_resumen_n=directorio_resumen.replace('\\','//')
-        consulta=f"UPDATE `obraliteraria` SET `titulo`={titulo},`autor`={autor},`editorial`={editorial},`resumen`='{directorio_resumen_n}', WHERE obraliteraria.id_obra={id};"
-        self.ejecutar_consulta(consulta)
-        self.agregarportada_obra(portada,id)
+
         
 
     def agregar_obra_nueva(self,titulo,autor,editorial,resumen,portada,cantidad_ejemplares):

@@ -48,7 +48,7 @@ class view_btn_edit_literary_work():
             search_results.reverse()
             for element in search_results:  
                 frame_books_list.insert('',0,text=element[0],values=(element[1],element[2],element[3]) )
-                
+
         def function_btn_add_cover():
             global img_tk
             filename = filedialog.askopenfilename(filetypes=(("Archivos de imagen",( "*.jpg","*.png" )),("Todos los archivos", "*.*")))
@@ -244,7 +244,7 @@ class view_btn_edit_literary_work():
         frame_four=ttkbootstrap.LabelFrame(container_frame,text='edita portada', bootstyle='success')
         frame_four.grid(row=2,column=1,sticky='news',columnspan=2)
         frame_four.grid_rowconfigure(0,weight=1)
-        #frame_four.grid_rowconfigure(1,weight=1)
+  
 
         frame_four.grid_columnconfigure(0,weight=1)
         frame_four.grid_columnconfigure(1,weight=1)
@@ -254,10 +254,7 @@ class view_btn_edit_literary_work():
         frame_cover.grid_rowconfigure(0,weight=1)
         frame_cover.grid_columnconfigure(0,weight=1)
 
-        # lbl_image= ttkbootstrap.Label(frame_cover)     
-        # lbl_image.grid(row=0,column=0,sticky='news')
-        # function_btn_cancel_cover()
-        
+ 
         frame_buttons=ttkbootstrap.LabelFrame(frame_four,text='botones portada',bootstyle='info')
         frame_buttons.grid(row=0,column=1,sticky='ne',pady=5,padx=5)#'sew'
         frame_buttons.columnconfigure(0,weight=1)
@@ -274,10 +271,10 @@ class view_btn_edit_literary_work():
         
         frame_summary.grid_columnconfigure(0,weight=1)
         frame_summary.grid_rowconfigure(0,weight=1)
-        # var_summary_literary_work=tkinter.StringVar()
+ 
         txt_summary_obra=ttkbootstrap.Text(frame_summary,padx=3,pady=3)
         txt_summary_obra.grid(row=0,column=0)
-        # txt_summary_obra.insert('1.0', var_summary_literary_work)
+  
         txt_summary_obra.configure(state='normal')
         var_link_cover=tkinter.StringVar()
         var_link_cover.set('NULL')        

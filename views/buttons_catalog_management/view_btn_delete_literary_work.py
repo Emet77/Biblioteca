@@ -7,7 +7,7 @@ from PIL import Image , ImageTk
 from pprint import *
 import ttkbootstrap  as ttk
 from ttkbootstrap.constants import *
-from drivers import partner_management_driver
+from drivers import catalog_driver
 import ttkbootstrap.window
 
 class view_btn_delete_literary_work():
@@ -16,13 +16,13 @@ class view_btn_delete_literary_work():
         self.main_window=contenedor
     
     def frame_delete_partner(self):
-        self.driver_partner_management=partner_management_driver.partner_management_driver()
+        self.driver_partner_management=catalog_driver.catalog_driver()
         def function_clean_interface():
             functio_on_entrys()
             ntry_id.delete(0,tkinter.END)
-            ntry_name.delete(0,tkinter.END)
-            ntry_cellphone.delete(0,tkinter.END)
-            ntry_dni.delete(0,tkinter.END)
+            ntry_title.delete(0,tkinter.END)
+            ntry_author.delete(0,tkinter.END)
+            ntry_editorial.delete(0,tkinter.END)
             # ntry_search_partner_dni.delete(0,tkinter.END)
             functio_off_entrys()
             # function_btn_search()
@@ -31,7 +31,7 @@ class view_btn_delete_literary_work():
             function_clean_interface()
             var_partner_id.set(0)
             search_this=var_partner_dni_search.get()
-            search_results=self.driver_partner_management.buscar_socio(search_this)
+            search_results=self.driver_partner_management.buscar_obra_catalogo(search_this,'general')
             delete_elements=frame_search_literary_work.get_children()
 
             for i in delete_elements:
@@ -40,28 +40,31 @@ class view_btn_delete_literary_work():
                 frame_search_literary_work.insert('',0,text=result[0],values=(result[1],result[2],result[3]) )
 
         def functio_on_entrys():
-            ntry_name.configure(state='normal')
-            ntry_cellphone.configure(state='normal')
-            ntry_dni.configure(state='normal')
+            ntry_title.configure(state='normal')
+            ntry_author.configure(state='normal')
+            ntry_editorial.configure(state='normal')
         def functio_off_entrys():
-            ntry_name.configure(state='disable')
-            ntry_cellphone.configure(state='disable')
-            ntry_dni.configure(state='disable')
+            ntry_title.configure(state='disable')
+            ntry_author.configure(state='disable')
+            ntry_editorial.configure(state='disable')
 
-        def function_select_partner(s):
+        def function_selected_literary_wrk(s):
             # lbl_title.configure(text='Editar Datos de Socio',bootstyle='dark')
             try:
-                selected_partner= frame_search_literary_work.item(frame_search_literary_work.selection())
-                id=selected_partner['text']
-                name=selected_partner['values'][0]
-                phone_number=selected_partner['values'][1]
-                dni_number=selected_partner['values'][2]
+                selected_literary_wrk= frame_search_literary_work.item(frame_search_literary_work.selection())
+
+                id=selected_literary_wrk['values'][2]
+                title=selected_literary_wrk['text']
+                author=selected_literary_wrk['values'][0]
+                editorial=selected_literary_wrk['values'][1]
+                available_quantity=self.driver_partner_management.ejemplares_totales(id)
                 function_clean_interface()
                 functio_on_entrys()
                 ntry_id.insert(0,string=id)
-                ntry_name.insert( 0, string=name)
-                ntry_cellphone.insert(0,string=phone_number)
-                ntry_dni.insert(0,string=dni_number)
+                ntry_title.insert( 0, string=title)
+                ntry_author.insert(0,string=author)
+                ntry_editorial.insert(0,string=editorial)
+                ntry_book_amount.insert(0,string=available_quantity)
                 functio_off_entrys()
             except:
                 pass
@@ -83,6 +86,10 @@ class view_btn_delete_literary_work():
                 elif(delete_warning=='No'):
                     function_clean_interface()
                 
+        #CONTINUAR:
+        # El buscador busca socios en lugar de obras literarias(listo)
+        # cuando seleccionamos una obra no se rellenan los campos de los entrys correctamente()
+
         container_frame=ttkbootstrap.Frame(self.main_window)
         container_frame.grid(row=0,column=0)
         container_frame.grid_columnconfigure(0,weight=1)
@@ -123,7 +130,7 @@ class view_btn_delete_literary_work():
         frame_search_literary_work.column('#1',width=55,minwidth=55)    
         frame_search_literary_work.column('#2',width=55,minwidth=55)   
  
-        frame_search_literary_work.bind("<<TreeviewSelect>>",function_select_partner)
+        frame_search_literary_work.bind("<<TreeviewSelect>>",function_selected_literary_wrk)
         frame_two=ttkbootstrap.LabelFrame(container_frame,text='frame Labels',bootstyle='info')
         frame_two.grid(row=1,column=1,sticky='news',pady=5,padx=5)
 
@@ -158,20 +165,19 @@ class view_btn_delete_literary_work():
         var_partner_id=tkinter.IntVar()
         ntry_id=ttkbootstrap.Entry(frame_three,textvariable=var_partner_id)#esta variable se coloca en el frame pero no se muestra 
 
-        var_partner_name=tkinter.StringVar()
-        ntry_name=ttkbootstrap.Entry(frame_three,state='disable',textvariable=var_partner_name,font='Helvetica')
-        ntry_name.grid(row=0,column=0,sticky='we',pady=3,padx=3) 
+        var_title=tkinter.StringVar()
+        ntry_title=ttkbootstrap.Entry(frame_three,state='disable',textvariable=var_title ,font='Helvetica')
+        ntry_title.grid(row=0,column=0,sticky='we',pady=3,padx=3) 
 
         # Validar que solo ingresen numeros enteros el los ntry cellphone y dni
-        validate_entry = lambda text: text.isdecimal()
-        var_partner_cellphone=tkinter.IntVar()
-        validate_entry = lambda text: text.isdecimal()
-        ntry_cellphone=ttkbootstrap.Entry(frame_three,font='Helvetica',state='disable',validate="key",validatecommand=(frame_three.register(validate_entry), "%S"), textvariable=var_partner_cellphone)  
-        ntry_cellphone.grid(row=1,column=0,sticky='we',pady=3,padx=3)
+        
+        var_author=tkinter.StringVar()
+        ntry_author=ttkbootstrap.Entry(frame_three,font='Helvetica',state='disable', textvariable=var_author)  
+        ntry_author.grid(row=1,column=0,sticky='we',pady=3,padx=3)
 
-        var_partner_dni=tkinter.IntVar()
-        ntry_dni=ttkbootstrap.Entry(frame_three,font='Helvetica',state='disable',validate="key",validatecommand=(frame_three.register(validate_entry), "%S"), textvariable=var_partner_dni)
-        ntry_dni.grid(row=2,column=0,sticky='we',pady=3,padx=3)
+        var_editorial=tkinter.StringVar()
+        ntry_editorial=ttkbootstrap.Entry(frame_three,font='Helvetica',state='disable', textvariable=var_editorial)
+        ntry_editorial.grid(row=2,column=0,sticky='we',pady=3,padx=3)
 
         ntry_book_amount=ttkbootstrap.Entry(frame_three,font='Helvetica',state='disabled')
         ntry_book_amount.grid(row=3,column=0,sticky='we',padx=3,pady=3)

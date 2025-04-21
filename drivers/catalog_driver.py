@@ -46,6 +46,14 @@ class catalog_driver():
                 consulta=f"""SELECT obraliteraria.titulo, obraliteraria.autor, obraliteraria.editorial,obraliteraria.id_obra
                         FROM obraliteraria
                         ORDER BY obraliteraria.titulo;""" 
+                
+            case 'general':
+                consulta=f"""SELECT obraliteraria.titulo, obraliteraria.autor, obraliteraria.editorial,obraliteraria.id_obra
+                        FROM obraliteraria
+                        WHERE obraLiteraria.titulo LIKE '%{criterio_busqueda}%' OR obraLiteraria.autor LIKE '%{criterio_busqueda}%'
+                        OR obraLiteraria.editorial LIKE '%{criterio_busqueda}%'
+                        ORDER BY obraliteraria.titulo;""" 
+
             case 'edit':
                 consulta=f"""SELECT obraliteraria.titulo, obraliteraria.autor, obraliteraria.editorial, obraliteraria.id_obra
                         FROM obraliteraria 

@@ -23,13 +23,14 @@ class view_btn_delete_literary_work():
             ntry_title.delete(0,tkinter.END)
             ntry_author.delete(0,tkinter.END)
             ntry_editorial.delete(0,tkinter.END)
+            ntry_book_amount.delete(0,tkinter.END)
             # ntry_search_partner_dni.delete(0,tkinter.END)
             functio_off_entrys()
             # function_btn_search()
 
         def function_btn_search():
             function_clean_interface()
-            var_partner_id.set(0)
+            var_literary_wrk_id.set(0)
             search_this=var_partner_dni_search.get()
             search_results=self.driver_partner_management.buscar_obra_catalogo(search_this,'general')
             delete_elements=frame_search_literary_work.get_children()
@@ -43,11 +44,12 @@ class view_btn_delete_literary_work():
             ntry_title.configure(state='normal')
             ntry_author.configure(state='normal')
             ntry_editorial.configure(state='normal')
+            ntry_book_amount.configure(state='normal')
         def functio_off_entrys():
             ntry_title.configure(state='disable')
             ntry_author.configure(state='disable')
             ntry_editorial.configure(state='disable')
-
+            ntry_book_amount.configure(state='disable')
         def function_selected_literary_wrk(s):
             # lbl_title.configure(text='Editar Datos de Socio',bootstyle='dark')
             try:
@@ -57,7 +59,7 @@ class view_btn_delete_literary_work():
                 title=selected_literary_wrk['text']
                 author=selected_literary_wrk['values'][0]
                 editorial=selected_literary_wrk['values'][1]
-                available_quantity=self.driver_partner_management.ejemplares_totales(id)
+                available_quantity=self.driver_partner_management.ejemplares_totales(id) 
                 function_clean_interface()
                 functio_on_entrys()
                 ntry_id.insert(0,string=id)
@@ -73,13 +75,13 @@ class view_btn_delete_literary_work():
                 
         def function_delete_partner():
 
-            id_partner_delete=var_partner_id.get()
-            if(id_partner_delete==0):
+            id_to_delete=var_literary_wrk_id.get()
+            if(id_to_delete==0):
                 Messagebox.show_info(title='Información',message='Busque y seleccione con f')
-            elif(id_partner_delete>0):
+            elif(id_to_delete>0):
                 delete_warning= Messagebox.show_question( message='¿Desea eliminar el socio seleccionado?' , title='Titulo' ,buttons=['No:secondary', 'Sí:primary'])
                 if(delete_warning=='Sí'):
-                    self.driver_partner_management.eliminar_socio(id_partner_delete)
+                    self.driver_partner_management.eliminar_obra_literaria(id_to_delete)
                     Messagebox.show_info(title='Información',message='¡Socio eliminado con exito')
                     function_clean_interface()
                     function_btn_search()
@@ -88,15 +90,17 @@ class view_btn_delete_literary_work():
                 
         #CONTINUAR:
         # El buscador busca socios en lugar de obras literarias(listo)
-        # cuando seleccionamos una obra no se rellenan los campos de los entrys correctamente()
+        # cuando seleccionamos una obra no se rellenan los campos de los entrys correctamente(listo)
+        # agregar funcion eliminar obra al controlador(listo)
+        # ademas de eliminar la obra literaria del registro de la base de datos. tambien tengo que eliminar los archivos
+        # de  resumen y portada(listo)
+        # cuando creamos una obra desde cero no agrega los resumenes
 
         container_frame=ttkbootstrap.Frame(self.main_window)
         container_frame.grid(row=0,column=0)
         container_frame.grid_columnconfigure(0,weight=1)
         container_frame.grid_columnconfigure(1,weight=1)
         container_frame.grid_columnconfigure(2,weight=1)
-        # container_frame.grid_rowconfigure(0,weight=1)
-        # container_frame.grid_rowconfigure(1,weight=1)
         container_frame.grid_rowconfigure(2,weight=1)
 
         frame_cero=ttkbootstrap.LabelFrame(container_frame,text='',bootstyle='info')
@@ -162,8 +166,8 @@ class view_btn_delete_literary_work():
 
         frame_three.grid_columnconfigure(0,weight=1)
 
-        var_partner_id=tkinter.IntVar()
-        ntry_id=ttkbootstrap.Entry(frame_three,textvariable=var_partner_id)#esta variable se coloca en el frame pero no se muestra 
+        var_literary_wrk_id=tkinter.IntVar()
+        ntry_id=ttkbootstrap.Entry(frame_three,textvariable=var_literary_wrk_id)#esta variable se coloca en el frame pero no se muestra 
 
         var_title=tkinter.StringVar()
         ntry_title=ttkbootstrap.Entry(frame_three,state='disable',textvariable=var_title ,font='Helvetica')
@@ -179,6 +183,7 @@ class view_btn_delete_literary_work():
         ntry_editorial=ttkbootstrap.Entry(frame_three,font='Helvetica',state='disable', textvariable=var_editorial)
         ntry_editorial.grid(row=2,column=0,sticky='we',pady=3,padx=3)
 
+        var_book_amount=tkinter.StringVar()
         ntry_book_amount=ttkbootstrap.Entry(frame_three,font='Helvetica',state='disabled')
         ntry_book_amount.grid(row=3,column=0,sticky='we',padx=3,pady=3)
 

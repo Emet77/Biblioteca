@@ -10,13 +10,7 @@ class catalog_driver():
         pass
     
     def ejecutar_consulta(self, consulta):
-        # self.consulta = consulta
-        # conexion = mysql.connector.connect( host='localhost' , user='root' , passwd='' , database='biblioteca4117')
-        # cursor= conexion.cursor()
-        # cursor.execute(consulta)
-        # resultado= cursor.fetchall()
-        # conexion.commit()
-        # return resultado 
+
         conexion = sqlite3.connect('databaseStructure/sqlite_biblioteca.db')
         cursor= conexion.cursor()
         resultado = cursor.execute(consulta)
@@ -60,11 +54,8 @@ class catalog_driver():
                         WHERE obraLiteraria.editorial LIKE '%{criterio_busqueda}%'
                         ORDER BY obraliteraria.titulo;""" 
          
-                #Agregar un where a esta consulta para que devuelva datos cuando se le da un criterio de busqueda
+ 
         resultado_busqueda=self.ejecutar_consulta(consulta)
-        #solo devolver los datos autor titulo editorial y identific
-        #delegar cantidad disponible y cantidad todal en una nueva funcion del controlador
-        #tambien delegar la busqueda de la portada
         lista_datos=[]
         for obra in resultado_busqueda:
             lista_datos.append(obra)
@@ -73,7 +64,6 @@ class catalog_driver():
     def ejemplares_disponibles(self,id):
         consulta_disponibles=f"SELECT COUNT(ejemplar.id_ejemplar) FROM ejemplar WHERE ejemplar.id_obra_fk = {id} AND ejemplar.disponibilidad=0; "
         cantidad_ejemplares_disp= self.ejecutar_consulta(consulta_disponibles)
-        #print(cantidad_ejemplares_disp.fetchall()) #Debemos agregar el campo fetchall para que los datosque vienen del cursor puedan ser vistos
         disp = cantidad_ejemplares_disp.fetchall()
         print("estos son los disponibles... ",disp[0][0])
         return disp[0][0]
@@ -154,14 +144,6 @@ class catalog_driver():
         except:
             return "wrong"
 
-  
-   
-
-
-        
-
-        
-
     def agregar_obra_nueva(self,titulo,autor,editorial,resumen,portada,cantidad_ejemplares):
         titulo=titulo.get()
         autor=autor.get()
@@ -180,14 +162,10 @@ class catalog_driver():
         max_id=max_id.fetchall()
         max_id=max_id[0][0]
         max_id_obra=int(max_id)
-        #max_id=0
         #<------------2 Agregas el rango de ejemplares----------->
-        
         contador_rango=1
-        #print("el inicio del rango es : ", contador_rango)
         while(contador_rango<=cantidad_ejemplares):
             print("se agrega el ejemplar n°= " , contador_rango)
-            #consulta=f"INSERT INTO ejemplar(id_ejemplar,id_obra_fk,disponibilidad)VALUES({contador_rango},{max_id},{0});"
             consulta=f"INSERT INTO ejemplar(id_ejemplar,id_obra_fk,disponibilidad)VALUES(NULL,{max_id_obra},{0});"
             
             self.ejecutar_consulta(consulta)
@@ -196,20 +174,17 @@ class catalog_driver():
 
 
         #<------------crea resumen----------->
-        #print("el resumen tiene : ",len(resumen))
-        #print(portada)
-        #print(type(portada))
+ 
         p=len(portada)
         print(p,type(p))
         if (len(resumen)>3):
-            #self.agregar_resumen(max_id,resumen) 
+            self.agregar_resumen(max_id,resumen) 
             print("evalua correctamente, el resumen tiene informacion")
         #<------------agrega portada---------->
         elif(len(resumen)<3):
             print("no tiene resumen")
         
-        if(p>4):#el problema era que nunca salia por falso aca
-            #ahora ya evalua
+        if(p>4):
             print("hay portada")
             print(type(portada))
             self.agregarportada_obra(portada,max_id_obra)
@@ -217,7 +192,6 @@ class catalog_driver():
             print("no hay portada")
         if(max_id_obra!=0):
            return 1
-
 
     def agregar_obra_existente(self,desde,hasta,titulo,autor,editorial,resumen,portada):
         #validar si el rango de ejemplares esta ocupado por otra obra literaria
@@ -307,8 +281,27 @@ class catalog_driver():
                 print("No continuar con la ejecucion del programa ")
                 return lista_ejemplares_repetidos
             
-
-
-    def actualizar_obra(self,identificador,titulo,autor,editorial,resumen,portada):
+    def eliminar_obra_literaria(self,id):
+        consulta=f"SELECT `resumen` ,`portada` FROM `obraliteraria` WHERE obraliteraria.id_obra={id}; "
+        direccion=self.ejecutar_consulta(consulta)
+        direccion=direccion.fetchall()
+        portada=direccion[0][1]   
+        if(direccion[0][0]==None ):
+           print("no tiene resumen")
+           
+        elif(direccion[0][0]!=None):
+            resumen=os.remove(direccion[0][0])
         
-        pass
+        if(direccion[0][1] == None):
+            print("NO tiene portada")
+        elif(direccion[0][1] != None):
+            print("tiene PORTADA !")
+            os.remove(direccion[0][1])           
+
+        consulta=f"DELETE FROM 'obraliteraria' WHERE  obraliteraria.id_obra={id};"
+        self.ejecutar_consulta(consulta)
+
+
+
+ 
+        

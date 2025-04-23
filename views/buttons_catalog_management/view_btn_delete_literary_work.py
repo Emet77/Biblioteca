@@ -77,25 +77,17 @@ class view_btn_delete_literary_work():
 
             id_to_delete=var_literary_wrk_id.get()
             if(id_to_delete==0):
-                Messagebox.show_info(title='Información',message='Busque y seleccione con f')
+                Messagebox.show_info(title='Información',message='Busque y seleccione una obra')
             elif(id_to_delete>0):
-                delete_warning= Messagebox.show_question( message='¿Desea eliminar el socio seleccionado?' , title='Titulo' ,buttons=['No:secondary', 'Sí:primary'])
+                delete_warning= Messagebox.show_question( message='¿Desea eliminar la obra seleccionada?' , title='Titulo' ,buttons=['No:secondary', 'Sí:primary'])
                 if(delete_warning=='Sí'):
                     self.driver_partner_management.eliminar_obra_literaria(id_to_delete)
-                    Messagebox.show_info(title='Información',message='¡Socio eliminado con exito')
+                    Messagebox.show_info(title='Información',message='¡Obra eliminada con exito!')
                     function_clean_interface()
                     function_btn_search()
                 elif(delete_warning=='No'):
                     function_clean_interface()
                 
-        #CONTINUAR:
-        # El buscador busca socios en lugar de obras literarias(listo)
-        # cuando seleccionamos una obra no se rellenan los campos de los entrys correctamente(listo)
-        # agregar funcion eliminar obra al controlador(listo)
-        # ademas de eliminar la obra literaria del registro de la base de datos. tambien tengo que eliminar los archivos
-        # de  resumen y portada(listo)
-        # cuando creamos una obra desde cero no agrega los resumenes
-
         container_frame=ttkbootstrap.Frame(self.main_window)
         container_frame.grid(row=0,column=0)
         container_frame.grid_columnconfigure(0,weight=1)

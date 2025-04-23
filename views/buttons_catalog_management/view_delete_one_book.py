@@ -19,6 +19,22 @@ class view_btn_delete_one_book():
         
 
     def frame_delete_one_book(self):
+        self.book_driver=catalog_driver.catalog_driver()
+        def function_search_book():
+            # tomamos el valor como string y lo casteamos a int
+            book_number=var_ntry_book_number.get()
+            book_number=int(book_number)
+            info=self.book_driver.buscar_info_ejemplar(book_number)
+            label_result_author.configure(text=info[0])
+            label_result_title.configure(text=info[1])
+            label_result_editorial.configure(text=info[2])
+            
+
+
+        
+        # CONTINUAR:
+        # el numero ingresado se cambia de base cuando se ingresa un 0 delante(listo)   
+        # arreglar cuando el controlador no encuentre informacion que el no sigua con los demas pasos()
         container_frame=ttkbootstrap.Frame(self.main_window)
         container_frame.grid(row=0,column=0)
         container_frame.grid_columnconfigure(0,weight=1)
@@ -70,9 +86,10 @@ class view_btn_delete_one_book():
         label_book_title.grid(column=0,row=2)
 
         validate_entry = lambda text: text.isdecimal()
-        var_ntry_book_number=tkinter.IntVar()
+        var_ntry_book_number=tkinter.StringVar() #esto era un intVar..cuidao
         entry_book_number=ttkbootstrap.Entry(frame_search_book,font='Helvetica',state='normal',validate="key",validatecommand=(frame_search_book.register(validate_entry), "%S"), textvariable=var_ntry_book_number)
         entry_book_number.grid(row=0,column=1,sticky='we',pady=3,padx=3)
+        entry_book_number.delete(0,END)
 
         label_result_author=ttkbootstrap.Label(frame_search_book,text='resultado autor',font='Helvetica')
         label_result_author.grid(column=1,row=1)
@@ -80,7 +97,7 @@ class view_btn_delete_one_book():
         label_result_title=ttkbootstrap.Label(frame_search_book,text='resultado titulo',font='Helvetica')
         label_result_title.grid(column=1,row=2)
 
-        button_search=ttkbootstrap.Button(frame_search_book,text='Buscar',bootstyle='danger')
+        button_search=ttkbootstrap.Button(frame_search_book,text='Buscar',bootstyle='danger',command=function_search_book)
         button_search.grid(column=2, row=0)
 
         label_editorial=ttkbootstrap.Label(frame_search_book,text='Editorial: ',font='Helvetica')

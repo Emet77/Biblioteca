@@ -121,9 +121,38 @@ class catalog_driver():
             leer_resumen=resumen.read()
             resumen.close()
             return leer_resumen
-            
+
+    def buscar_info_ejemplar(self,id):
+        consulta=f"""SELECT ejemplar.id_obra_fk 
+                        FROM ejemplar
+                        WHERE  ejemplar.id_ejemplar={id};"""
+        
+        id_obra=self.ejecutar_consulta(consulta)
+        id_obra=id_obra.fetchall()
+        id_obra=id_obra[0][0]
+        print("id de la obra a la que esta relacionada el libro: " , id_obra)
+
+        consulta=f"""SELECT obraliteraria.titulo, obraliteraria.autor, obraliteraria.editorial,obraliteraria.id_obra
+                        FROM obraliteraria
+                        WHERE obraLiteraria.id_obra={id_obra} """
+        info_libro=self.ejecutar_consulta(consulta)
+        info_libro=info_libro.fetchall()
+        lista_info=[]
+        print("info libro: ", info_libro)    
+
+        #titulo
+        lista_info.append(info_libro[0][0])
+        #autor
+        lista_info.append(info_libro[0][1])
+        #editorial
+        lista_info.append(info_libro[0][2])
+
+        print(lista_info)
+        return lista_info
+
 
         
+
     def guardar_datos(self, id, titulo, autor, editorial, resumen, portada):
         try:
             resumen=resumen.get(1.0,tkinter.END)      
